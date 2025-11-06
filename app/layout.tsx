@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     type: 'website',
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: '/logo.png',
   },
 };
 
@@ -36,16 +36,30 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ff7a00" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="GTSnet" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/gtsnet-logo.png" />
       </head>
       <body suppressHydrationWarning>
         <Providers>
           {children}
           <BackToMenuButton />
         </Providers>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                  .then(reg => console.log('Service Worker registrado:', reg.scope))
+                  .catch(err => console.log('Erro ao registrar Service Worker:', err));
+              });
+            }
+          `
+        }} />
       </body>
     </html>
   );

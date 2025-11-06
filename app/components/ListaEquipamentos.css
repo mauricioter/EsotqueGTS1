@@ -1,17 +1,29 @@
 /* Container principal */
-.list-container {
+.list-container,
+.lista-container {
   max-width: 1200px;
   margin: 18px auto;
   padding: 18px;
   background: var(--card);
   border-radius: 10px;
   box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color-strong);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
   color: var(--text);
 }
 
 /* Cabeçalho */
-.list-title {
+.list-title,
+.lista-title {
+/* Header wrapper alias */
+.lista-header {
+  margin-bottom: 12px;
+}
+
+.lista-subtitle {
+  margin: 0 0 12px 0;
+  color: var(--text-secondary);
+}
   margin: 0 0 16px 0;
   font-size: 20px;
   font-weight: 600;
@@ -22,7 +34,7 @@
   width: 100%;
   overflow-x: auto;
   border-radius: 8px;
-  border: 1px solid var(--input-border);
+  border: 1.5px solid var(--border-color-strong);
   background: var(--card);
 }
 
@@ -35,20 +47,21 @@
 }
 
 .equipamentos-table th {
-  background: var(--hover-overlay);
+  background: linear-gradient(to bottom, #ffb366, #ff9933);
   padding: 12px 16px;
   text-align: left;
-  font-weight: 600;
-  color: var(--muted);
-  border-bottom: 1px solid var(--input-border);
+  font-weight: 700;
+  color: #1a1a1a;
+  border-bottom: 2px solid var(--primary-dark);
   position: sticky;
   top: 0;
   z-index: 10;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
 }
 
 .equipamentos-table td {
   padding: 12px 16px;
-  border-bottom: 1px solid var(--input-border);
+  border-bottom: 1px solid var(--border-color);
   vertical-align: middle;
 }
 
@@ -92,6 +105,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.col-tecnico {
+  min-width: 140px;
+  max-width: 180px;
 }
 
 .col-status {
@@ -181,7 +199,7 @@
 .exit-form-actions {
   display: flex;
   gap: 8px;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 /* Botões da tabela */
@@ -373,50 +391,50 @@
 
 /* Variáveis CSS adicionais */
 :root {
-  --status-disponivel-bg: #d1fae5;
-  --status-disponivel-text: #065f46;
+  --status-disponivel-bg: #ffedd5;     /* orange-100 */
+  --status-disponivel-text: #9a3412;   /* orange-800 */
   --status-saida-bg: #fee2e2;
   --status-saida-text: #991b1b;
-  --status-manutencao-bg: #fef3c7;
-  --status-manutencao-text: #92400e;
-  --status-reservado-bg: #e0e7ff;
-  --status-reservado-text: #3730a3;
+  --status-manutencao-bg: #fff7ed;     /* orange-50 */
+  --status-manutencao-text: #92400e;   /* orange-700 */
+  --status-reservado-bg: #fde68a;      /* amber-300 */
+  --status-reservado-text: #92400e;    
   --status-default-bg: #f3f4f6;
   --status-default-text: #374151;
-  --saida-bg: #fef3c7;
+  --saida-bg: #fff7ed;                 /* orange subtle */
   --error: #ef4444;
   --error-text: #991b1b;
   --disabled: #9ca3af;
   --text-secondary: #6b7280;
   --muted: #9ca3af;
-  --primary: #3b82f6;
-  --primary-dark: #2563eb;
+  --primary: #ff7a00;                 /* brand orange */
+  --primary-dark: #e66900;
   --input-bg: #ffffff;
-  --hover-overlay: #f9fafb;
+  --hover-overlay: #fff7ed;
 }
 
 /* Tema escuro */
 @media (prefers-color-scheme: dark) {
   :root {
-    --status-disponivel-bg: #064e3b;
-    --status-disponivel-text: #6ee7b7;
+    --status-disponivel-bg: #7c2d12;    /* deep orange bg */
+    --status-disponivel-text: #fdba74;  /* orange-300 */
     --status-saida-bg: #7f1d1d;
     --status-saida-text: #fca5a5;
     --status-manutencao-bg: #451a03;
     --status-manutencao-text: #fbbf24;
-    --status-reservado-bg: #312e81;
-    --status-reservado-text: #a5b4fc;
+    --status-reservado-bg: #4a3000;     /* amber-ish */
+    --status-reservado-text: #fde68a;
     --status-default-bg: #374151;
     --status-default-text: #d1d5db;
-    --saida-bg: #451a03;
+    --saida-bg: #7c2d12;
     --error: #dc2626;
     --error-text: #fca5a5;
     --disabled: #6b7280;
     --text-secondary: #9ca3af;
     --muted: #6b7280;
-    --primary: #3b82f6;
-    --primary-dark: #2563eb;
+    --primary: #ff7a00;
+    --primary-dark: #e66900;
     --input-bg: #1f2937;
-    --hover-overlay: #374151;
+    --hover-overlay: #262626;
   }
 }

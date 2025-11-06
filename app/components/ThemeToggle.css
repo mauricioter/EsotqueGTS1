@@ -1,202 +1,178 @@
-/* Container do Theme Toggle */
-.theme-toggle-container {
+/* Wrapper do Theme Toggle */
+.theme-toggle-wrapper {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 120px;
 }
 
-/* Skeleton loader */
-.theme-skeleton {
-  width: 100px;
-  height: 40px;
-  background: linear-gradient(90deg, var(--skeleton-bg) 25%, var(--skeleton-bg-light) 50%, var(--skeleton-bg) 75%);
+/* Skeleton loader com animação suave */
+.theme-toggle-skeleton {
+  width: 120px;
+  height: 42px;
+  background: var(--card);
+  border-radius: 21px;
+  border: 1.5px solid var(--border-color);
+  overflow: hidden;
+  position: relative;
+}
+
+.skeleton-pulse {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 122, 0, 0.1) 50%,
+    transparent 100%
+  );
   background-size: 200% 100%;
-  border-radius: 20px;
-  animation: skeleton-loading 1.5s infinite;
+  animation: skeleton-shimmer 1.5s infinite;
 }
 
-@keyframes skeleton-loading {
+@keyframes skeleton-shimmer {
   0% {
-    background-position: 200% 0;
-  }
-  100% {
     background-position: -200% 0;
   }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
-/* Toggle switch */
-.theme-toggle-switch {
+/* Botão principal do tema */
+.theme-toggle-btn {
   position: relative;
-  width: 60px;
-  height: 32px;
-  background: var(--toggle-bg);
-  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 21px;
+  border: 2px solid var(--border-color-strong);
+  background: var(--card);
+  color: var(--text);
   cursor: pointer;
-  transition: all 0.3s ease;
-  border: 2px solid var(--toggle-border);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  min-width: 120px;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.theme-toggle-switch:hover {
-  transform: scale(1.05);
+/* Hover suave */
+.theme-toggle-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
 }
 
-.theme-toggle-switch.active {
-  background: var(--toggle-active-bg);
-  border-color: var(--toggle-active-border);
+/* Efeito de clique */
+.theme-toggle-btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: var(--shadow-sm);
 }
 
-/* Slider do toggle */
-.theme-toggle-slider {
+/* Estado de animação */
+.theme-toggle-btn.animating {
+  animation: theme-pulse 0.4s ease;
+}
+
+@keyframes theme-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Background animado do botão */
+.theme-toggle-bg {
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 24px;
-  height: 24px;
-  background: var(--toggle-slider);
-  border-radius: 50%;
-  transition: all 0.3s ease;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--primary-light) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.theme-toggle-btn:hover .theme-toggle-bg {
+  opacity: 0.08;
+}
+
+/* Wrapper dos ícones */
+.theme-toggle-icon-wrapper {
+  position: relative;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
 
-.theme-toggle-switch.active .theme-toggle-slider {
-  transform: translateX(28px);
-  background: var(--toggle-active-slider);
-}
-
-/* Ícones dentro do slider */
+/* Ícones de sol e lua */
 .theme-icon {
-  width: 14px;
-  height: 14px;
-  transition: all 0.3s ease;
-  color: var(--toggle-icon);
-}
-
-.theme-toggle-switch.active .theme-icon {
-  color: var(--toggle-active-icon);
-}
-
-/* Botão de tema com texto */
-.theme-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 20px;
-  border: 2px solid var(--button-border);
-  background: var(--button-bg);
-  color: var(--button-text);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: inherit;
-}
-
-.theme-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.theme-button:active {
-  transform: translateY(0);
-}
-
-.theme-button.active {
-  background: var(--button-active-bg);
-  border-color: var(--button-active-border);
-  color: var(--button-active-text);
-}
-
-/* Ícone do botão */
-.theme-button-icon {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.3s ease;
-}
-
-.theme-button:hover .theme-button-icon {
-  transform: rotate(180deg);
-}
-
-/* Container de múltiplos temas */
-.theme-selector {
-  display: flex;
-  gap: 8px;
-  padding: 4px;
-  background: var(--selector-bg);
-  border-radius: 12px;
-  border: 1px solid var(--selector-border);
-}
-
-/* Botão de seleção de tema */
-.theme-option {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
-  background: transparent;
-  color: var(--option-text);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: inherit;
-}
-
-.theme-option:hover {
-  background: var(--option-hover);
-}
-
-.theme-option.active {
-  background: var(--option-active-bg);
-  color: var(--option-active-text);
-}
-
-/* Ícone da opção */
-.theme-option-icon {
-  width: 14px;
-  height: 14px;
-}
-
-/* Animações de transição */
-.theme-transition {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-/* Tooltip de informação */
-.theme-info {
-  position: relative;
-  margin-left: 8px;
-}
-
-.theme-info-tooltip {
   position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 8px;
-  padding: 8px 12px;
-  background: var(--tooltip-bg);
-  color: var(--tooltip-text);
-  border-radius: 6px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.2s ease;
-  z-index: 1000;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.theme-info:hover .theme-info-tooltip {
+.sun-icon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+.sun-icon.active {
   opacity: 1;
-  visibility: visible;
+  transform: rotate(0deg) scale(1);
+}
+
+.moon-icon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
+.moon-icon.active {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* Label do tema */
+.theme-toggle-label {
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.3px;
+  transition: none;
+}
+
+/* Modo claro */
+.theme-toggle-btn.light-mode {
+  border-color: var(--primary);
+}
+
+.theme-toggle-btn.light-mode:hover {
+  box-shadow: 0 6px 16px rgba(255, 122, 0, 0.2);
+}
+
+/* Modo escuro */
+.theme-toggle-btn.dark-mode {
+  border-color: #475569;
+}
+
+.theme-toggle-btn.dark-mode:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  border-color: #64748b;
 }
 
 .theme-info-tooltip::after {
@@ -260,21 +236,21 @@
   --toggle-border: #d1d5db;
   --toggle-slider: #ffffff;
   --toggle-icon: #6b7280;
-  --toggle-active-bg: #3b82f6;
-  --toggle-active-border: #2563eb;
+  --toggle-active-bg: #ff7a00;
+  --toggle-active-border: #e66900;
   --toggle-active-slider: #ffffff;
   --toggle-active-icon: #ffffff;
   --button-bg: #f3f4f6;
   --button-border: #d1d5db;
   --button-text: #374151;
-  --button-active-bg: #3b82f6;
-  --button-active-border: #2563eb;
+  --button-active-bg: #ff7a00;
+  --button-active-border: #e66900;
   --button-active-text: #ffffff;
   --selector-bg: #f3f4f6;
   --selector-border: #d1d5db;
   --option-text: #6b7280;
   --option-hover: #e5e7eb;
-  --option-active-bg: #3b82f6;
+  --option-active-bg: #ff7a00;
   --option-active-text: #ffffff;
   --skeleton-bg: #e5e7eb;
   --skeleton-bg-light: #f3f4f6;
@@ -289,21 +265,21 @@
     --toggle-border: #4b5563;
     --toggle-slider: #1f2937;
     --toggle-icon: #9ca3af;
-    --toggle-active-bg: #3b82f6;
-    --toggle-active-border: #2563eb;
+  --toggle-active-bg: #ff7a00;
+  --toggle-active-border: #e66900;
     --toggle-active-slider: #ffffff;
     --toggle-active-icon: #ffffff;
     --button-bg: #374151;
     --button-border: #4b5563;
     --button-text: #d1d5db;
-    --button-active-bg: #3b82f6;
-    --button-active-border: #2563eb;
+  --button-active-bg: #ff7a00;
+  --button-active-border: #e66900;
     --button-active-text: #ffffff;
     --selector-bg: #374151;
     --selector-border: #4b5563;
     --option-text: #9ca3af;
     --option-hover: #4b5563;
-    --option-active-bg: #3b82f6;
+  --option-active-bg: #ff7a00;
     --option-active-text: #ffffff;
     --skeleton-bg: #374151;
     --skeleton-bg-light: #4b5563;

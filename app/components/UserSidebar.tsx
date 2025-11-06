@@ -3,10 +3,12 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
+import SettingsModal from './SettingsModal';
 
 export default function UserSidebar() {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const role = (session as any)?.role as 'ADMIN' | 'OPERATOR' | 'VIEWER' | undefined;
   const status = (session as any)?.status as 'PENDING' | 'APPROVED' | undefined;
 
@@ -257,6 +259,36 @@ export default function UserSidebar() {
             )}
             
             <button
+              onClick={() => setSettingsOpen(true)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                padding: '12px 16px',
+                borderRadius: 10,
+                border: '1px solid var(--input-border)',
+                background: 'transparent',
+                color: 'var(--text)',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                fontWeight: 500,
+                marginTop: 16
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'var(--primary-subtle)';
+                e.currentTarget.style.borderColor = 'var(--primary)';
+                e.currentTarget.style.color = 'var(--primary)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.borderColor = 'var(--input-border)';
+                e.currentTarget.style.color = 'var(--text)';
+              }}
+              aria-label="Configurações"
+            >
+              ⚙️ Configurações
+            </button>
+
+            <button
               onClick={() => signOut({ callbackUrl: '/login' })}
               style={{
                 display: 'flex',
@@ -269,7 +301,7 @@ export default function UserSidebar() {
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 fontWeight: 500,
-                marginTop: 16
+                marginTop: 8
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'var(--danger)';
@@ -285,6 +317,8 @@ export default function UserSidebar() {
             </button>
           </nav>
       </div>
+
+      <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </>
   );
 }

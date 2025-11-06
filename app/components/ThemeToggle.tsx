@@ -6,27 +6,10 @@ import './ThemeToggle.css';
 // Tipos para o tema
 type Theme = 'light' | 'dark';
 
-// Configuração de cores para cada tema
-const THEME_COLORS = {
-  light: {
-    '--bg': '#f3f4f6',
-    '--card': '#ffffff',
-    '--text': '#0f172a',
-    '--primary': '#4f46e5',
-    '--muted': '#64748b'
-  },
-  dark: {
-    '--bg': '#0f1724',
-    '--card': '#0b1220',
-    '--text': '#e6eef8',
-    '--primary': '#7c5cff',
-    '--muted': '#64748b'
-  }
-};
-
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>('light');
   const [isMounted, setIsMounted] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Inicializar o tema apenas quando o componente montar
   useEffect(() => {
@@ -53,6 +36,10 @@ export default function ThemeToggle() {
     const root = document.documentElement;
     const body = document.body;
 
+    // Adicionar classe de transição antes de mudar o tema
+    root.classList.add('theme-transitioning');
+    body.classList.add('theme-transitioning');
+
     // Aplicar/remover classe de tema
     if (theme === 'dark') {
       root.classList.add('theme-dark');
@@ -62,52 +49,64 @@ export default function ThemeToggle() {
       body.classList.remove('theme-dark');
     }
 
-    // Atualizar variáveis CSS
-    const colors = THEME_COLORS[theme];
-    Object.entries(colors).forEach(([key, value]) => {
-      root.style.setProperty(key, value);
-    });
-
     // Salvar tema no localStorage
     try {
       localStorage.setItem('theme', theme);
     } catch (error) {
       console.error('Erro ao salvar tema:', error);
     }
+
+    // Remover classe de transição após a animação
+    const timeout = setTimeout(() => {
+      root.classList.remove('theme-transitioning');
+      body.classList.remove('theme-transitioning');
+    }, 300);
+
+    return () => clearTimeout(timeout);
   }, [theme, isMounted]);
 
   const toggleTheme = () => {
+    setIsAnimating(true);
     setTheme(current => current === 'dark' ? 'light' : 'dark');
+    
+    // Reset da animação
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 400);
   };
 
   if (!isMounted) {
     return (
-      <div className="theme-toggle-container">
+      <div className="theme-toggle-wrapper">
         <div className="theme-toggle-skeleton">
-          <div className="skeleton-track"></div>
+          <div className="skeleton-pulse"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="theme-toggle-container">
-      <label className="theme-toggle" title={`Alternar para tema ${theme === 'dark' ? 'claro' : 'escuro'}`}>
-        <input
-          type="checkbox"
-          aria-label={`Alternar tema. Tema atual: ${theme === 'dark' ? 'escuro' : 'claro'}`}
-          checked={theme === 'dark'}
-          onChange={toggleTheme}
-        />
-        <span className="toggle-track">
-          <span className="toggle-knob">
-            <span className="theme-icon">{theme === 'dark' ? '🌙' : '☀️'}</span>
+    <div className="theme-toggle-wrapper">
+      <button
+        className={`theme-toggle-btn ${theme === 'dark' ? 'dark-mode' : 'light-mode'} ${isAnimating ? 'animating' : ''}`}
+        onClick={toggleTheme}
+        aria-label={`Mudar para tema ${theme === 'dark' ? 'claro' : 'escuro'}`}
+        title={`Mudar para tema ${theme === 'dark' ? 'claro' : 'escuro'}`}
+      >
+        <span className="theme-toggle-icon-wrapper">
+          <span className={`theme-icon sun-icon ${theme === 'light' ? 'active' : ''}`}>
+            ☀️
+          </span>
+          <span className={`theme-icon moon-icon ${theme === 'dark' ? 'active' : ''}`}>
+            🌙
           </span>
         </span>
-      </label>
-      <span className="theme-label">
-        {theme === 'dark' ? 'Escuro' : 'Claro'}
-      </span>
+        <span className="theme-toggle-label">
+          {theme === 'dark' ? 'Escuro' : 'Claro'}
+        </span>
+        <span className="theme-toggle-bg"></span>
+      </button>
     </div>
   );
 }
+

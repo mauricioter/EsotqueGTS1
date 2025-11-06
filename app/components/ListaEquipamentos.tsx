@@ -15,6 +15,9 @@ interface Equipamento {
   dataEntrada: string;
   dataSaida?: string | null;
   destino?: string | null;
+  tecnicoResponsavel?: string | null;
+  assinaturaTecnico?: string | null;
+  observacoes?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -29,12 +32,18 @@ interface ListaEquipamentosProps {
 interface ExitFormState {
   id?: string;
   destino: string;
+  tecnicoResponsavel: string;
+  assinaturaTecnico: string;
 }
 
 export default function ListaEquipamentos({ searchQuery = '', searchField = 'all' }: ListaEquipamentosProps) {
   const [items, setItems] = useState<Equipamento[]>([]);
   const [loading, setLoading] = useState(true);
-  const [exitForm, setExitForm] = useState<ExitFormState>({ destino: '' });
+  const [exitForm, setExitForm] = useState<ExitFormState>({ 
+    destino: '', 
+    tecnicoResponsavel: '', 
+    assinaturaTecnico: '' 
+  });
   const [error, setError] = useState<string>('');
 
   // Carregar equipamentos da API
@@ -84,14 +93,26 @@ export default function ListaEquipamentos({ searchQuery = '', searchField = 'all
       return;
     }
 
+    if (!exitForm.tecnicoResponsavel.trim()) {
+      alert('Informe o nome do técnico responsável');
+      return;
+    }
+
+    if (!exitForm.assinaturaTecnico.trim()) {
+      alert('Informe a assinatura/matrícula do técnico');
+      return;
+    }
+
     try {
       await api.put(`/equipamentos/${id}`, {
         destino: exitForm.destino.trim(),
+        tecnicoResponsavel: exitForm.tecnicoResponsavel.trim(),
+        assinaturaTecnico: exitForm.assinaturaTecnico.trim(),
         status: 'SAIDA',
         dataSaida: new Date().toISOString(),
       });
 
-      setExitForm({ destino: '' });
+      setExitForm({ destino: '', tecnicoResponsavel: '', assinaturaTecnico: '' });
       loadEquipamentos();
     } catch (error: any) {
       const mensagemErro = error.response?.data?.error || error.response?.data?.message || 'Erro ao registrar saída';
@@ -209,11 +230,11 @@ export default function ListaEquipamentos({ searchQuery = '', searchField = 'all
           <table className="equipamentos-table">
             <thead>
               <tr>
-                <th>ID</th>
                 <th>Nome</th>
                 <th>Serial</th>
                 <th>MAC</th>
                 <th>Destino</th>
+                <th>Técnico</th>
                 <th>Status</th>
                 <th>Entrada</th>
                 <th>Ações</th>
@@ -222,11 +243,20 @@ export default function ListaEquipamentos({ searchQuery = '', searchField = 'all
             <tbody>
               {filteredItems.map(item => (
                 <tr key={item.id} className={item.status === 'SAIDA' ? 'row-saida' : ''}>
-                  <td className="col-id">{item.id}</td>
                   <td className="col-nome">{item.nome}</td>
                   <td className="col-serial">{item.serial || '—'}</td>
                   <td className="col-mac">{item.mac || '—'}</td>
                   <td className="col-destino">{item.destino || '—'}</td>
+                  <td className="col-tecnico">
+                    {item.tecnicoResponsavel ? (
+                      <div style={{ fontSize: '13px' }}>
+                        <div style={{ fontWeight: 600 }}>{item.tecnicoResponsavel}</div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-light)' }}>
+                          {item.assinaturaTecnico && `Mat: ${item.assinaturaTecnico}`}
+                        </div>
+                      </div>
+                    ) : '—'}
+                  </td>
                   <td className="col-status">
                     <span className={`status-badge ${getStatusClass(item.status)}`}>{item.status}</span>
                   </td>
@@ -244,12 +274,28 @@ export default function ListaEquipamentos({ searchQuery = '', searchField = 'all
                               className="exit-form-input"
                               autoFocus
                             />
+                            <input
+                              type="text"
+                              value={exitForm.tecnicoResponsavel}
+                              placeholder="Nome do técnico"
+                              onChange={e => setExitForm({ ...exitForm, tecnicoResponsavel: e.target.value })}
+                              className="exit-form-input"
+                              style={{ marginTop: '8px' }}
+                            />
+                            <input
+                              type="text"
+                              value={exitForm.assinaturaTecnico}
+                              placeholder="Matrícula/Assinatura do técnico"
+                              onChange={e => setExitForm({ ...exitForm, assinaturaTecnico: e.target.value })}
+                              className="exit-form-input"
+                              style={{ marginTop: '8px' }}
+                            />
                           </div>
                           <div className="exit-form-actions">
                             <button className="btn-primary btn-small" onClick={() => handleRegisterSaida(item.id)}>
                               Confirmar
                             </button>
-                            <button className="btn-secondary btn-small" onClick={() => setExitForm({ destino: '' })}>
+                            <button className="btn-secondary btn-small" onClick={() => setExitForm({ destino: '', tecnicoResponsavel: '', assinaturaTecnico: '' })}>
                               Cancelar
                             </button>
                           </div>
@@ -258,7 +304,12 @@ export default function ListaEquipamentos({ searchQuery = '', searchField = 'all
                         <div className="acoes-botoes">
                           <button
                             className="btn-primary btn-small"
-                            onClick={() => setExitForm({ id: item.id, destino: item.destino || '' })}
+                            onClick={() => setExitForm({ 
+                              id: item.id, 
+                              destino: item.destino || '', 
+                              tecnicoResponsavel: '', 
+                              assinaturaTecnico: '' 
+                            })}
                             disabled={item.status === 'SAIDA'}
                           >
                             Registrar Saída

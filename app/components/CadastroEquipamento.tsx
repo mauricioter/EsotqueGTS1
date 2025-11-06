@@ -11,6 +11,7 @@ interface FormData {
   serial: string;
   mac: string;
   destino: string;
+  status: string;
 }
 
 // Estado inicial do formulário
@@ -19,7 +20,8 @@ const INITIAL_FORM: FormData = {
   descricao: '',
   serial: '',
   mac: '',
-  destino: ''
+  destino: '',
+  status: 'DISPONIVEL'
 };
 
 export default function CadastroEquipamento() {
@@ -56,8 +58,8 @@ export default function CadastroEquipamento() {
     setMensagemTipo('');
 
     try {
-      // Envia o status padrão exigido pela API (DISPONIVEL)
-      await api.post('/equipamentos', { ...form, status: 'DISPONIVEL' });
+      // Envia o formulário com o status selecionado
+      await api.post('/equipamentos', form);
       
       setMensagem('Equipamento cadastrado com sucesso!');
       setMensagemTipo('success');
@@ -196,6 +198,35 @@ export default function CadastroEquipamento() {
             disabled={submitting}
             maxLength={100}
           />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="status" className="form-label">
+            Status do Equipamento <span className="required">*</span>
+          </label>
+          <select
+            id="status"
+            className="form-input"
+            value={form.status}
+            onChange={(e) => handleChange('status', e.target.value)}
+            disabled={submitting}
+            required
+          >
+            <option value="DISPONIVEL">✅ Disponível</option>
+            <option value="EM_USO">🔧 Em Uso</option>
+            <option value="MANUTENCAO">⚠️ Em Manutenção</option>
+            <option value="SAIDA">📤 Saída (Descartado/Transferido)</option>
+            <option value="RESERVADO">📋 Reservado</option>
+            <option value="DEFEITO">❌ Com Defeito</option>
+          </select>
+          <small className="form-hint">
+            {form.status === 'DISPONIVEL' && 'Equipamento pronto para uso'}
+            {form.status === 'EM_USO' && 'Equipamento sendo utilizado'}
+            {form.status === 'MANUTENCAO' && 'Equipamento em manutenção'}
+            {form.status === 'SAIDA' && 'Equipamento descartado ou transferido'}
+            {form.status === 'RESERVADO' && 'Equipamento reservado para uso futuro'}
+            {form.status === 'DEFEITO' && 'Equipamento com defeito'}
+          </small>
         </div>
 
         <div className="form-actions">

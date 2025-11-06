@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState } from 'react';
 import axios from 'axios';
@@ -30,17 +30,25 @@ export default function UsuariosPage() {
   const [loading, setLoading] = useState(false);
 
   if (authStatus === 'loading') {
-    return <div style={{ padding: 24 }}>Carregando...</div>;
+    return (
+      <div className="page-container">
+        <div className="section-card text-center">Carregando...</div>
+      </div>
+    );
   }
 
   const role = (session as any)?.role;
   if (!session || role !== 'ADMIN') {
     return (
-      <div style={{ maxWidth: 600, margin: '20px auto', padding: 16 }}>
-        <h2>Acesso negado</h2>
-        <p>Você precisa ser <strong>ADMIN</strong> para cadastrar usuários por esta página.</p>
-        <div style={{ marginTop: 20 }}>
-          <Link href="/">Voltar para a página inicial</Link>
+      <div className="page-container">
+        <div className="section-card text-center">
+          <h2>Acesso negado</h2>
+          <p>
+            Você precisa ser <strong>ADMIN</strong> para cadastrar usuários por esta página.
+          </p>
+          <div className="actions-center" style={{ marginTop: 12 }}>
+            <Link href="/" className="btn btn-secondary">Voltar para a página inicial</Link>
+          </div>
         </div>
       </div>
     );
@@ -83,56 +91,64 @@ export default function UsuariosPage() {
   }
 
   return (
-    <div style={{ maxWidth: 600, margin: '20px auto', padding: 16 }}>
-      <h1>Cadastrar Usuário</h1>
-      <p>Registre novos usuários com nome completo, número, email e CPF.</p>
-      <form onSubmit={handleSubmit} style={{ display: 'grid', gap: 12 }}>
-        <label>
-          Nome completo
-          <input
-            type="text"
-            value={nomeCompleto}
-            onChange={(e) => setNomeCompleto(e.target.value)}
-            placeholder="Ex.: Maria Souza"
-            required
-          />
-        </label>
-        <label>
-          Número
-          <input
-            type="text"
-            value={numero}
-            onChange={(e) => setNumero(e.target.value)}
-            placeholder="Telefone ou matrícula"
-          />
-        </label>
-        <label>
-          Email
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="exemplo@dominio.com"
-            required
-          />
-        </label>
-        <label>
-          CPF
-          <input
-            type="text"
-            value={cpf}
-            onChange={(e) => setCpf(e.target.value)}
-            placeholder="000.000.000-00"
-            required
-          />
-        </label>
-        <button type="submit" disabled={loading}>
-          {loading ? 'Salvando...' : 'Cadastrar'}
-        </button>
-      </form>
-      {status && <p style={{ marginTop: 10 }}>{status}</p>}
-      <div style={{ marginTop: 20 }}>
-        <Link href="/">Voltar para a página inicial</Link>
+    <div className="page-container">
+      <div className="section-card" style={{ maxWidth: 720, margin: "0 auto" }}>
+        <div className="section-header">
+          <div>
+            <h1>Cadastrar Usuário</h1>
+            <p className="text-muted">Registre novos usuários com nome completo, número, email e CPF.</p>
+          </div>
+        </div>
+        <form onSubmit={handleSubmit} style={{ display: "grid", gap: 12 }}>
+          <label>
+            Nome completo
+            <input
+              type="text"
+              value={nomeCompleto}
+              onChange={(e) => setNomeCompleto(e.target.value)}
+              placeholder="Ex.: Maria Souza"
+              required
+            />
+          </label>
+          <label>
+            Número
+            <input
+              type="text"
+              value={numero}
+              onChange={(e) => setNumero(e.target.value)}
+              placeholder="Telefone ou matrícula"
+            />
+          </label>
+          <label>
+            Email
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="exemplo@dominio.com"
+              required
+            />
+          </label>
+          <label>
+            CPF
+            <input
+              type="text"
+              value={cpf}
+              onChange={(e) => setCpf(e.target.value)}
+              placeholder="000.000.000-00"
+              required
+            />
+          </label>
+          <div className="actions-center" style={{ marginTop: 8 }}>
+            <button type="submit" disabled={loading} className="btn btn-primary">
+              {loading ? "Salvando..." : "Cadastrar"}
+            </button>
+          </div>
+        </form>
+        {status && <p className="text-center" style={{ marginTop: 10 }}>{status}</p>}
+        <div className="actions-center" style={{ marginTop: 12 }}>
+          <Link href="/" className="btn btn-secondary">Voltar para a página inicial</Link>
+        </div>
       </div>
     </div>
   );

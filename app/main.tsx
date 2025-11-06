@@ -7,6 +7,7 @@ import CadastroEquipamento from './components/CadastroEquipamento';
 import ListaEquipamentos from './components/ListaEquipamentos';
 import SidebarSearch from './components/SidebarSearch';
 import UserSidebar from './components/UserSidebar';
+import NotesPanel from './components/NotesPanel';
 import './index.css';
 
 // Importação dinâmica do ThemeToggle para evitar problemas de hidratação
@@ -70,15 +71,29 @@ export default function App() {
   return (
     <div className="app-container" suppressHydrationWarning>
       <header className="app-header">
-        <h1 className="header-title">Controle de Estoque</h1>
-        <div className="header-actions">
-          <ThemeToggle />
+        <div className="app-nav container">
+          <div className="header-title">
+            <img 
+              src="/logo.png" 
+              alt="GTSnet Logo" 
+              style={{ 
+                height: '32px', 
+                width: 'auto',
+                marginRight: '12px'
+              }} 
+            />
+            Controle de Estoque
+          </div>
+          <div className="header-actions">
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
       <div className="app-layout">
         <aside className="sidebar">
           <SidebarSearch onSearch={handleSearch} />
+          <NotesPanel />
         </aside>
         
         <main className="main-content">

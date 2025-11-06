@@ -1,45 +1,49 @@
 /* Global design tokens and layout */
 :root {
   /* Color System */
-  --bg: #f8fafc;
+  /* Light theme: Brand Orange + White with better contrast */
+  --bg: #f8f9fa;
   --card: #ffffff;
-  --primary: #6366f1;
-  --primary-dark: #4f46e5;
-  --primary-light: #818cf8;
-  --primary-subtle: #e0e7ff;
-  --accent: #10b981;
-  --accent-dark: #059669;
-  --accent-light: #34d399;
-  --accent-subtle: #d1fae5;
-  --muted: #64748b;
-  --muted-light: #94a3b8;
-  --text: #0f172a;
-  --text-light: #334155;
-  --danger: #ef4444;
-  --danger-dark: #dc2626;
-  --danger-light: #fca5a5;
+  --primary: #ff7a00;           /* Brand Orange */
+  --primary-dark: #cc6200;      /* Brand Orange Darker for better contrast */
+  --primary-light: #ff9933;     /* Brand Orange Light */
+  --primary-subtle: #fff4e6;    /* Brand Orange Subtle */
+  --accent: #ff7a00;            /* Brand Orange */
+  --accent-dark: #cc6200;       /* Brand Orange Darker */
+  --accent-light: #ff9933;      /* Brand Orange Light */
+  --accent-subtle: #fff4e6;     /* Brand Orange Subtle */
+  --muted: #475569;             /* Darker for better readability */
+  --muted-light: #64748b;       /* Darker for better readability */
+  --text: #0f172a;              /* Dark text */
+  --text-light: #475569;        /* Lighter text but still readable */
+  --text-secondary: #64748b;    /* Secondary text */
+  --danger: #dc2626;
+  --danger-dark: #b91c1c;
+  --danger-light: #f87171;
   --danger-bg: #fee2e2;
-  --success: #22c55e;
-  --success-dark: #16a34a;
+  --success: #16a34a;
+  --success-dark: #15803d;
   --success-light: #4ade80;
   --success-bg: #dcfce7;
-  --warning: #f59e0b;
-  --warning-dark: #d97706;
-  --warning-light: #fcd34d;
+  --warning: #d97706;
+  --warning-dark: #b45309;
+  --warning-light: #fbbf24;
   --warning-bg: #fef3c7;
   --input-bg: #ffffff;
-  --input-border: #e2e8f0;
-  --input-focus: #e0e7ff;
-  --badge-bg: #e0e7ff;
-  --badge-text: #3730a3;
+  --input-border: #cbd5e1;      /* More visible border */
+  --input-focus: #fff4e6;       /* Orange subtle for focus */
+  --badge-bg: #fff4e6;          /* Orange subtle background */
+  --badge-text: #cc6200;        /* Dark orange text */
+  --border-color: #e2e8f0;      /* General border color */
+  --border-color-strong: #cbd5e1; /* Stronger borders */
 
   /* Elevation & Effects */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 8px -1px rgb(0 0 0 / 0.15), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 20px -3px rgb(0 0 0 / 0.2), 0 4px 8px -4px rgb(0 0 0 / 0.15);
+  --card-shadow: 0 2px 8px 0 rgb(0 0 0 / 0.1);
   --focus-ring: 0 0 0 3px var(--primary-subtle);
-  --hover-overlay: rgba(0, 0, 0, 0.03);
+  --hover-overlay: rgba(255, 122, 0, 0.08);
 
   /* Border Radiuses */
   --radius-sm: 6px;
@@ -73,16 +77,17 @@
 
 /* Dark theme variables */
 :root.theme-dark {
-  --bg: #0f172a;
-  --card: #1e293b;
-  --primary: #818cf8;
-  --primary-dark: #6366f1;
-  --primary-light: #a5b4fc;
-  --primary-subtle: rgba(99, 102, 241, 0.12);
-  --accent: #34d399;
-  --accent-dark: #10b981;
-  --accent-light: #6ee7b7;
-  --accent-subtle: rgba(16, 185, 129, 0.12);
+  /* Dark theme with brand orange accents */
+  --bg: #0b1020;
+  --card: #111827;
+  --primary: #ff7a00;            /* Brand Orange */
+  --primary-dark: #e66900;       /* Brand Orange Dark */
+  --primary-light: #ffa347;      /* Brand Orange Light */
+  --primary-subtle: rgba(255, 122, 0, 0.15);
+  --accent: #ff7a00;
+  --accent-dark: #e66900;
+  --accent-light: #ffa347;
+  --accent-subtle: rgba(255, 122, 0, 0.12);
   --muted: #94a3b8;
   --muted-light: #cbd5e1;
   --text: #f8fafc;
@@ -101,9 +106,9 @@
   --warning-bg: rgba(245, 158, 11, 0.12);
   --input-bg: #0f172a;
   --input-border: #334155;
-  --input-focus: rgba(99, 102, 241, 0.12);
-  --badge-bg: rgba(99, 102, 241, 0.12);
-  --badge-text: #c7d2fe;
+  --input-focus: rgba(255, 122, 0, 0.18);
+  --badge-bg: rgba(255, 122, 0, 0.12);
+  --badge-text: #ffc299;
 
   /* Elevation & Effects for dark mode */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.1);
@@ -127,17 +132,38 @@ html {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 html, body, #root {
   height: 100%;
 }
 
+/* Transições suaves APENAS para mudança de tema */
+:root.theme-transitioning,
+:root.theme-transitioning body,
+:root.theme-transitioning .card,
+:root.theme-transitioning .app-header,
+:root.theme-transitioning .section-card,
+:root.theme-transitioning button,
+:root.theme-transitioning input,
+:root.theme-transitioning select,
+:root.theme-transitioning textarea,
+:root.theme-transitioning table,
+:root.theme-transitioning .sidebar-search,
+:root.theme-transitioning .list-container,
+:root.theme-transitioning .cadastro-container {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease,
+              box-shadow 0.3s ease !important;
+}
+
 /* Ensure variables are applied at root level */
 :root, body {
   background: var(--bg);
   color: var(--text);
-  transition: var(--transition-normal);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 body {
@@ -201,53 +227,68 @@ button, .btn {
   background: var(--primary);
   color: white;
   box-shadow: var(--shadow-sm);
+  border: 1px solid var(--primary-dark);
+  font-weight: 600;
 }
 
 .btn-primary:hover {
   background: var(--primary-dark);
   box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  border-color: var(--primary-dark);
 }
 
 .btn-secondary {
   background: var(--card);
   color: var(--text);
-  border: 1px solid var(--input-border);
+  border: 1px solid var(--border-color-strong);
+  font-weight: 600;
 }
 
 .btn-secondary:hover {
   border-color: var(--primary);
   background: var(--primary-subtle);
   color: var(--primary-dark);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
 }
 
 .btn-danger {
-  background: var(--danger-bg);
-  color: var(--danger-dark);
+  background: var(--danger);
+  color: white;
+  border: 1px solid var(--danger-dark);
+  font-weight: 600;
 }
 
 .btn-danger:hover {
-  background: var(--danger);
-  color: white;
+  background: var(--danger-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 /* Form Controls */
 input, select, textarea {
   width: 100%;
   padding: 0.625rem 0.875rem;
-  border: 1px solid var(--input-border);
+  border: 1.5px solid var(--border-color-strong);
   border-radius: var(--radius-md);
   background: var(--input-bg);
   color: var(--text);
   font-size: 0.875rem;
   line-height: 1.25rem;
   transition: var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+input:hover, select:hover, textarea:hover {
+  border-color: var(--primary-light);
 }
 
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: var(--focus-ring);
+  box-shadow: var(--focus-ring), var(--shadow-sm);
+  background: var(--card);
 }
 
 /* Utility Classes */
@@ -327,11 +368,12 @@ input:focus, select:focus, textarea:focus {
   width: 320px;
   background: var(--card);
   border-radius: var(--radius-lg);
-  padding: var(--gap-lg);
+  padding: 24px;
   box-shadow: var(--shadow-lg);
   height: fit-content;
-  max-height: calc(100vh - 48px); /* altura máxima visível */
-  overflow-y: auto; /* scroll interno se necessário */
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  overflow-x: hidden;
   transition: var(--transition-normal);
   border: 1px solid var(--input-border);
   position: sticky;
@@ -343,19 +385,36 @@ input:focus, select:focus, textarea:focus {
   box-shadow: var(--shadow-lg),
               0 0 0 1px var(--primary),
               0 0 0 4px var(--primary-subtle);
-  transform: translateY(-2px);
+}
+
+/* Scrollbar customizada para sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }
 
 /* Header e Navegação */
 .app-header {
   background: var(--card);
-  border-bottom: 1px solid var(--input-border);
+  border-bottom: 2px solid var(--primary);
   padding: var(--gap-md) 0;
   position: sticky;
   top: 0;
   z-index: var(--z-drawer);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-md);
 }
 
 .app-nav {
@@ -364,6 +423,40 @@ input:focus, select:focus, textarea:focus {
   justify-content: space-between;
   gap: var(--gap-md);
   padding: 0 var(--gap-md);
+}
+
+/* Header title styling for better readability */
+.header-title {
+  margin: 0;
+  font-size: 1.375rem; /* ~22px */
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.header-title img {
+  transition: transform 0.3s ease;
+}
+
+.header-title:hover img {
+  transform: scale(1.05);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+/* Improve link contrast in light mode inside header */
+.app-header a {
+  color: var(--text);
+}
+.app-header a:hover {
+  color: var(--primary-dark);
 }
 
 .nav-brand {
@@ -560,7 +653,7 @@ input:focus, select:focus, textarea:focus {
 .search-actions {
   display: flex;
   gap: var(--gap-sm);
-  justify-content: flex-end;
+  justify-content: center;
   margin-top: var(--gap-md);
 }
 
@@ -601,14 +694,15 @@ input:focus, select:focus, textarea:focus {
   background: var(--card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-  border: 1px solid var(--input-border);
+  border: 1px solid var(--border-color-strong);
   padding: var(--gap-lg);
   transition: var(--transition-normal);
 }
 
 .card:hover {
   box-shadow: var(--shadow-lg);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  border-color: var(--primary);
 }
 
 /* Text Helpers */
@@ -843,3 +937,58 @@ input, select, textarea {
 
 /* Small helper to make the outline transition smooth */
 .app-shell { transition: outline-color 180ms ease, outline-offset 180ms ease; }
+
+/* Generic page container + cards */
+.page-container { width: 100%; max-width: 1200px; margin: var(--gap-xl) auto; padding: 0 var(--gap-lg); }
+.section-card { 
+  background: var(--card); 
+  border: 1px solid var(--border-color-strong); 
+  border-radius: var(--radius-lg); 
+  box-shadow: var(--card-shadow); 
+  padding: var(--gap-lg);
+  transition: all var(--transition-normal);
+}
+.section-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+.section-header { display: flex; align-items: center; justify-content: center; margin-bottom: var(--gap-md); text-align: center; }
+.actions-center { display: flex; justify-content: center; gap: var(--gap-sm); }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap-md); }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap-md); }
+
+@media (max-width: 1024px){
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px){
+  .grid-4, .grid-2 { grid-template-columns: 1fr; }
+}
+
+/* Table helpers */
+.table-header { 
+  background: linear-gradient(to bottom, #ffb366, #ff9933); 
+  color: #1a1a1a; 
+  font-weight: 700;
+  border-bottom: 2px solid var(--primary-dark);
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+/* Grid de 5 colunas */
+@media (max-width: 1200px) {
+  div[style*="grid-template-columns: repeat(5, 1fr)"] {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  div[style*="grid-template-columns: repeat(5, 1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  div[style*="grid-template-columns: repeat(5, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+}

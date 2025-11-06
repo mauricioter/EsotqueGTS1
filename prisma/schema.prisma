@@ -8,28 +8,21 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  name         String
-  email        String   @unique
-  cpf          String?  @unique
-  numero       String?
-  passwordHash String?
-  role         Role     @default(VIEWER)
-  status       UserStatus @default(PENDING)
-  createdAt    DateTime @default(now())
-  accounts     Account[]
-  sessions     Session[]
-}
-
-enum Role {
-  ADMIN
-  OPERATOR
-  VIEWER
-}
-
-enum UserStatus {
-  PENDING
-  APPROVED
+  id                 String     @id @default(cuid())
+  name               String
+  email              String     @unique
+  cpf                String?    @unique
+  numero             String?
+  phone              String?
+  passwordHash       String?
+  role               Role       @default(VIEWER)
+  status             UserStatus @default(PENDING)
+  verificationCode   String?
+  codeExpiresAt      DateTime?
+  createdAt          DateTime   @default(now())
+  accounts           Account[]
+  sessions           Session[]
+  instalacoes        Instalacao[]
 }
 
 model Account {
@@ -66,24 +59,65 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model Equipamento {
+  id          String            @id @default(cuid())
+  nome        String
+  descricao   String?
+  serial      String?           @unique
+  mac         String?           @unique
+  status      StatusEquipamento @default(DISPONIVEL)
+  dataEntrada DateTime          @default(now())
+  dataSaida   DateTime?
+  destino     String?
+  tecnicoResponsavel String?
+  assinaturaTecnico  String?
+  observacoes String?
+  qrCode      String?           @unique
+  localizacaoAtual String?
+  instalacoes Instalacao[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model Instalacao {
+  id                String      @id @default(cuid())
+  equipamentoId     String
+  equipamento       Equipamento @relation(fields: [equipamentoId], references: [id], onDelete: Cascade)
+  tecnicoId         String
+  tecnico           User        @relation(fields: [tecnicoId], references: [id])
+  dataInstalacao    DateTime    @default(now())
+  endereco          String?
+  latitude          Float?
+  longitude         Float?
+  fotoEquipamento   String?
+  fotoSerial        String?
+  fotoLocal         String?
+  fotosAdicionais   String[]
+  assinaturaCliente String?
+  nomeCliente       String?
+  observacoes       String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+
+enum Role {
+  ADMIN
+  OPERATOR
+  VIEWER
+}
+
+enum UserStatus {
+  PENDING
+  APPROVED
+}
+
 enum StatusEquipamento {
   DISPONIVEL
   EM_USO
   EMPRESTADO
   MANUTENCAO
   SAIDA
-}
-
-model Equipamento {
-  id          String              @id @default(cuid())
-  nome        String
-  descricao   String?
-  serial      String?             @unique
-  mac         String?             @unique
-  status      StatusEquipamento   @default(DISPONIVEL)
-  dataEntrada DateTime            @default(now())
-  dataSaida   DateTime?
-  destino     String?
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
+  RESERVADO
+  DEFEITO
+  INSTALADO
 }

@@ -8,9 +8,11 @@ export default async function AdminPage() {
   const role = (session as any)?.role;
   if (!session || role !== 'ADMIN') {
     return (
-      <div style={{ padding: 24 }}>
-        <h2>Acesso negado</h2>
-        <p>Você precisa ser ADMIN para acessar esta página.</p>
+      <div className="page-container">
+        <div className="section-card" style={{ textAlign: 'center' }}>
+          <h2>Acesso negado</h2>
+          <p>Você precisa ser ADMIN para acessar esta página.</p>
+        </div>
       </div>
     );
   }
@@ -20,17 +22,24 @@ export default async function AdminPage() {
   
 
   return (
-    <div style={{ padding: 24 }}>
-      <h2>Administração de Usuários</h2>
+    <div className="page-container">
+      <div className="section-header">
+        <div>
+          <h2>Administração de Usuários</h2>
+          <p className="text-muted">Aprove usuários pendentes para liberar acesso.</p>
+        </div>
+      </div>
       {pendentes.length === 0 ? (
-        <p>Não há usuários pendentes.</p>
+        <div className="section-card text-center">Não há usuários pendentes.</div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div className="section-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {pendentes.map((u) => (
-            <div key={u.id} style={{ border: '1px solid var(--input-border)', borderRadius: 8, padding: 12 }}>
+            <div key={u.id} className="card" style={{ padding: 12 }}>
               <div><strong>{u.name}</strong> — {u.email}</div>
-              <div>CPF: {u.cpf} | Número: {u.numero ?? '-'}</div>
-              <ApproveButton userId={u.id} />
+              <div className="small-muted">CPF: {u.cpf} | Número: {u.numero ?? '-'}</div>
+              <div className="actions-center" style={{ marginTop: 8 }}>
+                <ApproveButton userId={u.id} />
+              </div>
             </div>
           ))}
         </div>

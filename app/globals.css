@@ -51,3 +51,10 @@ html, body {
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Hover effect para cards de equipamentos */
+.equipamento-card:hover {
+  border-color: var(--primary) !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.15);
+  transform: translateY(-2px);
+}
