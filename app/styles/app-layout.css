@@ -1,0 +1,53 @@
+/* App Layout Shell */
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--gap-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-md);
+}
+
+.header {
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: var(--gap-lg);
+}
+
+@media (max-width: 1024px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+.main {
+  background: var(--card);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  padding: var(--gap-lg);
+}
+
+/* Global divider */
+hr {
+  border: 0;
+  border-top: 1px solid var(--input-border);
+  margin: var(--gap-lg) 0;
+}
+
+:root.theme-dark hr {
+  border-top-color: #334155;
+}

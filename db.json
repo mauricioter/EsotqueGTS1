@@ -1,0 +1,22 @@
+{
+  "equipamentos": [
+    {
+      "id": "2",
+      "nome": "Monitor LG 27",
+      "descricao": "4K, IPS",
+      "status": "manutencao"
+    },
+    {
+      "id": "3",
+      "nome": "Mouse Wireless",
+      "descricao": "Logitech MX Master 3",
+      "status": "emprestado"
+    },
+    {
+      "destino": "Sala do Daniel",
+      "status": "saida",
+      "dataSaida": "2025-11-04T15:09:56.930Z",
+      "id": "7e31"
+    }
+  ]
+}

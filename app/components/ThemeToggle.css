@@ -1,0 +1,313 @@
+/* Container do Theme Toggle */
+.theme-toggle-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+}
+
+/* Skeleton loader */
+.theme-skeleton {
+  width: 100px;
+  height: 40px;
+  background: linear-gradient(90deg, var(--skeleton-bg) 25%, var(--skeleton-bg-light) 50%, var(--skeleton-bg) 75%);
+  background-size: 200% 100%;
+  border-radius: 20px;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Toggle switch */
+.theme-toggle-switch {
+  position: relative;
+  width: 60px;
+  height: 32px;
+  background: var(--toggle-bg);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid var(--toggle-border);
+}
+
+.theme-toggle-switch:hover {
+  transform: scale(1.05);
+}
+
+.theme-toggle-switch.active {
+  background: var(--toggle-active-bg);
+  border-color: var(--toggle-active-border);
+}
+
+/* Slider do toggle */
+.theme-toggle-slider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  background: var(--toggle-slider);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle-switch.active .theme-toggle-slider {
+  transform: translateX(28px);
+  background: var(--toggle-active-slider);
+}
+
+/* Ícones dentro do slider */
+.theme-icon {
+  width: 14px;
+  height: 14px;
+  transition: all 0.3s ease;
+  color: var(--toggle-icon);
+}
+
+.theme-toggle-switch.active .theme-icon {
+  color: var(--toggle-active-icon);
+}
+
+/* Botão de tema com texto */
+.theme-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 2px solid var(--button-border);
+  background: var(--button-bg);
+  color: var(--button-text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.theme-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.theme-button:active {
+  transform: translateY(0);
+}
+
+.theme-button.active {
+  background: var(--button-active-bg);
+  border-color: var(--button-active-border);
+  color: var(--button-active-text);
+}
+
+/* Ícone do botão */
+.theme-button-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+}
+
+.theme-button:hover .theme-button-icon {
+  transform: rotate(180deg);
+}
+
+/* Container de múltiplos temas */
+.theme-selector {
+  display: flex;
+  gap: 8px;
+  padding: 4px;
+  background: var(--selector-bg);
+  border-radius: 12px;
+  border: 1px solid var(--selector-border);
+}
+
+/* Botão de seleção de tema */
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--option-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.theme-option:hover {
+  background: var(--option-hover);
+}
+
+.theme-option.active {
+  background: var(--option-active-bg);
+  color: var(--option-active-text);
+}
+
+/* Ícone da opção */
+.theme-option-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Animações de transição */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Tooltip de informação */
+.theme-info {
+  position: relative;
+  margin-left: 8px;
+}
+
+.theme-info-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: var(--tooltip-bg);
+  color: var(--tooltip-text);
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.theme-info:hover .theme-info-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.theme-info-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--tooltip-bg);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .theme-toggle-container {
+    min-width: 100px;
+  }
+  
+  .theme-toggle-switch {
+    width: 50px;
+    height: 28px;
+  }
+  
+  .theme-toggle-slider {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .theme-toggle-switch.active .theme-toggle-slider {
+    transform: translateX(22px);
+  }
+  
+  .theme-button {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  
+  .theme-selector {
+    gap: 4px;
+  }
+  
+  .theme-option {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-selector {
+    flex-direction: column;
+  }
+  
+  .theme-option {
+    justify-content: center;
+  }
+}
+
+/* Variáveis CSS */
+:root {
+  --toggle-bg: #e5e7eb;
+  --toggle-border: #d1d5db;
+  --toggle-slider: #ffffff;
+  --toggle-icon: #6b7280;
+  --toggle-active-bg: #3b82f6;
+  --toggle-active-border: #2563eb;
+  --toggle-active-slider: #ffffff;
+  --toggle-active-icon: #ffffff;
+  --button-bg: #f3f4f6;
+  --button-border: #d1d5db;
+  --button-text: #374151;
+  --button-active-bg: #3b82f6;
+  --button-active-border: #2563eb;
+  --button-active-text: #ffffff;
+  --selector-bg: #f3f4f6;
+  --selector-border: #d1d5db;
+  --option-text: #6b7280;
+  --option-hover: #e5e7eb;
+  --option-active-bg: #3b82f6;
+  --option-active-text: #ffffff;
+  --skeleton-bg: #e5e7eb;
+  --skeleton-bg-light: #f3f4f6;
+  --tooltip-bg: #1f2937;
+  --tooltip-text: #ffffff;
+}
+
+/* Tema escuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --toggle-bg: #374151;
+    --toggle-border: #4b5563;
+    --toggle-slider: #1f2937;
+    --toggle-icon: #9ca3af;
+    --toggle-active-bg: #3b82f6;
+    --toggle-active-border: #2563eb;
+    --toggle-active-slider: #ffffff;
+    --toggle-active-icon: #ffffff;
+    --button-bg: #374151;
+    --button-border: #4b5563;
+    --button-text: #d1d5db;
+    --button-active-bg: #3b82f6;
+    --button-active-border: #2563eb;
+    --button-active-text: #ffffff;
+    --selector-bg: #374151;
+    --selector-border: #4b5563;
+    --option-text: #9ca3af;
+    --option-hover: #4b5563;
+    --option-active-bg: #3b82f6;
+    --option-active-text: #ffffff;
+    --skeleton-bg: #374151;
+    --skeleton-bg-light: #4b5563;
+    --tooltip-bg: #f9fafb;
+    --tooltip-text: #1f2937;
+  }
+}

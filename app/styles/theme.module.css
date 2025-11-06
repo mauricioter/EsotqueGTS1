@@ -1,0 +1,72 @@
+/* Theme tokens */
+.light {
+  --bg: #f3f4f6;
+  --card: #ffffff;
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
+  --accent: #10b981;
+  --accent-dark: #059669;
+  --muted: #64748b;
+  --text: #0f172a;
+  --danger: #dc2626;
+  --danger-bg: #fff1f2;
+  --input-bg: #fbfdff;
+  --input-border: #e6e9ef;
+  --badge-bg: #e0e7ff;
+  --badge-text: #3730a3;
+  --card-shadow: 0 6px 18px rgba(20,24,40,0.08);
+  --focus-ring: rgba(99,102,241,0.08);
+  --hover-overlay: rgba(0,0,0,0.03);
+  --danger-border: rgba(220,38,38,0.12);
+  --danger-hover: rgba(220,38,38,0.14);
+  --danger-border-light: rgba(254,202,202,0.8);
+  --radius: 10px;
+  --gap: 16px;
+}
+
+.dark {
+  --bg: #0f1724;
+  --card: #0b1220;
+  --primary: #7c5cff;
+  --primary-dark: #5b3ef0;
+  --accent: #34d399;
+  --accent-dark: #10b981;
+  --muted: #94a3b8;
+  --text: #e6eef8;
+  --danger: #fca5a5;
+  --danger-bg: rgba(255, 225, 230, 0.06);
+  --input-bg: #071024;
+  --input-border: #1f2937;
+  --badge-bg: rgba(124, 58, 237, 0.12);
+  --badge-text: #e9d5ff;
+  --card-shadow: 0 10px 30px rgba(2,6,23,0.6);
+}
+
+/* Base styles */
+.root {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 250ms ease, color 250ms ease;
+}
+
+/* Layout */
+.container {
+  padding: 12px;
+}
+
+.appShell {
+  display: flex;
+  gap: var(--gap);
+  max-width: 1200px;
+  margin: 28px auto;
+  padding: 18px;
+}
+
+@media (max-width: 900px) {
+  .appShell {
+    flex-direction: column;
+    padding: 12px;
+    margin: 12px;
+  }
+}

@@ -1,26 +1,53 @@
 @import "tailwindcss";
+@import "./index.css";
 
+/* Aliases e variáveis complementares para integração de estilos dos componentes */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Mapear variáveis globais para tokens existentes do index.css */
+  --background: var(--bg);
+  --foreground: var(--text);
+  --border: var(--input-border);
+  --border-light: #f1f5f9;
+  --card-header: var(--hover-overlay);
+  --table-header: var(--hover-overlay);
+  --hover: var(--hover-overlay);
+  --primary-alpha: rgba(59, 130, 246, 0.12);
+  --secondary: #f3f4f6;
+  --secondary-hover: #e5e7eb;
+  --secondary-border: #d1d5db;
+  --danger-border: #ef4444;
+  --danger-border-light: #fca5a5;
+  /* Aliases ausentes usados em componentes */
+  --text-secondary: var(--text-light);
+  --placeholder: var(--muted-light);
+  --tip-bg: var(--badge-bg);
+  --disabled: var(--muted-light);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--bg);
+    --foreground: var(--text);
+    --border-light: #4b5563;
+    --card-header: #1f2937;
+    --table-header: #1f2937;
+    --hover: #374151;
+    --secondary: #374151;
+    --secondary-hover: #4b5563;
+    --secondary-border: #6b7280;
+    --text-secondary: var(--text-light);
+    --placeholder: var(--muted);
+    --tip-bg: var(--badge-bg);
+    --disabled: var(--muted);
   }
 }
 
-body {
+/* Base mínima para garantir consistência */
+html, body {
   background: var(--background);
   color: var(--foreground);
+}
+
+body {
   font-family: Arial, Helvetica, sans-serif;
 }
