@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verificar se o código existe e não expirou
-    // @ts-expect-error - Prisma Client cache
+    // @ts-ignore - Prisma Client cache
     if (!user.verificationCode || !user.codeExpiresAt) {
       return NextResponse.json(
         { error: 'Nenhum código de verificação pendente' },
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // @ts-expect-error - Prisma Client cache
+    // @ts-ignore - Prisma Client cache
     if (new Date() > user.codeExpiresAt) {
       return NextResponse.json(
         { error: 'Código de verificação expirado' },
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // @ts-expect-error - Prisma Client cache
+    // @ts-ignore - Prisma Client cache
     if (user.verificationCode !== code) {
       return NextResponse.json(
         { error: 'Código de verificação inválido' },

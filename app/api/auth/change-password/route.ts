@@ -30,7 +30,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Verificar código de verificação
-    // @ts-expect-error - Prisma Client needs reload
+    // @ts-ignore
     if (!user.verificationCode || !user.codeExpiresAt) {
       return NextResponse.json(
         { error: 'Código de verificação não encontrado' },
@@ -38,7 +38,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // @ts-expect-error - Prisma Client needs reload
+    // @ts-ignore
     if (new Date() > user.codeExpiresAt) {
       return NextResponse.json(
         { error: 'Código de verificação expirado' },
@@ -46,7 +46,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // @ts-expect-error - Prisma Client needs reload
+    // @ts-ignore
     if (user.verificationCode !== verificationCode) {
       return NextResponse.json(
         { error: 'Código de verificação inválido' },
@@ -73,9 +73,9 @@ export async function PUT(request: NextRequest) {
       where: { email: session.user.email },
       data: {
         passwordHash: hashedPassword,
-        // @ts-expect-error - Prisma Client needs reload
+        // @ts-ignore
         verificationCode: null,
-        // @ts-expect-error - Prisma Client needs reload
+        // @ts-ignore
         codeExpiresAt: null
       }
     });

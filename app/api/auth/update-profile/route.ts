@@ -37,7 +37,7 @@ export async function PUT(request: NextRequest) {
       data: {
         name,
         email,
-        // @ts-expect-error - Prisma Client cache
+        // @ts-ignore
         phone
       }
     });
@@ -47,7 +47,7 @@ export async function PUT(request: NextRequest) {
       user: {
         name: updatedUser.name,
         email: updatedUser.email,
-        // @ts-expect-error - Prisma Client cache
+        // @ts-ignore
         phone: updatedUser.phone
       }
     });

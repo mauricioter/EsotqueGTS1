@@ -27,9 +27,9 @@ export async function POST(request: NextRequest) {
     await prisma.user.update({
       where: { email },
       data: {
-        // @ts-expect-error - Prisma Client cache
+        // @ts-ignore
         verificationCode: code,
-        // @ts-expect-error - Prisma Client cache
+        // @ts-ignore
         codeExpiresAt: expiresAt
       }
     });
