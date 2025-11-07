@@ -177,12 +177,12 @@ export default function EquipamentosPageNew() {
   const getStatusBadge = (status: string) => {
     const badges: Record<string, { icon: string; label: string; className: string }> = {
       DISPONIVEL: { icon: '✅', label: 'Disponível', className: 'status-disponivel' },
-      EM_POSSE_DO_TECNICO: { icon: '👤', label: 'Em Posse do Técnico', className: 'status-em-posse' },
+        EM_POSSE_DO_TECNICO: { icon: '�', label: 'Em Posse do Técnico', className: 'status-em-posse' },
       DESCARTADO: { icon: '🗑️', label: 'Descartado', className: 'status-descartado' },
       SAIDA: { icon: '📤', label: 'Saída', className: 'status-saida' },
       RESERVADO: { icon: '📋', label: 'Reservado', className: 'status-reservado' },
       DEFEITO: { icon: '❌', label: 'Com Defeito', className: 'status-defeito' },
-      INSTALADO: { icon: '📍', label: 'Instalado', className: 'status-instalado' },
+        INSTALADO: { icon: '✅', label: 'Instalado', className: 'status-instalado' },
     };
 
     const badge = badges[status] || badges.DISPONIVEL;
@@ -252,8 +252,8 @@ export default function EquipamentosPageNew() {
             >
               <option value="ALL">Todos</option>
               <option value="DISPONIVEL">✅ Disponível</option>
-              <option value="EM_POSSE_DO_TECNICO">👤 Em Posse do Técnico</option>
-              <option value="INSTALADO">📍 Instalado</option>
+                <option value="EM_POSSE_DO_TECNICO">� Em Posse do Técnico</option>
+                <option value="INSTALADO">✅ Instalado</option>
               <option value="DESCARTADO">🗑️ Descartado</option>
               <option value="SAIDA">📤 Saída</option>
               <option value="RESERVADO">📋 Reservado</option>
@@ -446,12 +446,12 @@ export default function EquipamentosPageNew() {
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                   >
                     <option value="DISPONIVEL">✅ Disponível</option>
-                    <option value="EM_POSSE_DO_TECNICO">👤 Em Posse do Técnico</option>
+                      <option value="EM_POSSE_DO_TECNICO">� Em Posse do Técnico</option>
                     <option value="DESCARTADO">🗑️ Descartado</option>
                     <option value="SAIDA">📤 Saída</option>
                     <option value="RESERVADO">📋 Reservado</option>
                     <option value="DEFEITO">❌ Com Defeito</option>
-                    <option value="INSTALADO">📍 Instalado</option>
+                      <option value="INSTALADO">✅ Instalado</option>
                   </select>
                 </div>
 

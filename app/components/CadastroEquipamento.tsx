@@ -213,12 +213,12 @@ export default function CadastroEquipamento() {
             required
           >
             <option value="DISPONIVEL">✅ Disponível</option>
-            <option value="EM_POSSE_DO_TECNICO">� Em Posse do Técnico</option>
+              <option value="EM_POSSE_DO_TECNICO">🔧 Em Posse do Técnico</option>
             <option value="DESCARTADO">🗑️ Descartado</option>
             <option value="SAIDA">📤 Saída (Transferido)</option>
             <option value="RESERVADO">📋 Reservado</option>
             <option value="DEFEITO">❌ Com Defeito</option>
-            <option value="INSTALADO">📍 Instalado</option>
+              <option value="INSTALADO">✅ Instalado</option>
           </select>
           <small className="form-hint">
             {form.status === 'DISPONIVEL' && 'Equipamento pronto para uso'}
