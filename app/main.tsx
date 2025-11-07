@@ -8,7 +8,6 @@ import ListaEquipamentos from './components/ListaEquipamentos';
 import SidebarSearch from './components/SidebarSearch';
 import UserSidebar from './components/UserSidebar';
 import NotesPanel from './components/NotesPanel';
-import './index.css';
 import './animations.css';
 
 // Importação dinâmica do ThemeToggle para evitar problemas de hidratação
