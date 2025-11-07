@@ -50,6 +50,30 @@ export async function PUT(
       return NextResponse.json({ error: 'Status inválido' }, { status: 400 });
     }
 
+    // Validar serial duplicado (se estiver sendo alterado)
+    if (body.serial) {
+      const serialExistente = await prisma.equipamento.findUnique({
+        where: { serial: body.serial }
+      });
+      if (serialExistente && serialExistente.id !== id) {
+        return NextResponse.json({ 
+          error: `Serial "${body.serial}" já cadastrado no equipamento "${serialExistente.nome}"` 
+        }, { status: 400 });
+      }
+    }
+
+    // Validar MAC duplicado (se estiver sendo alterado)
+    if (body.mac) {
+      const macExistente = await prisma.equipamento.findUnique({
+        where: { mac: body.mac }
+      });
+      if (macExistente && macExistente.id !== id) {
+        return NextResponse.json({ 
+          error: `MAC "${body.mac}" já cadastrado no equipamento "${macExistente.nome}"` 
+        }, { status: 400 });
+      }
+    }
+
     const dataToUpdate: any = { ...body };
     if (body.dataSaida) {
       dataToUpdate.dataSaida = new Date(body.dataSaida);

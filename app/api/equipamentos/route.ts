@@ -44,6 +44,30 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Status inválido' }, { status: 400 });
     }
 
+    // Validar serial duplicado
+    if (body.serial) {
+      const serialExistente = await prisma.equipamento.findUnique({
+        where: { serial: body.serial }
+      });
+      if (serialExistente) {
+        return NextResponse.json({ 
+          error: `Serial "${body.serial}" já cadastrado no equipamento "${serialExistente.nome}"` 
+        }, { status: 400 });
+      }
+    }
+
+    // Validar MAC duplicado
+    if (body.mac) {
+      const macExistente = await prisma.equipamento.findUnique({
+        where: { mac: body.mac }
+      });
+      if (macExistente) {
+        return NextResponse.json({ 
+          error: `MAC "${body.mac}" já cadastrado no equipamento "${macExistente.nome}"` 
+        }, { status: 400 });
+      }
+    }
+
     const novoEquipamento = await prisma.equipamento.create({
       data: {
         nome: body.nome,
