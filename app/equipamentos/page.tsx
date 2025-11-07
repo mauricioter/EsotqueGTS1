@@ -69,6 +69,9 @@ export default function EquipamentosPageNew() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('Salvando equipamento:', formData);
+    console.log('Editando?', editingEquipamento ? 'Sim' : 'Não');
+    
     try {
       const url = editingEquipamento 
         ? `/api/equipamentos/${editingEquipamento.id}`
@@ -76,22 +79,30 @@ export default function EquipamentosPageNew() {
       
       const method = editingEquipamento ? 'PUT' : 'POST';
       
+      console.log('URL:', url, 'Method:', method);
+      
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
+      console.log('Response status:', response.status);
+
       if (response.ok) {
+        const data = await response.json();
+        console.log('Equipamento salvo com sucesso:', data);
         await loadEquipamentos();
         handleCloseModal();
+        alert('Equipamento salvo com sucesso!');
       } else {
         const error = await response.json();
+        console.error('Erro da API:', error);
         alert(error.error || 'Erro ao salvar equipamento');
       }
     } catch (error) {
       console.error('Erro:', error);
-      alert('Erro ao salvar equipamento');
+      alert('Erro ao salvar equipamento: ' + error);
     }
   };
 
@@ -177,12 +188,12 @@ export default function EquipamentosPageNew() {
   const getStatusBadge = (status: string) => {
     const badges: Record<string, { icon: string; label: string; className: string }> = {
       DISPONIVEL: { icon: '✅', label: 'Disponível', className: 'status-disponivel' },
-        EM_POSSE_DO_TECNICO: { icon: '�', label: 'Em Posse do Técnico', className: 'status-em-posse' },
+      EM_POSSE_DO_TECNICO: { icon: '🔧', label: 'Em Posse do Técnico', className: 'status-em-posse' },
       DESCARTADO: { icon: '🗑️', label: 'Descartado', className: 'status-descartado' },
       SAIDA: { icon: '📤', label: 'Saída', className: 'status-saida' },
       RESERVADO: { icon: '📋', label: 'Reservado', className: 'status-reservado' },
       DEFEITO: { icon: '❌', label: 'Com Defeito', className: 'status-defeito' },
-        INSTALADO: { icon: '✅', label: 'Instalado', className: 'status-instalado' },
+      INSTALADO: { icon: '✅', label: 'Instalado', className: 'status-instalado' },
     };
 
     const badge = badges[status] || badges.DISPONIVEL;
@@ -252,8 +263,8 @@ export default function EquipamentosPageNew() {
             >
               <option value="ALL">Todos</option>
               <option value="DISPONIVEL">✅ Disponível</option>
-                <option value="EM_POSSE_DO_TECNICO">� Em Posse do Técnico</option>
-                <option value="INSTALADO">✅ Instalado</option>
+              <option value="EM_POSSE_DO_TECNICO">🔧 Em Posse do Técnico</option>
+              <option value="INSTALADO">✅ Instalado</option>
               <option value="DESCARTADO">🗑️ Descartado</option>
               <option value="SAIDA">📤 Saída</option>
               <option value="RESERVADO">📋 Reservado</option>
@@ -446,12 +457,12 @@ export default function EquipamentosPageNew() {
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                   >
                     <option value="DISPONIVEL">✅ Disponível</option>
-                      <option value="EM_POSSE_DO_TECNICO">� Em Posse do Técnico</option>
+                    <option value="EM_POSSE_DO_TECNICO">🔧 Em Posse do Técnico</option>
                     <option value="DESCARTADO">🗑️ Descartado</option>
                     <option value="SAIDA">📤 Saída</option>
                     <option value="RESERVADO">📋 Reservado</option>
                     <option value="DEFEITO">❌ Com Defeito</option>
-                      <option value="INSTALADO">✅ Instalado</option>
+                    <option value="INSTALADO">✅ Instalado</option>
                   </select>
                 </div>
 
