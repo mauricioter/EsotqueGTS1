@@ -7,6 +7,7 @@ import Link from 'next/link';
 import CadastroEquipamento from '../components/CadastroEquipamento';
 import ListaEquipamentos from '../components/ListaEquipamentos';
 import SidebarSearch from '../components/SidebarSearch';
+import '../index.css';
 import '../equipamentos.css';
 
 interface SearchState {
