@@ -213,19 +213,21 @@ export default function CadastroEquipamento() {
             required
           >
             <option value="DISPONIVEL">✅ Disponível</option>
-            <option value="EM_USO">🔧 Em Uso</option>
-            <option value="MANUTENCAO">⚠️ Em Manutenção</option>
-            <option value="SAIDA">📤 Saída (Descartado/Transferido)</option>
+            <option value="EM_POSSE_DO_TECNICO">� Em Posse do Técnico</option>
+            <option value="DESCARTADO">🗑️ Descartado</option>
+            <option value="SAIDA">📤 Saída (Transferido)</option>
             <option value="RESERVADO">📋 Reservado</option>
             <option value="DEFEITO">❌ Com Defeito</option>
+            <option value="INSTALADO">📍 Instalado</option>
           </select>
           <small className="form-hint">
             {form.status === 'DISPONIVEL' && 'Equipamento pronto para uso'}
-            {form.status === 'EM_USO' && 'Equipamento sendo utilizado'}
-            {form.status === 'MANUTENCAO' && 'Equipamento em manutenção'}
-            {form.status === 'SAIDA' && 'Equipamento descartado ou transferido'}
+            {form.status === 'EM_POSSE_DO_TECNICO' && 'Equipamento com técnico responsável'}
+            {form.status === 'DESCARTADO' && 'Equipamento descartado'}
+            {form.status === 'SAIDA' && 'Equipamento transferido'}
             {form.status === 'RESERVADO' && 'Equipamento reservado para uso futuro'}
             {form.status === 'DEFEITO' && 'Equipamento com defeito'}
+            {form.status === 'INSTALADO' && 'Equipamento instalado em campo'}
           </small>
         </div>
 

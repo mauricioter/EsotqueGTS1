@@ -113,9 +113,8 @@ enum UserStatus {
 
 enum StatusEquipamento {
   DISPONIVEL
-  EM_USO
-  EMPRESTADO
-  MANUTENCAO
+  EM_POSSE_DO_TECNICO
+  DESCARTADO
   SAIDA
   RESERVADO
   DEFEITO
