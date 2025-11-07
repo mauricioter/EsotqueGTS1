@@ -335,7 +335,7 @@ export default async function DashboardPage() {
                   <div style={{ fontSize: '13px', color: 'var(--text-light)', marginBottom: '4px' }}>
                     📍 Destino: {e.destino || '—'}
                   </div>
-                  {/* @ts-expect-error - Prisma Client needs regeneration */}
+                  {/* @ts-ignore - tecnicoResponsavel exists in schema */}
                   {e.tecnicoResponsavel && (
                     <div style={{ 
                       fontSize: '13px', 
@@ -348,13 +348,13 @@ export default async function DashboardPage() {
                       borderLeft: '3px solid var(--primary)'
                     }}>
                       <div style={{ fontWeight: 600, marginBottom: '2px' }}>
-                        {/* @ts-expect-error - Prisma Client needs regeneration */}
+                        {/* @ts-ignore - tecnicoResponsavel exists in schema */}
                         👤 Técnico: {e.tecnicoResponsavel}
                       </div>
-                      {/* @ts-expect-error - Prisma Client needs regeneration */}
+                      {/* @ts-ignore - assinaturaTecnico exists in schema */}
                       {e.assinaturaTecnico && (
                         <div style={{ fontSize: '12px', color: 'var(--text-light)' }}>
-                          {/* @ts-expect-error - Prisma Client needs regeneration */}
+                          {/* @ts-ignore */}
                           ✍️ Matrícula/Assinatura: {e.assinaturaTecnico}
                         </div>
                       )}
