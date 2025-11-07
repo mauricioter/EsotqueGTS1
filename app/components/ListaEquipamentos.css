@@ -438,3 +438,100 @@
     --hover-overlay: #262626;
   }
 }
+
+/* ========================================
+   RESPONSIVE STYLES
+   ======================================== */
+
+/* Tablet (< 1024px) */
+@media (max-width: 1024px) {
+  .list-container,
+  .lista-container {
+    max-width: 100%;
+    padding: 16px;
+  }
+  
+  .equipamentos-table {
+    font-size: 13px;
+  }
+  
+  .equipamentos-table th,
+  .equipamentos-table td {
+    padding: 10px 8px;
+  }
+}
+
+/* Mobile devices (< 768px) */
+@media (max-width: 768px) {
+  .list-container,
+  .lista-container {
+    margin: 0;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .list-title,
+  .lista-title {
+    font-size: 18px;
+  }
+  
+  /* Card view for mobile instead of table */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .equipamentos-table {
+    font-size: 12px;
+    min-width: 800px; /* Force horizontal scroll */
+  }
+  
+  .equipamentos-table th,
+  .equipamentos-table td {
+    padding: 8px 6px;
+  }
+  
+  /* Action buttons */
+  .btn-editar,
+  .btn-deletar,
+  .btn-saida {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  /* Status badges */
+  .status-badge {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+  
+  /* Pagination */
+  .pagination {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .page-btn {
+    min-width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+}
+
+/* Small mobile (< 480px) */
+@media (max-width: 480px) {
+  .list-container,
+  .lista-container {
+    padding: 8px;
+  }
+  
+  .equipamentos-table {
+    min-width: 700px;
+  }
+  
+  .equipamentos-table th,
+  .equipamentos-table td {
+    padding: 6px 4px;
+    font-size: 11px;
+  }
+}

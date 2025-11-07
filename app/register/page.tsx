@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
+import '../login/login.css';
 
 function validarEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -29,6 +31,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [status, setStatus] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,12 +53,9 @@ export default function RegisterPage() {
       setStatus('Senha deve ter ao menos 6 caracteres');
       return;
     }
-    if (!/(?=.*[A-Za-z])(?=.*\d)/.test(password)) {
-      setStatus('Senha deve conter letras e números');
-      return;
-    }
 
     try {
+      setLoading(true);
       setStatus('Cadastrando...');
       const res = await fetch('/api/register', {
         method: 'POST',
@@ -65,91 +65,193 @@ export default function RegisterPage() {
       const data = await res.json();
       if (!res.ok) {
         setStatus(data.error || 'Erro ao cadastrar');
+        setLoading(false);
         return;
       }
-      setStatus('Cadastro realizado! Aguarde aprovação do administrador.');
+      setStatus('✅ Cadastro realizado! Aguarde aprovação do administrador.');
+      setLoading(false);
+      
+      // Clear form
+      setNomeCompleto('');
+      setNumero('');
+      setEmail('');
+      setCpf('');
+      setPassword('');
+      setConfirm('');
     } catch (e) {
       setStatus('Erro de rede');
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      background: 'var(--bg)',
-      padding: 'var(--gap-md)'
-    }}>
-      <div style={{ 
-        width: '100%',
-        maxWidth: 480, 
-        display: 'flex', 
-        flexDirection: 'column', 
-        gap: 20, 
-        background: 'var(--card)', 
-        border: '2px solid var(--primary)', 
-        borderRadius: 'var(--radius-lg)', 
-        boxShadow: 'var(--shadow-lg)', 
-        padding: 32 
-      }}>
-        <div style={{ textAlign: 'center', marginBottom: 8 }}>
-          <div style={{
-            width: 80,
-            height: 80,
-            background: 'white',
-            borderRadius: 'var(--radius-lg)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 16,
-            margin: '0 auto 16px auto',
-            padding: 8,
-            boxShadow: 'var(--shadow-md)',
-            border: '2px solid var(--primary)'
-          }}>
-            <img src="/logo.png" alt="GTSnet Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+    <div className="login-container">
+      {/* Left Side - Branding */}
+      <div className="login-brand">
+        <div className="brand-content">
+          <img src="/logo.png" alt="GTSnet" className="brand-logo" />
+          <h1>Criar Conta</h1>
+          <p>Junte-se ao sistema de controle de estoque GTSnet</p>
+          <div className="brand-features">
+            <div className="feature-item">
+              <span className="feature-icon">✅</span>
+              <span>Cadastro rápido e seguro</span>
+            </div>
+            <div className="feature-item">
+              <span className="feature-icon">🔐</span>
+              <span>Aprovação por administrador</span>
+            </div>
+            <div className="feature-item">
+              <span className="feature-icon">📊</span>
+              <span>Acesso completo ao sistema</span>
+            </div>
+            <div className="feature-item">
+              <span className="feature-icon">🚀</span>
+              <span>Comece em minutos</span>
+            </div>
           </div>
-          <h2 style={{ margin: '0 0 8px 0', color: 'var(--text)' }}>Criar conta</h2>
-          <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: 14 }}>Cadastre-se para começar</p>
         </div>
-        <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <div>
-            <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: 6 }}>Nome completo</label>
-            <input value={nomeCompleto} onChange={(e) => setNomeCompleto(e.target.value)} placeholder="Seu nome" required style={{ width: '100%', padding: '10px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', fontSize: 14 }} />
+      </div>
+
+      {/* Right Side - Register Form */}
+      <div className="login-form-container">
+        <div className="login-form-wrapper">
+          <div className="login-header">
+            <h2>Crie sua conta</h2>
+            <p>Preencha os dados abaixo para se cadastrar</p>
           </div>
 
-          <div>
-            <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: 6 }}>Número</label>
-            <input value={numero} onChange={(e) => setNumero(e.target.value)} placeholder="Ex: 123" style={{ width: '100%', padding: '10px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', fontSize: 14 }} />
-          </div>
+          {status && (
+            <div className={`alert ${status.includes('✅') ? 'alert-success' : status.includes('Erro') || status.includes('inválid') ? 'alert-error' : 'alert-info'}`}>
+              <span className="alert-icon">
+                {status.includes('✅') ? '✅' : status.includes('Erro') ? '⚠️' : 'ℹ️'}
+              </span>
+              <span>{status}</span>
+            </div>
+          )}
 
-          <div>
-            <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: 6 }}>Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="seu@email.com" required style={{ width: '100%', padding: '10px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', fontSize: 14 }} />
-          </div>
+          <form onSubmit={submit} className="login-form">
+            <div className="form-group">
+              <label htmlFor="nome" className="form-label">
+                Nome Completo
+              </label>
+              <input
+                id="nome"
+                type="text"
+                value={nomeCompleto}
+                onChange={(e) => setNomeCompleto(e.target.value)}
+                placeholder="João da Silva"
+                required
+                className="form-input"
+                disabled={loading}
+              />
+            </div>
 
-          <div>
-            <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: 6 }}>CPF</label>
-            <input value={cpf} onChange={(e) => setCpf(e.target.value)} placeholder="000.000.000-00" required style={{ width: '100%', padding: '10px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', fontSize: 14 }} />
-          </div>
+            <div className="form-group">
+              <label htmlFor="numero" className="form-label">
+                Número de Funcionário
+              </label>
+              <input
+                id="numero"
+                type="text"
+                value={numero}
+                onChange={(e) => setNumero(e.target.value)}
+                placeholder="12345"
+                required
+                className="form-input"
+                disabled={loading}
+              />
+            </div>
 
-          <div>
-            <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: 6 }}>Senha</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min. 6 caracteres (letras e números)" required style={{ width: '100%', padding: '10px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', fontSize: 14 }} />
-          </div>
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="seu@email.com"
+                required
+                className="form-input"
+                disabled={loading}
+              />
+            </div>
 
-          <div>
-            <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: 6 }}>Confirmar senha</label>
-            <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="••••••" required style={{ width: '100%', padding: '10px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', fontSize: 14 }} />
-          </div>
+            <div className="form-group">
+              <label htmlFor="cpf" className="form-label">
+                CPF
+              </label>
+              <input
+                id="cpf"
+                type="text"
+                value={cpf}
+                onChange={(e) => setCpf(e.target.value)}
+                placeholder="000.000.000-00"
+                required
+                className="form-input"
+                disabled={loading}
+                maxLength={14}
+              />
+            </div>
 
-          <button type="submit" style={{ padding: '12px 16px', borderRadius: 'var(--radius-md)', border: 'none', background: 'var(--primary)', color: 'white', cursor: 'pointer', fontWeight: 600, fontSize: 14, marginTop: 8 }}>Cadastrar</button>
-          {status && <div style={{ fontSize: 13, color: 'var(--text-secondary)', textAlign: 'center', padding: '8px 12px', background: 'var(--primary-subtle)', borderRadius: 'var(--radius-md)' }}>{status}</div>}
-        </form>
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 8, paddingTop: 12, borderTop: '1px solid var(--input-border)' }}>
-          <a href="/login" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600, fontSize: 14 }}>Já tem conta? Entrar</a>
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
+                Senha
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Mínimo 6 caracteres"
+                required
+                className="form-input"
+                disabled={loading}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="confirm" className="form-label">
+                Confirmar Senha
+              </label>
+              <input
+                id="confirm"
+                type="password"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                placeholder="Digite a senha novamente"
+                required
+                className="form-input"
+                disabled={loading}
+              />
+            </div>
+
+            <button 
+              type="submit" 
+              className="btn-login"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <span className="spinner-small"></span>
+                  Cadastrando...
+                </>
+              ) : (
+                'Criar Conta'
+              )}
+            </button>
+          </form>
+
+          <div className="login-footer">
+            <p>
+              Já tem uma conta?{' '}
+              <Link href="/login" className="link-register">
+                Faça login aqui
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

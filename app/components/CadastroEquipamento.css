@@ -310,3 +310,73 @@ select.form-input:focus {
   --error-text: #991b1b;
   --error-border: #fecaca;
 }
+
+  /* ========================================
+     RESPONSIVE STYLES
+     ======================================== */
+
+  /* Mobile devices (< 768px) */
+  @media (max-width: 768px) {
+    .cadastro-container {
+      max-width: 100%;
+      margin: 0;
+      padding: 16px;
+      border-radius: 8px;
+    }
+  
+    .cadastro-title {
+      font-size: 20px;
+    }
+  
+    .cadastro-subtitle {
+      font-size: 13px;
+    }
+  
+    .form-group {
+      gap: 12px;
+    }
+  
+    .form-label {
+      font-size: 14px;
+    }
+  
+    .form-input,
+    .form-select,
+    .form-textarea {
+      font-size: 16px; /* Prevents zoom on iOS */
+      padding: 12px;
+    }
+  
+    .btn-group {
+      flex-direction: column;
+      gap: 12px;
+    }
+  
+    .btn-submit,
+    .btn-clear {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+    }
+  
+    .status-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+  
+    .status-badge {
+      font-size: 12px;
+      padding: 6px 10px;
+    }
+  }
+
+  /* Small mobile (< 480px) */
+  @media (max-width: 480px) {
+    .cadastro-container {
+      padding: 12px;
+    }
+  
+    .status-grid {
+      grid-template-columns: 1fr;
+    }
+  }

@@ -73,6 +73,45 @@
   --z-dropdown: 40;
   --z-modal: 50;
   --z-toast: 60;
+  
+  /* Smooth scrolling */
+  scroll-behavior: smooth;
+}
+
+/* Improve touch interactions */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Selection colors */
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+::-moz-selection {
+  background: var(--primary);
+  color: white;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color-strong);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }
 
 /* Dark theme variables */
@@ -215,11 +254,39 @@ button, .btn {
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.25rem;
-  transition: var(--transition-normal);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   border: none;
   outline: none;
   gap: var(--gap-sm);
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Ripple effect for buttons */
+button::before, .btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+button:active::before, .btn:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Button active state */
+button:active, .btn:active {
+  transform: scale(0.98);
 }
 
 /* Button Variants */
@@ -236,6 +303,10 @@ button, .btn {
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
   border-color: var(--primary-dark);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
 }
 
 .btn-secondary {
@@ -374,10 +445,32 @@ input:focus, select:focus, textarea:focus {
   max-height: calc(100vh - 120px);
   overflow-y: auto;
   overflow-x: hidden;
-  transition: var(--transition-normal);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid var(--input-border);
   position: sticky;
-  top: var(--gap-lg);
+  top: 20px;
+}
+
+/* Smooth scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+.sidebar {
+  top: 20px;
   flex-shrink: 0;
 }
 
@@ -990,5 +1083,354 @@ input, select, textarea {
 @media (max-width: 480px) {
   div[style*="grid-template-columns: repeat(5, 1fr)"] {
     grid-template-columns: 1fr !important;
+  }
+}
+
+/* ================================================
+   RESPONSIVE DESIGN - Mobile First
+   ================================================ */
+
+/* Tablet and below (1024px) */
+@media (max-width: 1024px) {
+  .app-container {
+    grid-template-columns: 250px 1fr !important;
+  }
+
+  .sidebar {
+    width: 250px !important;
+  }
+
+  .main-content {
+    padding: 1.5rem !important;
+  }
+
+  .equipamento-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+  }
+}
+
+/* ========================================
+   HAMBURGER MENU & MOBILE SIDEBAR
+   ======================================== */
+
+/* Hamburger Menu Button - Hidden on desktop */
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+  position: relative;
+}
+
+.hamburger-menu span {
+  width: 30px;
+  height: 3px;
+  background: var(--text-color);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.hamburger-menu:hover span {
+  background: var(--primary);
+}
+
+.hamburger-menu:active span {
+  transform: scale(0.95);
+}
+
+/* Animated hamburger when sidebar is open */
+.sidebar-open ~ .app-layout .hamburger-menu span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.sidebar-open ~ .app-layout .hamburger-menu span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.sidebar-open ~ .app-layout .hamburger-menu span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Sidebar Close Button - Hidden on desktop */
+.sidebar-close {
+  display: none;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 32px;
+  color: var(--text-color);
+  cursor: pointer;
+  z-index: 1002;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  line-height: 1;
+}
+
+.sidebar-close:hover {
+  color: var(--primary);
+}
+
+/* Sidebar Overlay - Hidden on desktop */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Tablet Portrait (768px) */
+@media (max-width: 768px) {
+  .app-container {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sidebar {
+    position: fixed !important;
+    left: -100% !important;
+    top: 0 !important;
+    height: 100vh !important;
+    width: 280px !important;
+    z-index: 1000 !important;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1) !important;
+    overflow-y: auto !important;
+    padding-top: 60px !important;
+    transform: translateX(0) !important;
+    will-change: transform !important;
+  }
+
+  .sidebar.sidebar-open {
+    left: 0 !important;
+    animation: slideInLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+  }    /* Show hamburger menu on mobile */
+    .hamburger-menu {
+      display: flex !important;
+    }
+  
+    /* Show sidebar close button on mobile */
+    .sidebar-close {
+      display: block !important;
+  }
+
+  .main-content {
+    padding: 1rem !important;
+    margin-left: 0 !important;
+  }
+
+    /* Header adjustments */
+    .app-header {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 998 !important;
+    }
+  
+    .app-nav {
+      display: flex !important;
+      align-items: center !important;
+      gap: 1rem !important;
+    }
+  
+    .header-title {
+      font-size: 1rem !important;
+      flex: 1 !important;
+    }
+  
+    .header-title img {
+      height: 24px !important;
+    }
+  
+    .header-actions {
+      display: flex !important;
+      gap: 0.5rem !important;
+    }
+  
+    .header-old {
+    padding: 1rem !important;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .header-search {
+    width: 100% !important;
+  }
+
+  .equipamento-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  table {
+    font-size: 0.875rem !important;
+  }
+
+  th, td {
+    padding: 0.5rem !important;
+  }
+}
+
+/* Mobile (480px) */
+@media (max-width: 480px) {
+  .main-content {
+    padding: 0.75rem !important;
+  }
+
+  .header {
+    padding: 0.75rem !important;
+  }
+
+  .header h1 {
+    font-size: 1.25rem !important;
+  }
+
+  .equipamento-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stat-card {
+    padding: 1rem !important;
+  }
+
+  .button {
+    padding: 0.625rem 1rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .modal-content {
+    margin: 1rem !important;
+    padding: 1.25rem !important;
+    max-width: calc(100% - 2rem) !important;
+  }
+
+  .form-group {
+    margin-bottom: 1rem !important;
+  }
+
+  input, select, textarea {
+    font-size: 16px !important; /* Prevent zoom on iOS */
+  }
+
+  /* Tabela responsiva */
+  table {
+    display: block !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  thead {
+    display: none !important;
+  }
+
+  tr {
+    display: block !important;
+    margin-bottom: 1rem !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 0.75rem !important;
+  }
+
+  td {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 0.5rem 0 !important;
+    border-bottom: 1px solid var(--border-color) !important;
+  }
+
+  td:last-child {
+    border-bottom: none !important;
+  }
+
+  td::before {
+    content: attr(data-label) !important;
+    font-weight: 600 !important;
+    color: var(--text-secondary) !important;
+  }
+}
+
+/* Ultra small devices (360px) */
+@media (max-width: 360px) {
+  .sidebar {
+    width: 100% !important;
+  }
+
+  .modal-content {
+    margin: 0.5rem !important;
+    padding: 1rem !important;
+  }
+
+  .button {
+    width: 100% !important;
+  }
+}
+
+/* Desktop hiding utilities */
+.mobile-menu-btn {
+  display: none;
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+  .sidebar {
+    overflow-y: auto !important;
+  }
+
+  .modal-content {
+    max-height: 90vh !important;
+    overflow-y: auto !important;
   }
 }
