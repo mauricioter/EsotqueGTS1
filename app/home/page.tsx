@@ -187,6 +187,14 @@ export default function HomePage() {
               <p>Visualizar, criar e editar equipamentos</p>
             </Link>
 
+            {(role === 'ADMIN' || role === 'OPERATOR') && (
+              <Link href="/transferencias" className="action-card">
+                <div className="action-icon">🔄</div>
+                <h4>Transferir Equipamentos</h4>
+                <p>Transferir equipamentos para técnicos</p>
+              </Link>
+            )}
+
             {role === 'ADMIN' && (
               <Link href="/usuarios" className="action-card">
                 <div className="action-icon">👥</div>

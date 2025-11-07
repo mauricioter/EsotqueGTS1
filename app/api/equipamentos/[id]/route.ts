@@ -62,10 +62,10 @@ export async function PUT(
       }
     }
 
-    // Validar MAC duplicado (se estiver sendo alterado)
-    if (body.mac) {
+    // Validar MAC duplicado (se estiver sendo alterado e não estiver vazio)
+    if (body.mac && body.mac.trim() !== '') {
       const macExistente = await prisma.equipamento.findUnique({
-        where: { mac: body.mac }
+        where: { mac: body.mac.trim() }
       });
       if (macExistente && macExistente.id !== id) {
         return NextResponse.json({ 
@@ -74,10 +74,16 @@ export async function PUT(
       }
     }
 
-    const dataToUpdate: any = { ...body };
-    if (body.dataSaida) {
-      dataToUpdate.dataSaida = new Date(body.dataSaida);
-    }
+    // Mapear campos do formulário para o schema do Prisma
+    const dataToUpdate: any = {
+      nome: body.nome,
+      descricao: body.tipo ? `${body.tipo} - ${body.marca} ${body.modelo}` : body.observacoes,
+      serial: body.serial || null,
+      mac: body.mac && body.mac.trim() !== '' ? body.mac.trim() : null,
+      status: body.status as StatusEquipamento,
+      localizacaoAtual: body.localizacao || null,
+      observacoes: body.observacoes || null,
+    };
 
     const equipamentoAtualizado = await prisma.equipamento.update({
       where: { id },

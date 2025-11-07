@@ -1,0 +1,370 @@
+.instalar-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #1a1a1a;
+}
+
+.equipment-name {
+  font-size: 1.1rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.btn-voltar {
+  display: inline-block;
+  margin-bottom: 15px;
+  padding: 8px 16px;
+  background: #6c757d;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.progress-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.progress-bar .step {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #666;
+  transition: all 0.3s;
+}
+
+.progress-bar .step.active {
+  background: #28a745;
+  color: white;
+}
+
+.progress-bar .line {
+  width: 60px;
+  height: 3px;
+  background: #ddd;
+  transition: all 0.3s;
+}
+
+.progress-bar .line.active {
+  background: #28a745;
+}
+
+.etapa-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.etapa-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #1a1a1a;
+}
+
+.etapa-card > p {
+  color: #666;
+  margin-bottom: 25px;
+}
+
+/* Camera */
+.camera-container {
+  text-align: center;
+}
+
+.camera-preview {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  background: #000;
+}
+
+.btn-camera,
+.btn-foto {
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-camera {
+  background: #007bff;
+  color: white;
+}
+
+.btn-camera:hover {
+  background: #0056b3;
+}
+
+.btn-foto {
+  background: #28a745;
+  color: white;
+}
+
+.btn-foto:hover {
+  background: #218838;
+}
+
+/* Foto Preview */
+.foto-preview {
+  text-align: center;
+}
+
+.foto-preview img {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.btn-refazer {
+  display: block;
+  margin: 0 auto 15px;
+  padding: 10px 20px;
+  background: #ffc107;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-refazer:hover {
+  background: #e0a800;
+}
+
+.btn-proximo {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-proximo:hover {
+  background: #218838;
+}
+
+/* Info Box */
+.info-box {
+  background: #e7f3ff;
+  border-left: 4px solid #007bff;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+}
+
+.info-box p {
+  margin: 8px 0;
+  color: #333;
+  font-size: 1rem;
+}
+
+.btn-iniciar {
+  width: 100%;
+  padding: 15px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.btn-iniciar:hover {
+  background: #0056b3;
+}
+
+.btn-voltar-etapa {
+  width: 100%;
+  padding: 12px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-voltar-etapa:hover {
+  background: #5a6268;
+}
+
+/* Form */
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.info-text {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.input-endereco {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.input-endereco:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Canvas Assinatura */
+.canvas-assinatura {
+  width: 100%;
+  max-width: 600px;
+  height: 200px;
+  border: 2px dashed #007bff;
+  border-radius: 8px;
+  cursor: crosshair;
+  background: #f8f9fa;
+  display: block;
+  margin: 10px auto;
+  touch-action: none;
+}
+
+.btn-limpar {
+  display: block;
+  margin: 10px auto 0;
+  padding: 8px 16px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-limpar:hover {
+  background: #c82333;
+}
+
+/* Mensagem */
+.mensagem {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.mensagem.sucesso {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.mensagem.erro {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.btn-finalizar {
+  width: 100%;
+  padding: 15px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.btn-finalizar:hover:not(:disabled) {
+  background: #218838;
+}
+
+.btn-finalizar:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .instalar-container {
+    padding: 15px;
+  }
+
+  .header h1 {
+    font-size: 1.4rem;
+  }
+
+  .progress-bar .step {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+  }
+
+  .progress-bar .line {
+    width: 30px;
+  }
+
+  .etapa-card {
+    padding: 20px;
+  }
+
+  .canvas-assinatura {
+    height: 150px;
+  }
+}

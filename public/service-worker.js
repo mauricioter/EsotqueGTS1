@@ -37,15 +37,42 @@ self.addEventListener('activate', (event) => {
 
 // Fetch Strategy: Network First, fallback to Cache
 self.addEventListener('fetch', (event) => {
+  // Ignorar esquemas não HTTP/HTTPS (chrome-extension, etc)
+  const url = new URL(event.request.url);
+  if (!url.protocol.startsWith('http')) {
+    return;
+  }
+
+  // Não cachear POST, PUT, DELETE requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  // Não cachear requisições de autenticação
+  if (event.request.url.includes('/api/auth/') || 
+      event.request.url.includes('/api/equipamentos') ||
+      event.request.url.includes('/api/mobile')) {
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
+        // Só cachear respostas bem-sucedidas
+        if (!response || response.status !== 200 || response.type === 'error') {
+          return response;
+        }
+
         // Clone the response
         const responseToCache = response.clone();
 
         caches.open(CACHE_NAME)
           .then((cache) => {
             cache.put(event.request, responseToCache);
+          })
+          .catch((err) => {
+            // Silenciar erros de cache (ex: chrome-extension)
+            console.log('Cache put error (ignorado):', err.message);
           });
 
         return response;

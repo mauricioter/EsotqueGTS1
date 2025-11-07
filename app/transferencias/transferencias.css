@@ -1,0 +1,188 @@
+.transferencias-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #1a1a1a;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 1rem;
+}
+
+.btn-voltar {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background: #6c757d;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.btn-voltar:hover {
+  background: #5a6268;
+}
+
+.transferencia-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.info-text {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 5px;
+}
+
+.canvas-assinatura {
+  width: 100%;
+  max-width: 600px;
+  height: 200px;
+  border: 2px dashed #007bff;
+  border-radius: 8px;
+  cursor: crosshair;
+  background: #f8f9fa;
+  display: block;
+  margin: 10px auto;
+  touch-action: none;
+}
+
+.btn-limpar {
+  display: block;
+  margin: 10px auto 0;
+  padding: 8px 16px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s;
+}
+
+.btn-limpar:hover {
+  background: #c82333;
+}
+
+.mensagem {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.mensagem.sucesso {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.mensagem.erro {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.btn-transferir {
+  width: 100%;
+  padding: 15px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-transferir:hover:not(:disabled) {
+  background: #218838;
+}
+
+.btn-transferir:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.error-message {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.error-message h2 {
+  color: #dc3545;
+  margin-bottom: 20px;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .transferencias-container {
+    padding: 15px;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .transferencia-card {
+    padding: 20px;
+  }
+
+  .canvas-assinatura {
+    height: 150px;
+  }
+}

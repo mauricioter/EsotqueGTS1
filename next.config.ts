@@ -1,13 +1,33 @@
 import type { NextConfig } from "next";
 
-// Config reais do Next: mover turbopack para nível raiz
-const nextConfig: any = {
-  turbopack: {
-    root: __dirname,
+const nextConfig: NextConfig = {
+  // Headers de segurança
+  async headers() {
+    return [
+      {
+        source: '/manifest.json',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/service-worker.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+          {
+            key: 'Service-Worker-Allowed',
+            value: '/',
+          },
+        ],
+      },
+    ];
   },
-  // Removido rewrite global de /api para evitar quebrar NextAuth e APIs do App Router.
-  // Se você precisar usar json-server, crie rotas específicas (ex.: /mock/:path*) ou
-  // habilite via variável de ambiente e NÃO inclua /api/auth, /api/usuarios, /api/equipamentos.
 };
 
-export default nextConfig as NextConfig;
+export default nextConfig;

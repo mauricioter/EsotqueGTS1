@@ -56,10 +56,10 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Validar MAC duplicado
-    if (body.mac) {
+    // Validar MAC duplicado (apenas se MAC foi fornecido e não está vazio)
+    if (body.mac && body.mac.trim() !== '') {
       const macExistente = await prisma.equipamento.findUnique({
-        where: { mac: body.mac }
+        where: { mac: body.mac.trim() }
       });
       if (macExistente) {
         return NextResponse.json({ 
@@ -71,12 +71,12 @@ export async function POST(req: NextRequest) {
     const novoEquipamento = await prisma.equipamento.create({
       data: {
         nome: body.nome,
-        descricao: body.descricao,
-        serial: body.serial,
-        mac: body.mac,
+        descricao: body.tipo ? `${body.tipo} - ${body.marca} ${body.modelo}` : body.observacoes,
+        serial: body.serial || null,
+        mac: body.mac && body.mac.trim() !== '' ? body.mac.trim() : null,
         status: body.status as StatusEquipamento,
-        destino: body.destino,
-        dataEntrada: body.dataEntrada ? new Date(body.dataEntrada) : new Date(),
+        localizacaoAtual: body.localizacao || null,
+        observacoes: body.observacoes || null,
       },
     });
 
