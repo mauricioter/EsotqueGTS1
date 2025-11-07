@@ -9,9 +9,8 @@ import '../home.css';
 interface Stats {
   total: number;
   disponivel: number;
-  emUso: number;
-  emprestado: number;
-  manutencao: number;
+  emPosseDoTecnico: number;
+  descartado: number;
   saida: number;
   reservado: number;
   defeito: number;
@@ -24,9 +23,8 @@ export default function HomePage() {
   const [stats, setStats] = useState<Stats>({
     total: 0,
     disponivel: 0,
-    emUso: 0,
-    emprestado: 0,
-    manutencao: 0,
+    emPosseDoTecnico: 0,
+    descartado: 0,
     saida: 0,
     reservado: 0,
     defeito: 0,
@@ -54,9 +52,8 @@ export default function HomePage() {
       const statsData = {
         total: data.length,
         disponivel: data.filter((e: any) => e.status === 'DISPONIVEL').length,
-        emUso: data.filter((e: any) => e.status === 'EM_USO').length,
-        emprestado: data.filter((e: any) => e.status === 'EMPRESTADO').length,
-        manutencao: data.filter((e: any) => e.status === 'MANUTENCAO').length,
+        emPosseDoTecnico: data.filter((e: any) => e.status === 'EM_POSSE_DO_TECNICO').length,
+        descartado: data.filter((e: any) => e.status === 'DESCARTADO').length,
         saida: data.filter((e: any) => e.status === 'SAIDA').length,
         reservado: data.filter((e: any) => e.status === 'RESERVADO').length,
         defeito: data.filter((e: any) => e.status === 'DEFEITO').length,
@@ -131,35 +128,35 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="stat-card stat-em-uso">
-            <div className="stat-icon">🔧</div>
+          <div className="stat-card stat-em-posse">
+            <div className="stat-icon">�</div>
             <div className="stat-content">
-              <h3>Em Uso</h3>
-              <p className="stat-number">{stats.emUso}</p>
+              <h3>Em Posse do Técnico</h3>
+              <p className="stat-number">{stats.emPosseDoTecnico}</p>
             </div>
           </div>
 
           <div className="stat-card stat-instalado">
-            <div className="stat-icon">📡</div>
+            <div className="stat-icon">�</div>
             <div className="stat-content">
               <h3>Instalados</h3>
               <p className="stat-number">{stats.instalado}</p>
             </div>
           </div>
 
-          <div className="stat-card stat-manutencao">
-            <div className="stat-icon">🔨</div>
+          <div className="stat-card stat-descartado">
+            <div className="stat-icon">�️</div>
             <div className="stat-content">
-              <h3>Manutenção</h3>
-              <p className="stat-number">{stats.manutencao}</p>
+              <h3>Descartados</h3>
+              <p className="stat-number">{stats.descartado}</p>
             </div>
           </div>
 
-          <div className="stat-card stat-emprestado">
-            <div className="stat-icon">🤝</div>
+          <div className="stat-card stat-saida">
+            <div className="stat-icon">📤</div>
             <div className="stat-content">
-              <h3>Emprestados</h3>
-              <p className="stat-number">{stats.emprestado}</p>
+              <h3>Saída</h3>
+              <p className="stat-number">{stats.saida}</p>
             </div>
           </div>
 
@@ -231,13 +228,13 @@ export default function HomePage() {
 
             <div className="activity-bar">
               <div className="bar-label">
-                <span>Em Uso</span>
-                <span>{stats.emUso}</span>
+                <span>Em Posse do Técnico</span>
+                <span>{stats.emPosseDoTecnico}</span>
               </div>
               <div className="bar-track">
                 <div 
-                  className="bar-fill bar-em-uso" 
-                  style={{ width: `${(stats.emUso / stats.total) * 100}%` }}
+                  className="bar-fill bar-em-posse" 
+                  style={{ width: `${(stats.emPosseDoTecnico / stats.total) * 100}%` }}
                 ></div>
               </div>
             </div>
@@ -257,13 +254,13 @@ export default function HomePage() {
 
             <div className="activity-bar">
               <div className="bar-label">
-                <span>Manutenção</span>
-                <span>{stats.manutencao}</span>
+                <span>Descartados</span>
+                <span>{stats.descartado}</span>
               </div>
               <div className="bar-track">
                 <div 
-                  className="bar-fill bar-manutencao" 
-                  style={{ width: `${(stats.manutencao / stats.total) * 100}%` }}
+                  className="bar-fill bar-descartado" 
+                  style={{ width: `${(stats.descartado / stats.total) * 100}%` }}
                 ></div>
               </div>
             </div>

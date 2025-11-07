@@ -150,10 +150,10 @@
 /* Stat Card Colors */
 .stat-total { border-left: 4px solid #3b82f6; }
 .stat-disponivel { border-left: 4px solid #10b981; }
-.stat-em-uso { border-left: 4px solid #8b5cf6; }
+.stat-em-posse { border-left: 4px solid #8b5cf6; }
 .stat-instalado { border-left: 4px solid var(--primary); }
-.stat-manutencao { border-left: 4px solid #f59e0b; }
-.stat-emprestado { border-left: 4px solid #06b6d4; }
+.stat-descartado { border-left: 4px solid #6b7280; }
+.stat-saida { border-left: 4px solid #06b6d4; }
 .stat-reservado { border-left: 4px solid #ec4899; }
 .stat-defeito { border-left: 4px solid #ef4444; }
 
@@ -268,9 +268,9 @@
 }
 
 .bar-disponivel { background: #10b981; }
-.bar-em-uso { background: #8b5cf6; }
+.bar-em-posse { background: #8b5cf6; }
 .bar-instalado { background: var(--primary); }
-.bar-manutencao { background: #f59e0b; }
+.bar-descartado { background: #6b7280; }
 
 /* Loading Screen */
 .loading-screen {
