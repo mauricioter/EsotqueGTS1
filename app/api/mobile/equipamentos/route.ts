@@ -29,13 +29,14 @@ export async function GET(request: NextRequest) {
 
     const equipamentos = await prisma.equipamento.findMany({
       where: whereClause,
-      orderBy: { updatedAt: 'desc' },
-      include: {
-        instalacoes: {
-          orderBy: { createdAt: 'desc' },
-          take: 1 // Última instalação
-        }
-      } as any
+      orderBy: { updatedAt: 'desc' }
+      // TODO: Descomentar quando modelo Instalacao estiver no schema
+      // include: {
+      //   instalacoes: {
+      //     orderBy: { createdAt: 'desc' },
+      //     take: 1
+      //   }
+      // }
     });
 
     return NextResponse.json({
