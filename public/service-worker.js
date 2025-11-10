@@ -67,7 +67,10 @@ self.addEventListener('fetch', (event) => {
 
         caches.open(CACHE_NAME)
           .then((cache) => {
-            cache.put(event.request, responseToCache);
+            // Verificar novamente se é um scheme válido antes de cachear
+            if (event.request.url.startsWith('http')) {
+              cache.put(event.request, responseToCache);
+            }
           })
           .catch((err) => {
             // Silenciar erros de cache (ex: chrome-extension)
