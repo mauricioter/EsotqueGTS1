@@ -19,6 +19,8 @@ model User {
   status             UserStatus @default(PENDING)
   verificationCode   String?
   codeExpiresAt      DateTime?
+  resetToken         String?
+  resetTokenExpiry   DateTime?
   createdAt          DateTime   @default(now())
   accounts           Account[]
   sessions           Session[]

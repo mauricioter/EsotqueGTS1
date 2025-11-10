@@ -23,6 +23,9 @@
 # misc
 .DS_Store
 *.pem
+.env.vercel
+.env.local
+.env.production
 
 # debug
 npm-debug.log*
