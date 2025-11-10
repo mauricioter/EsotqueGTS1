@@ -1,7 +1,7 @@
-const CACHE_NAME = 'gtsnet-mobile-v1';
+const CACHE_NAME = 'gtsnet-web-v1';
 const urlsToCache = [
-  '/mobile',
-  '/mobile/instalacoes',
+  '/home',
+  '/equipamentos',
   '/gtsnet-logo.png',
   '/offline.html'
 ];
@@ -50,8 +50,7 @@ self.addEventListener('fetch', (event) => {
 
   // Não cachear requisições de autenticação
   if (event.request.url.includes('/api/auth/') || 
-      event.request.url.includes('/api/equipamentos') ||
-      event.request.url.includes('/api/mobile')) {
+      event.request.url.includes('/api/equipamentos')) {
     return;
   }
 
@@ -116,7 +115,7 @@ self.addEventListener('push', (event) => {
     badge: '/gtsnet-logo.png',
     vibrate: [200, 100, 200],
     data: {
-      url: data.url || '/mobile'
+      url: data.url || '/home'
     }
   };
 

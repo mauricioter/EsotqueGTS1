@@ -203,12 +203,6 @@ export default function HomePage() {
               </Link>
             )}
 
-            <Link href="/mobile" className="action-card">
-              <div className="action-icon">📱</div>
-              <h4>App Mobile</h4>
-              <p>Acesso para técnicos de campo</p>
-            </Link>
-
             <button onClick={fetchStats} className="action-card action-refresh">
               <div className="action-icon">🔄</div>
               <h4>Atualizar Dados</h4>

@@ -56,8 +56,8 @@ function LoginForm() {
               <span>Controle total do estoque</span>
             </div>
             <div className="feature-item">
-              <span className="feature-icon">📱</span>
-              <span>Acesso mobile para técnicos</span>
+              <span className="feature-icon">⚡</span>
+              <span>Interface rápida e eficiente</span>
             </div>
             <div className="feature-item">
               <span className="feature-icon">📊</span>
