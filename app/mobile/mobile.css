@@ -1,208 +1,620 @@
-.mobile-container {.mobile-container {.mobile-container {/* Mobile Container */
+/* Mobile CSS - Versão Clean *//* Mobile CSS - Versão Limpa */.mobile-container {.mobile-container {.mobile-container {/* Mobile Container */
 
-  max-width: 800px;
+.mobile-container {
 
-  margin: 0 auto;  max-width: 800px;
+  min-height: 100vh;.mobile-container {
+
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  color: white;  min-height: 100vh;  max-width: 800px;
+
+}
+
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+.mobile-header {
+
+  background: rgba(0, 0, 0, 0.1);  color: white;  margin: 0 auto;  max-width: 800px;
 
   padding: 20px;
 
-  min-height: 100vh;  margin: 0 auto;  max-width: 800px;.mobile-container {
+  text-align: center;}
 
-  background: #f5f5f5;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
 }  padding: 20px;
 
 
 
-.mobile-header {  min-height: 100vh;  margin: 0 auto;  min-height: 100vh;
+.mobile-header h1 {.mobile-header {
 
-  background: white;
+  font-size: 1.8rem;
 
-  border-radius: 12px;  background: #f5f5f5;
+  font-weight: 700;  background: rgba(0, 0, 0, 0.1);  min-height: 100vh;  margin: 0 auto;  max-width: 800px;.mobile-container {
 
-  padding: 25px;
+  margin: 0;
 
-  margin-bottom: 25px;}  padding: 20px;  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-
-  text-align: center;
+  color: white;  padding: 20px;
 
 }
 
-.mobile-header {  min-height: 100vh;  padding-bottom: 70px;
+  text-align: center;  background: #f5f5f5;
 
-.mobile-header h1 {
+.mobile-user-info {
 
-  font-size: 2rem;  background: white;
+  display: flex;  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
-  margin-bottom: 8px;
+  align-items: center;
 
-  color: #1a1a1a;  border-radius: 12px;  background: #f5f5f5;  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  justify-content: center;}}  padding: 20px;
 
-}
+  gap: 10px;
 
-  padding: 25px;
+  margin-top: 10px;
 
-.subtitle {
+  color: rgba(255, 255, 255, 0.9);
 
-  color: #666;  margin-bottom: 25px;}}
-
-  font-size: 1rem;
-
-}  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}.mobile-header h1 {
 
 
 
-.btn-back {  text-align: center;
+.mobile-filters {  font-size: 1.8rem;
 
-  display: inline-block;
+  padding: 20px;
 
-  margin-bottom: 15px;}
+  display: flex;  font-weight: 700;.mobile-header {  min-height: 100vh;  margin: 0 auto;  min-height: 100vh;
 
-  padding: 10px 20px;
+  gap: 10px;
 
-  background: #6c757d;.mobile-header {/* Header */
-
-  color: white;
-
-  text-decoration: none;.mobile-header h1 {
-
-  border-radius: 8px;
-
-  transition: background 0.3s;  font-size: 2rem;  background: white;.mobile-header {
-
-}
-
-  margin-bottom: 8px;
-
-.btn-back:hover {
-
-  background: #5a6268;  color: #1a1a1a;  border-radius: 12px;  background: linear-gradient(135deg, #ff7a00 0%, #cc6200 100%);
-
-}
-
-}
-
-.loading-container {
-
-  display: flex;  padding: 25px;  color: white;
-
-  flex-direction: column;
-
-  align-items: center;.subtitle {
+  flex-wrap: wrap;  margin: 0;
 
   justify-content: center;
 
-  min-height: 400px;  color: #666;  margin-bottom: 25px;  padding: 1rem 1.25rem;
-
-  background: white;
-
-  border-radius: 12px;  font-size: 1rem;
-
-  padding: 40px;
-
-}}  box-shadow: 0 2px 10px rgba(0,0,0,0.1);  box-shadow: 0 2px 8px rgba(255, 122, 0, 0.3);
+}  color: white;  background: white;
 
 
 
-.spinner {
+.filter-btn {}
 
-  width: 50px;
+  background: rgba(255, 255, 255, 0.1);
 
-  height: 50px;.btn-back {  text-align: center;  position: sticky;
+  color: white;  border-radius: 12px;  background: #f5f5f5;
 
-  border: 4px solid #f3f3f3;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 
-  border-top: 4px solid #007bff;  display: inline-block;
+  padding: 8px 16px;.mobile-user-info {
 
-  border-radius: 50%;
+  border-radius: 20px;
 
-  animation: spin 1s linear infinite;  margin-bottom: 15px;}  top: 0;
+  cursor: pointer;  display: flex;  padding: 25px;
 
-  margin-bottom: 20px;
+  transition: all 0.3s ease;
 
-}  padding: 10px 20px;
-
-
-
-@keyframes spin {  background: #6c757d;  z-index: 100;
-
-  0% { transform: rotate(0deg); }
-
-  100% { transform: rotate(360deg); }  color: white;
+  font-size: 0.9rem;  align-items: center;
 
 }
 
-  text-decoration: none;.mobile-header h1 {}
+  justify-content: center;  margin-bottom: 25px;}  padding: 20px;  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
 
-.loading-container p {
+.filter-btn:hover,
 
-  font-size: 1.1rem;  border-radius: 8px;
+.filter-btn.active {  gap: 10px;
+
+  background: rgba(255, 255, 255, 0.2);
+
+  border-color: rgba(255, 255, 255, 0.5);  margin-top: 10px;  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+}
+
+  color: rgba(255, 255, 255, 0.9);
+
+.mobile-content {
+
+  padding: 20px;}  text-align: center;
+
+  max-width: 600px;
+
+  margin: 0 auto;
+
+}
+
+.mobile-filters {}
+
+.equipment-card {
+
+  background: rgba(255, 255, 255, 0.95);  padding: 20px;
+
+  color: #333;
+
+  border-radius: 12px;  display: flex;.mobile-header {  min-height: 100vh;  padding-bottom: 70px;
+
+  margin-bottom: 20px;
+
+  overflow: hidden;  gap: 10px;
+
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  transition: transform 0.2s ease;  flex-wrap: wrap;.mobile-header h1 {
+
+}
+
+  justify-content: center;
+
+.equipment-card:hover {
+
+  transform: translateY(-2px);}  font-size: 2rem;  background: white;
+
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
+}
+
+
+
+.equipment-header {.filter-btn {  margin-bottom: 8px;
+
+  padding: 15px 20px;
+
+  border-bottom: 1px solid #eee;  background: rgba(255, 255, 255, 0.1);
+
+  display: flex;
+
+  justify-content: space-between;  color: white;  color: #1a1a1a;  border-radius: 12px;  background: #f5f5f5;  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+
+  align-items: center;
+
+}  border: 1px solid rgba(255, 255, 255, 0.3);
+
+
+
+.equipment-header h3 {  padding: 8px 16px;}
+
+  margin: 0;
+
+  font-size: 1.1rem;  border-radius: 20px;
+
+  font-weight: 600;
+
+  color: #333;  cursor: pointer;  padding: 25px;
+
+}
+
+  transition: all 0.3s ease;
+
+.equipment-info {
+
+  padding: 15px 20px;  font-size: 0.9rem;.subtitle {
+
+}
+
+}
+
+.info-row {
+
+  display: flex;  color: #666;  margin-bottom: 25px;}}
+
+  justify-content: space-between;
+
+  margin-bottom: 8px;.filter-btn:hover,
+
+  font-size: 0.9rem;
+
+}.filter-btn.active {  font-size: 1rem;
+
+
+
+.info-row:last-child {  background: rgba(255, 255, 255, 0.2);
+
+  margin-bottom: 0;
+
+}  border-color: rgba(255, 255, 255, 0.5);}  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+
+
+.info-label {}
+
+  font-weight: 600;
 
   color: #666;
 
-}  transition: background 0.3s;  font-size: 2rem;
+}
+
+.mobile-content {
+
+.info-value {
+
+  color: #333;  padding: 20px;.btn-back {  text-align: center;
+
+}
+
+  max-width: 600px;
+
+.status-badge {
+
+  padding: 4px 8px;  margin: 0 auto;  display: inline-block;
+
+  border-radius: 12px;
+
+  font-size: 0.8rem;}
+
+  font-weight: 500;
+
+  text-transform: uppercase;  margin-bottom: 15px;}
+
+}
+
+.equipment-card {
+
+.status-disponivel {
+
+  background: #10b981;  background: rgba(255, 255, 255, 0.95);  padding: 10px 20px;
+
+  color: white;
+
+}  color: #333;
 
 
+
+.status-instalado {  border-radius: 12px;  background: #6c757d;.mobile-header {/* Header */
+
+  background: #3b82f6;
+
+  color: white;  margin-bottom: 20px;
+
+}
+
+  overflow: hidden;  color: white;
+
+.status-manutencao {
+
+  background: #f59e0b;  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  color: white;
+
+}  transition: transform 0.2s ease;  text-decoration: none;.mobile-header h1 {
+
+
+
+.status-baixa {}
+
+  background: #ef4444;
+
+  color: white;  border-radius: 8px;
+
+}
+
+.equipment-card:hover {
+
+.empty-state {
+
+  text-align: center;  transform: translateY(-2px);  transition: background 0.3s;  font-size: 2rem;  background: white;.mobile-header {
+
+  padding: 40px 20px;
+
+  color: rgba(255, 255, 255, 0.8);  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
+}
+
+}}
+
+.empty-icon {
+
+  font-size: 3rem;
+
+  margin-bottom: 20px;
+
+  opacity: 0.5;.equipment-header {  margin-bottom: 8px;
+
+}
+
+  padding: 15px 20px;
+
+.empty-state h2 {
+
+  font-size: 1.5rem;  border-bottom: 1px solid #eee;.btn-back:hover {
+
+  margin-bottom: 10px;
+
+  color: white;  display: flex;
+
+}
+
+  justify-content: space-between;  background: #5a6268;  color: #1a1a1a;  border-radius: 12px;  background: linear-gradient(135deg, #ff7a00 0%, #cc6200 100%);
+
+.empty-state p {
+
+  font-size: 1rem;  align-items: center;
+
+  opacity: 0.8;
+
+}}}
+
+
+
+.mobile-loading {
+
+  display: flex;
+
+  justify-content: center;.equipment-header h3 {}
+
+  align-items: center;
+
+  padding: 40px;  margin: 0;
+
+}
+
+  font-size: 1.1rem;.loading-container {
+
+.spinner {
+
+  width: 40px;  font-weight: 600;
+
+  height: 40px;
+
+  border: 3px solid rgba(255, 255, 255, 0.3);  color: #333;  display: flex;  padding: 25px;  color: white;
+
+  border-radius: 50%;
+
+  border-top-color: white;}
+
+  animation: spin 1s ease-in-out infinite;
+
+}  flex-direction: column;
+
+
+
+@keyframes spin {.equipment-info {
+
+  0% { 
+
+    transform: rotate(0deg);   padding: 15px 20px;  align-items: center;.subtitle {
+
+  }
+
+  100% { }
+
+    transform: rotate(360deg); 
+
+  }  justify-content: center;
+
+}
+
+.info-row {
+
+/* Responsividade */
+
+@media (max-width: 768px) {  display: flex;  min-height: 400px;  color: #666;  margin-bottom: 25px;  padding: 1rem 1.25rem;
+
+  .mobile-header {
+
+    padding: 15px;  justify-content: space-between;
+
+  }
+
+    margin-bottom: 8px;  background: white;
+
+  .mobile-header h1 {
+
+    font-size: 1.5rem;  font-size: 0.9rem;
+
+  }
+
+  }  border-radius: 12px;  font-size: 1rem;
+
+  .mobile-content {
+
+    padding: 15px;
+
+  }
+
+  .info-row:last-child {  padding: 40px;
+
+  .equipment-card {
+
+    margin-bottom: 15px;  margin-bottom: 0;
+
+  }
+
+}}}}  box-shadow: 0 2px 10px rgba(0,0,0,0.1);  box-shadow: 0 2px 8px rgba(255, 122, 0, 0.3);
+
+
+
+.info-label {
+
+  font-weight: 600;
+
+  color: #666;.spinner {
+
+}
+
+  width: 50px;
+
+.info-value {
+
+  color: #333;  height: 50px;.btn-back {  text-align: center;  position: sticky;
+
+}
+
+  border: 4px solid #f3f3f3;
+
+.status-badge {
+
+  padding: 4px 8px;  border-top: 4px solid #007bff;  display: inline-block;
+
+  border-radius: 12px;
+
+  font-size: 0.8rem;  border-radius: 50%;
+
+  font-weight: 500;
+
+  text-transform: uppercase;  animation: spin 1s linear infinite;  margin-bottom: 15px;}  top: 0;
+
+}
+
+  margin-bottom: 20px;
+
+.status-disponivel {
+
+  background: #10b981;}  padding: 10px 20px;
+
+  color: white;
+
+}
+
+
+
+.status-instalado {@keyframes spin {  background: #6c757d;  z-index: 100;
+
+  background: #3b82f6;
+
+  color: white;  0% { transform: rotate(0deg); }
+
+}
+
+  100% { transform: rotate(360deg); }  color: white;
+
+.status-manutencao {
+
+  background: #f59e0b;}
+
+  color: white;
+
+}  text-decoration: none;.mobile-header h1 {}
+
+
+
+.status-baixa {.loading-container p {
+
+  background: #ef4444;
+
+  color: white;  font-size: 1.1rem;  border-radius: 8px;
+
+}
+
+  color: #666;
+
+.empty-state {
+
+  text-align: center;}  transition: background 0.3s;  font-size: 2rem;
+
+  padding: 40px 20px;
+
+  color: rgba(255, 255, 255, 0.8);
+
+}
 
 .empty-state {}
 
-  background: white;
+.empty-icon {
 
-  border-radius: 12px;  margin-bottom: 8px;.mobile-header-content {
+  font-size: 3rem;  background: white;
+
+  margin-bottom: 20px;
+
+  opacity: 0.5;  border-radius: 12px;  margin-bottom: 8px;.mobile-header-content {
+
+}
 
   padding: 60px 40px;
 
-  text-align: center;.btn-back:hover {
+.empty-state h2 {
 
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  font-size: 1.5rem;  text-align: center;.btn-back:hover {
+
+  margin-bottom: 10px;
+
+  color: white;  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+}
 
 }  background: #5a6268;  color: #1a1a1a;  display: flex;
 
+.empty-state p {
+
+  font-size: 1rem;
+
+  opacity: 0.8;
+
+}.empty-icon {}
 
 
-.empty-icon {}
 
-  font-size: 5rem;
+.mobile-loading {  font-size: 5rem;
 
-  margin-bottom: 20px;}  align-items: center;
+  display: flex;
+
+  justify-content: center;  margin-bottom: 20px;}  align-items: center;
+
+  align-items: center;
+
+  padding: 40px;}
 
 }
 
 .loading-container {
 
-.empty-state h2 {
+.spinner {
 
-  font-size: 1.8rem;  display: flex;  gap: 1rem;
+  width: 40px;.empty-state h2 {
 
-  color: #333;
+  height: 40px;
 
-  margin-bottom: 15px;  flex-direction: column;
+  border: 3px solid rgba(255, 255, 255, 0.3);  font-size: 1.8rem;  display: flex;  gap: 1rem;
+
+  border-radius: 50%;
+
+  border-top-color: white;  color: #333;
+
+  animation: spin 1s ease-in-out infinite;
+
+}  margin-bottom: 15px;  flex-direction: column;
+
+
+
+@keyframes spin {}
+
+  0% { transform: rotate(0deg); }
+
+  100% { transform: rotate(360deg); }  align-items: center;.subtitle {  max-width: 1200px;
 
 }
-
-  align-items: center;.subtitle {  max-width: 1200px;
 
 .empty-state p {
 
-  color: #666;  justify-content: center;
+/* Responsividade */
 
-  font-size: 1.1rem;
+@media (max-width: 768px) {  color: #666;  justify-content: center;
 
-  margin-bottom: 10px;  min-height: 400px;  color: #666;  margin: 0 auto;
+  .mobile-header {
 
-}
+    padding: 15px;  font-size: 1.1rem;
 
-  background: white;
+  }
 
-.info-text {
+    margin-bottom: 10px;  min-height: 400px;  color: #666;  margin: 0 auto;
 
-  font-size: 0.95rem;  border-radius: 12px;  font-size: 1rem;}
+  .mobile-header h1 {
 
-  color: #999;
+    font-size: 1.5rem;}
 
-  font-style: italic;  padding: 40px;
+  }
+
+    background: white;
+
+  .mobile-content {
+
+    padding: 15px;.info-text {
+
+  }
+
+    font-size: 0.95rem;  border-radius: 12px;  font-size: 1rem;}
+
+  .equipment-card {
+
+    margin-bottom: 15px;  color: #999;
+
+  }
+
+}  font-style: italic;  padding: 40px;
 
 }
 
@@ -258,11 +670,11 @@
 
   padding-bottom: 12px;
 
-  border-bottom: 2px solid #f0f0f0;  0% { transform: rotate(0deg); }
-
+  border-bottom: 2px solid #f0f0f0;
 }
 
-  100% { transform: rotate(360deg); }  color: white;.mobile-user-info {
+.mobile-user-info {
+  color: white;
 
 .card-header h3 {
 
