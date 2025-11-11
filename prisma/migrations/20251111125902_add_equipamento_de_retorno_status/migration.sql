@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "StatusEquipamento" ADD VALUE 'EQUIPAMENTO_DE_RETORNO';

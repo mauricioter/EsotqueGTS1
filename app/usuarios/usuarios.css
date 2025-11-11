@@ -1,0 +1,566 @@
+/* ========================================
+   PÁGINA DE USUÁRIOS - DESIGN PROFISSIONAL
+   ======================================== */
+
+.usuarios-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+  padding-bottom: 3rem;
+}
+
+/* ========================================
+   HEADER
+   ======================================== */
+.usuarios-page .page-header {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.usuarios-page .header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.usuarios-page .header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.usuarios-page .header-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.usuarios-page .header-title svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.usuarios-page .back-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.usuarios-page .back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateX(-4px);
+}
+
+.usuarios-page .page-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/* ========================================
+   SECTIONS
+   ======================================== */
+.usuarios-page .section-card {
+  max-width: 1400px;
+  margin: 2rem auto;
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.usuarios-page .section-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.usuarios-page .header-icon-wrapper {
+  display: flex;
+  align-items: start;
+  gap: 1rem;
+}
+
+.usuarios-page .header-icon-wrapper svg {
+  color: #6366f1;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.usuarios-page .section-header h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.usuarios-page .text-muted {
+  color: #6b7280;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* ========================================
+   PENDING SECTION
+   ======================================== */
+.pending-section {
+  border: 2px solid #fbbf24;
+  background: linear-gradient(to bottom, #fffbeb, white);
+}
+
+.pending-section .header-icon-wrapper svg {
+  color: #f59e0b;
+}
+
+/* ========================================
+   USUARIOS GRID
+   ======================================== */
+.usuarios-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.usuario-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  border: 2px solid #e5e7eb;
+}
+
+.usuario-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+}
+
+.pending-card {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border-color: #fbbf24;
+}
+
+.pending-card .card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 2rem;
+}
+
+.user-info {
+  display: flex;
+  gap: 1.5rem;
+  flex: 1;
+}
+
+.user-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.pending-card .user-avatar {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-details h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.user-details p {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.user-details svg {
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.user-email {
+  font-weight: 500;
+  color: #4b5563;
+}
+
+/* ========================================
+   CARD ACTIONS
+   ======================================== */
+.card-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.btn-approve,
+.btn-reject {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-approve {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.btn-approve:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.btn-reject {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.btn-reject:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+/* ========================================
+   FORM SECTION
+   ======================================== */
+.form-section {
+  max-width: 800px;
+}
+
+.user-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.user-form .form-group:nth-child(3),
+.user-form .form-group:nth-child(4) {
+  grid-column: span 1;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.form-group label svg {
+  color: #6366f1;
+}
+
+.form-group input {
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background: #f9fafb;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #6366f1;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-submit,
+.btn-back {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-back {
+  background: #f3f4f6;
+  color: #374151;
+  border: 2px solid #e5e7eb;
+}
+
+.btn-back:hover {
+  background: #e5e7eb;
+  transform: translateY(-2px);
+}
+
+.spinner-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   STATUS MESSAGE
+   ======================================== */
+.status-message {
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  border: 2px solid;
+}
+
+.status-message.success {
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #10b981;
+}
+
+.status-message.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #ef4444;
+}
+
+/* ========================================
+   APPROVED USERS SECTION
+   ======================================== */
+.approved-section {
+  border: 2px solid #10b981;
+  background: linear-gradient(to bottom, #d1fae5, white);
+}
+
+.approved-section .header-icon-wrapper svg {
+  color: #10b981;
+}
+
+.approved-grid {
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+
+.approved-card {
+  background: white;
+  border: 2px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.approved-card:hover {
+  border-color: #6366f1;
+}
+
+.approved-card .user-avatar {
+  width: 80px;
+  height: 80px;
+}
+
+.approved-card .user-details {
+  width: 100%;
+}
+
+.approved-card .user-details p {
+  justify-content: center;
+}
+
+.user-role {
+  width: 100%;
+  padding-top: 1rem;
+  border-top: 2px solid #e5e7eb;
+}
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid;
+}
+
+.role-badge.admin {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  color: #78350f;
+  border-color: #f59e0b;
+}
+
+.role-badge.operator {
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  color: #1e3a8a;
+  border-color: #3b82f6;
+}
+
+.role-badge.viewer {
+  background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+  color: #1f2937;
+  border-color: #6b7280;
+}
+
+/* ========================================
+   LOADING STATE
+   ======================================== */
+.loading-state {
+  text-align: center;
+  padding: 3rem;
+  color: #6b7280;
+}
+
+.loading-state .spinner-icon {
+  color: #6366f1;
+  margin-bottom: 1rem;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  .usuarios-page .section-card {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .usuarios-page .header-left {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .usuarios-page .header-title {
+    flex-direction: row;
+  }
+
+  .pending-card .card-content {
+    flex-direction: column;
+  }
+
+  .card-actions {
+    width: 100%;
+  }
+
+  .user-form {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .approved-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .usuarios-page .page-header {
+    padding: 1rem;
+  }
+
+  .usuarios-page .page-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .usuarios-page .section-card {
+    padding: 1rem;
+  }
+
+  .user-info {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .user-avatar {
+    margin: 0 auto;
+  }
+
+  .user-details p {
+    justify-content: center;
+  }
+
+  .card-actions {
+    flex-direction: column;
+  }
+
+  .btn-approve,
+  .btn-reject {
+    width: 100%;
+  }
+}

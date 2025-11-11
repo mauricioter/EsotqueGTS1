@@ -186,14 +186,47 @@ export default function EquipamentosPageNew() {
   });
 
   const getStatusBadge = (status: string) => {
-    const badges: Record<string, { icon: string; label: string; className: string }> = {
-      DISPONIVEL: { icon: '✅', label: 'Disponível', className: 'status-disponivel' },
-      EM_POSSE_DO_TECNICO: { icon: '🔧', label: 'Em Posse do Técnico', className: 'status-em-posse' },
-      DESCARTADO: { icon: '🗑️', label: 'Descartado', className: 'status-descartado' },
-      SAIDA: { icon: '📤', label: 'Saída', className: 'status-saida' },
-      RESERVADO: { icon: '📋', label: 'Reservado', className: 'status-reservado' },
-      DEFEITO: { icon: '❌', label: 'Com Defeito', className: 'status-defeito' },
-      INSTALADO: { icon: '✅', label: 'Instalado', className: 'status-instalado' },
+    const badges: Record<string, { icon: JSX.Element; label: string; className: string }> = {
+      DISPONIVEL: { 
+        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
+        label: 'Disponível', 
+        className: 'status-disponivel' 
+      },
+      EM_POSSE_DO_TECNICO: { 
+        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>,
+        label: 'Em Posse do Técnico', 
+        className: 'status-em-posse' 
+      },
+      DESCARTADO: { 
+        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>,
+        label: 'Descartado', 
+        className: 'status-descartado' 
+      },
+      SAIDA: { 
+        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>,
+        label: 'Saída', 
+        className: 'status-saida' 
+      },
+      RESERVADO: { 
+        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>,
+        label: 'Reservado', 
+        className: 'status-reservado' 
+      },
+      DEFEITO: { 
+        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>,
+        label: 'Com Defeito', 
+        className: 'status-defeito' 
+      },
+      INSTALADO: { 
+        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
+        label: 'Instalado', 
+        className: 'status-instalado' 
+      },
+      EQUIPAMENTO_DE_RETORNO: { 
+        icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>,
+        label: 'Equipamento de Retorno', 
+        className: 'status-equipamento_de_retorno' 
+      },
     };
 
     const badge = badges[status] || badges.DISPONIVEL;
@@ -225,15 +258,29 @@ export default function EquipamentosPageNew() {
         <div className="header-content">
           <div className="header-left">
             <Link href="/home" className="back-button">
-              ← Voltar
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              Voltar
             </Link>
-            <h1>Gerenciar Equipamentos</h1>
+            <div className="header-title">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
+              </svg>
+              <h1>Gerenciar Equipamentos</h1>
+            </div>
           </div>
           <div className="header-right">
             <span className="user-name">{session.user?.name}</span>
             {(role === 'ADMIN' || role === 'OPERATOR') && (
               <button onClick={handleNewEquipamento} className="btn-primary">
-                ➕ Novo Equipamento
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                Novo Equipamento
               </button>
             )}
           </div>
@@ -244,7 +291,10 @@ export default function EquipamentosPageNew() {
       <div className="filters-section">
         <div className="filters-container">
           <div className="search-box">
-            <span className="search-icon">🔍</span>
+            <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
             <input
               type="text"
               placeholder="Buscar por nome, serial, marca ou modelo..."
@@ -255,20 +305,26 @@ export default function EquipamentosPageNew() {
           </div>
 
           <div className="filter-group">
-            <label>Status:</label>
+            <label>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+              </svg>
+              Status:
+            </label>
             <select 
               value={statusFilter} 
               onChange={(e) => setStatusFilter(e.target.value)}
               className="filter-select"
             >
               <option value="ALL">Todos</option>
-              <option value="DISPONIVEL">✅ Disponível</option>
-              <option value="EM_POSSE_DO_TECNICO">🔧 Em Posse do Técnico</option>
-              <option value="INSTALADO">✅ Instalado</option>
-              <option value="DESCARTADO">🗑️ Descartado</option>
-              <option value="SAIDA">📤 Saída</option>
-              <option value="RESERVADO">📋 Reservado</option>
-              <option value="DEFEITO">❌ Com Defeito</option>
+              <option value="DISPONIVEL">Disponível</option>
+              <option value="EM_POSSE_DO_TECNICO">Em Posse do Técnico</option>
+              <option value="INSTALADO">Instalado</option>
+              <option value="DESCARTADO">Descartado</option>
+              <option value="SAIDA">Saída</option>
+              <option value="RESERVADO">Reservado</option>
+              <option value="DEFEITO">Com Defeito</option>
+              <option value="EQUIPAMENTO_DE_RETORNO">Equipamento de Retorno</option>
             </select>
           </div>
 
@@ -282,7 +338,11 @@ export default function EquipamentosPageNew() {
       <div className="equipamentos-grid">
         {filteredEquipamentos.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">📦</div>
+            <svg className="empty-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
             <h3>Nenhum equipamento encontrado</h3>
             <p>
               {searchTerm || statusFilter !== 'ALL' 
@@ -291,7 +351,11 @@ export default function EquipamentosPageNew() {
             </p>
             {(role === 'ADMIN' || role === 'OPERATOR') && (
               <button onClick={handleNewEquipamento} className="btn-primary">
-                ➕ Cadastrar Equipamento
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                Cadastrar Equipamento
               </button>
             )}
           </div>
@@ -341,7 +405,11 @@ export default function EquipamentosPageNew() {
                     className="btn-edit"
                     title="Editar"
                   >
-                    ✏️ Editar
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                      <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Editar
                   </button>
                   {role === 'ADMIN' && (
                     <button 
@@ -349,7 +417,11 @@ export default function EquipamentosPageNew() {
                       className="btn-delete"
                       title="Excluir"
                     >
-                      🗑️ Excluir
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                      </svg>
+                      Excluir
                     </button>
                   )}
                 </div>
@@ -364,8 +436,31 @@ export default function EquipamentosPageNew() {
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>{editingEquipamento ? '✏️ Editar Equipamento' : '➕ Novo Equipamento'}</h2>
-              <button onClick={handleCloseModal} className="modal-close">✕</button>
+              <h2>
+                {editingEquipamento ? (
+                  <>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                      <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Editar Equipamento
+                  </>
+                ) : (
+                  <>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <line x1="12" y1="5" x2="12" y2="19"/>
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Novo Equipamento
+                  </>
+                )}
+              </h2>
+              <button onClick={handleCloseModal} className="modal-close">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
             </div>
 
             <form onSubmit={handleSubmit} className="modal-form">
@@ -456,13 +551,14 @@ export default function EquipamentosPageNew() {
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                   >
-                    <option value="DISPONIVEL">✅ Disponível</option>
-                    <option value="EM_POSSE_DO_TECNICO">🔧 Em Posse do Técnico</option>
-                    <option value="DESCARTADO">🗑️ Descartado</option>
-                    <option value="SAIDA">📤 Saída</option>
-                    <option value="RESERVADO">📋 Reservado</option>
-                    <option value="DEFEITO">❌ Com Defeito</option>
-                    <option value="INSTALADO">✅ Instalado</option>
+                    <option value="DISPONIVEL">Disponível</option>
+                    <option value="EM_POSSE_DO_TECNICO">Em Posse do Técnico</option>
+                    <option value="DESCARTADO">Descartado</option>
+                    <option value="SAIDA">Saída</option>
+                    <option value="RESERVADO">Reservado</option>
+                    <option value="DEFEITO">Com Defeito</option>
+                    <option value="INSTALADO">Instalado</option>
+                    <option value="EQUIPAMENTO_DE_RETORNO">Equipamento de Retorno</option>
                   </select>
                 </div>
 
