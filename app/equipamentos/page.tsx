@@ -186,7 +186,7 @@ export default function EquipamentosPageNew() {
   });
 
   const getStatusBadge = (status: string) => {
-    const badges: Record<string, { icon: JSX.Element; label: string; className: string }> = {
+    const badges: Record<string, { icon: React.ReactElement; label: string; className: string }> = {
       DISPONIVEL: { 
         icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
         label: 'Disponível', 
