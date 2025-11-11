@@ -71,6 +71,9 @@ export async function POST(req: NextRequest) {
     const novoEquipamento = await prisma.equipamento.create({
       data: {
         nome: body.nome,
+        tipo: body.tipo || null,
+        marca: body.marca || null,
+        modelo: body.modelo || null,
         descricao: body.tipo ? `${body.tipo} - ${body.marca} ${body.modelo}` : body.observacoes,
         serial: body.serial || null,
         mac: body.mac && body.mac.trim() !== '' ? body.mac.trim() : null,

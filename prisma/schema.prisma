@@ -64,6 +64,9 @@ model VerificationToken {
 model Equipamento {
   id          String            @id @default(cuid())
   nome        String
+  tipo        String?
+  marca       String?
+  modelo      String?
   descricao   String?
   serial      String?           @unique
   mac         String?           @unique

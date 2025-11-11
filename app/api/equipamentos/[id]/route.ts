@@ -77,6 +77,9 @@ export async function PUT(
     // Mapear campos do formulário para o schema do Prisma
     const dataToUpdate: any = {
       nome: body.nome,
+      tipo: body.tipo || null,
+      marca: body.marca || null,
+      modelo: body.modelo || null,
       descricao: body.tipo ? `${body.tipo} - ${body.marca} ${body.modelo}` : body.observacoes,
       serial: body.serial || null,
       mac: body.mac && body.mac.trim() !== '' ? body.mac.trim() : null,
