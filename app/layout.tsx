@@ -3,7 +3,6 @@ import './globals.css';
 import './index.css';
 import './styles/app-layout.css';
 import Providers from './components/Providers';
-import BackToMenuButton from './components/BackToMenuButton';
 
 // Metadata global da aplicação
 export const metadata: Metadata = {
@@ -47,7 +46,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body suppressHydrationWarning>
         <Providers>
           {children}
-          <BackToMenuButton />
         </Providers>
         <script dangerouslySetInnerHTML={{
           __html: `
