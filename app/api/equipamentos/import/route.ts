@@ -46,6 +46,13 @@ function normalizeStatus(status?: string): string {
   return statusMap[normalized] || 'DISPONIVEL';
 }
 
+// Helper para limpar valores vazios
+function cleanValue(value: any): string | undefined {
+  if (!value) return undefined;
+  const cleaned = String(value).trim();
+  return cleaned === '' ? undefined : cleaned;
+}
+
 export async function POST(req: NextRequest) {
   try {
     console.log('[IMPORT] Iniciando importação de equipamentos');
@@ -102,30 +109,30 @@ export async function POST(req: NextRequest) {
       const row = data[i];
       const linha = i + 2; // +2 porque linha 1 é cabeçalho e arrays começam em 0
 
-      // Campo obrigatório: nome
-      if (!row.nome && !row.Nome && !row.NOME) {
+      const equipamento: EquipamentoImport = {
+        nome: cleanValue(row.nome || row.Nome || row.NOME) || '',
+        tipo: cleanValue(row.tipo || row.Tipo || row.TIPO),
+        marca: cleanValue(row.marca || row.Marca || row.MARCA),
+        modelo: cleanValue(row.modelo || row.Modelo || row.MODELO),
+        descricao: cleanValue(row.descricao || row.Descricao || row.descricão || row.Descrição || row.DESCRICAO),
+        serial: cleanValue(row.serial || row.Serial || row.SERIAL),
+        mac: cleanValue(row.mac || row.Mac || row.MAC),
+        status: normalizeStatus(row.status || row.Status || row.STATUS),
+        destino: cleanValue(row.destino || row.Destino || row.DESTINO),
+        tecnicoResponsavel: cleanValue(row.tecnicoResponsavel || row.tecnico_responsavel || row['Técnico Responsável'] || row['tecnico responsavel']),
+        observacoes: cleanValue(row.observacoes || row.Observacoes || row.observações || row.Observações || row.OBSERVACOES),
+        localizacaoAtual: cleanValue(row.localizacaoAtual || row.localizacao_atual || row['Localização Atual'] || row.localizacao || row.Localização),
+      };
+      
+      // Validar nome não vazio
+      if (!equipamento.nome) {
         errors.push({
           linha,
           campo: 'nome',
-          mensagem: 'Nome é obrigatório'
+          mensagem: 'Nome é obrigatório e não pode estar vazio'
         });
         continue;
       }
-
-      const equipamento: EquipamentoImport = {
-        nome: row.nome || row.Nome || row.NOME,
-        tipo: row.tipo || row.Tipo || row.TIPO || null,
-        marca: row.marca || row.Marca || row.MARCA || null,
-        modelo: row.modelo || row.Modelo || row.MODELO || null,
-        descricao: row.descricao || row.Descricao || row.descricão || row.Descrição || row.DESCRICAO || null,
-        serial: row.serial || row.Serial || row.SERIAL || null,
-        mac: row.mac || row.Mac || row.MAC || null,
-        status: normalizeStatus(row.status || row.Status || row.STATUS),
-        destino: row.destino || row.Destino || row.DESTINO || null,
-        tecnicoResponsavel: row.tecnicoResponsavel || row.tecnico_responsavel || row['Técnico Responsável'] || row['tecnico responsavel'] || null,
-        observacoes: row.observacoes || row.Observacoes || row.observações || row.Observações || row.OBSERVACOES || null,
-        localizacaoAtual: row.localizacaoAtual || row.localizacao_atual || row['Localização Atual'] || row.localizacao || row.Localização || null,
-      };
 
       equipamentos.push(equipamento);
     }
@@ -193,26 +200,20 @@ export async function POST(req: NextRequest) {
     // Importar em batch
     console.log('[IMPORT] Iniciando importação em batch de', equipamentos.length, 'equipamentos');
     const resultado = await prisma.equipamento.createMany({
-      data: equipamentos.map(eq => {
-        const data: any = {
-          nome: eq.nome,
-          status: eq.status as any,
-        };
-        
-        // Adiciona campos opcionais apenas se tiverem valor
-        if (eq.tipo) data.tipo = eq.tipo;
-        if (eq.marca) data.marca = eq.marca;
-        if (eq.modelo) data.modelo = eq.modelo;
-        if (eq.descricao) data.descricao = eq.descricao;
-        if (eq.serial) data.serial = eq.serial;
-        if (eq.mac) data.mac = eq.mac;
-        if (eq.destino) data.destino = eq.destino;
-        if (eq.tecnicoResponsavel) data.tecnicoResponsavel = eq.tecnicoResponsavel;
-        if (eq.observacoes) data.observacoes = eq.observacoes;
-        if (eq.localizacaoAtual) data.localizacaoAtual = eq.localizacaoAtual;
-        
-        return data;
-      }),
+      data: equipamentos.map(eq => ({
+        nome: eq.nome,
+        tipo: eq.tipo,
+        marca: eq.marca,
+        modelo: eq.modelo,
+        descricao: eq.descricao,
+        serial: eq.serial,
+        mac: eq.mac,
+        status: eq.status as any,
+        destino: eq.destino,
+        tecnicoResponsavel: eq.tecnicoResponsavel,
+        observacoes: eq.observacoes,
+        localizacaoAtual: eq.localizacaoAtual,
+      })),
       skipDuplicates: true,
     });
 
