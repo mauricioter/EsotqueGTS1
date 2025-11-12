@@ -31,6 +31,8 @@ export default function TransferenciasPage() {
   const [tecnicos, setTecnicos] = useState<Usuario[]>([]);
   const [equipamentoSelecionado, setEquipamentoSelecionado] = useState('');
   const [tecnicoSelecionado, setTecnicoSelecionado] = useState('');
+  const [buscaEquipamento, setBuscaEquipamento] = useState('');
+  const [buscaTecnico, setBuscaTecnico] = useState('');
   const [assinatura, setAssinatura] = useState('');
   const [loading, setLoading] = useState(false);
   const [mensagem, setMensagem] = useState('');
@@ -208,17 +210,41 @@ export default function TransferenciasPage() {
               </svg>
               Selecione o Equipamento
             </label>
+            <input
+              type="text"
+              placeholder="Digite para buscar equipamento..."
+              value={buscaEquipamento}
+              onChange={(e) => setBuscaEquipamento(e.target.value)}
+              list="equipamentos-list"
+              className="search-input"
+            />
+            <datalist id="equipamentos-list">
+              {equipamentos
+                .filter(eq => 
+                  eq.nome.toLowerCase().includes(buscaEquipamento.toLowerCase()) ||
+                  (eq.serial && eq.serial.toLowerCase().includes(buscaEquipamento.toLowerCase()))
+                )
+                .map((eq) => (
+                  <option key={eq.id} value={`${eq.nome}${eq.serial ? ` (Serial: ${eq.serial})` : ''}`} />
+                ))}
+            </datalist>
             <select
               value={equipamentoSelecionado}
               onChange={(e) => setEquipamentoSelecionado(e.target.value)}
               required
+              style={{ marginTop: '8px' }}
             >
               <option value="">-- Escolha um equipamento --</option>
-              {equipamentos.map((eq) => (
-                <option key={eq.id} value={eq.id}>
-                  {eq.nome} {eq.serial ? `(Serial: ${eq.serial})` : ''}
-                </option>
-              ))}
+              {equipamentos
+                .filter(eq => 
+                  eq.nome.toLowerCase().includes(buscaEquipamento.toLowerCase()) ||
+                  (eq.serial && eq.serial.toLowerCase().includes(buscaEquipamento.toLowerCase()))
+                )
+                .map((eq) => (
+                  <option key={eq.id} value={eq.id}>
+                    {eq.nome} {eq.serial ? `(Serial: ${eq.serial})` : ''}
+                  </option>
+                ))}
             </select>
             {equipamentos.length === 0 && (
               <p className="info-text">Nenhum equipamento disponível no momento</p>
@@ -232,17 +258,41 @@ export default function TransferenciasPage() {
               </svg>
               Selecione o Técnico
             </label>
+            <input
+              type="text"
+              placeholder="Digite para buscar técnico..."
+              value={buscaTecnico}
+              onChange={(e) => setBuscaTecnico(e.target.value)}
+              list="tecnicos-list"
+              className="search-input"
+            />
+            <datalist id="tecnicos-list">
+              {tecnicos
+                .filter(tec => 
+                  tec.name.toLowerCase().includes(buscaTecnico.toLowerCase()) ||
+                  tec.email.toLowerCase().includes(buscaTecnico.toLowerCase())
+                )
+                .map((tec) => (
+                  <option key={tec.id} value={`${tec.name} (${tec.email})`} />
+                ))}
+            </datalist>
             <select
               value={tecnicoSelecionado}
               onChange={(e) => setTecnicoSelecionado(e.target.value)}
               required
+              style={{ marginTop: '8px' }}
             >
               <option value="">-- Escolha um técnico --</option>
-              {tecnicos.map((tec) => (
-                <option key={tec.id} value={tec.id}>
-                  {tec.name} ({tec.email})
-                </option>
-              ))}
+              {tecnicos
+                .filter(tec => 
+                  tec.name.toLowerCase().includes(buscaTecnico.toLowerCase()) ||
+                  tec.email.toLowerCase().includes(buscaTecnico.toLowerCase())
+                )
+                .map((tec) => (
+                  <option key={tec.id} value={tec.id}>
+                    {tec.name} ({tec.email})
+                  </option>
+                ))}
             </select>
           </div>
 

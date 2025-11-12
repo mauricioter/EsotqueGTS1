@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Toast from '../components/Toast';
 import Footer from '../components/Footer';
+import { gerarRelatorioPDF } from '@/lib/pdfGenerator';
 import './equipamentos-new.css';
 
 interface Equipamento {
@@ -19,6 +20,7 @@ interface Equipamento {
   status: string;
   localizacao?: string;
   observacoes?: string;
+  dataEntrada: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -37,6 +39,7 @@ export default function EquipamentosPageNew() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
+  const [tipoFilter, setTipoFilter] = useState('ALL');
   const [showModal, setShowModal] = useState(false);
   const [editingEquipamento, setEditingEquipamento] = useState<Equipamento | null>(null);
   const [showImportModal, setShowImportModal] = useState(false);
@@ -186,6 +189,34 @@ export default function EquipamentosPageNew() {
     setShowModal(true);
   };
 
+  const handleGerarRelatorio = async () => {
+    try {
+      showToast('Gerando relatório PDF...', 'info');
+      
+      // Calcular estatísticas
+      const stats = {
+        total: equipamentos.length,
+        disponiveis: equipamentos.filter(e => e.status === 'DISPONIVEL').length,
+        emUso: equipamentos.filter(e => e.status === 'EM_USO' || e.status === 'EM_POSSE_DO_TECNICO').length,
+        manutencao: equipamentos.filter(e => e.status === 'MANUTENCAO').length,
+        saida: equipamentos.filter(e => e.status === 'SAIDA').length,
+        reservado: equipamentos.filter(e => e.status === 'RESERVADO').length,
+        defeito: equipamentos.filter(e => e.status === 'DEFEITO').length,
+        emprestado: equipamentos.filter(e => e.status === 'EMPRESTADO').length,
+        instalado: equipamentos.filter(e => e.status === 'INSTALADO').length,
+        retorno: equipamentos.filter(e => e.status === 'EQUIPAMENTO_DE_RETORNO').length,
+      };
+      
+      // Gerar PDF
+      gerarRelatorioPDF(equipamentos, stats);
+      
+      showToast('Relatório PDF gerado com sucesso!', 'success');
+    } catch (error) {
+      console.error('Erro ao gerar relatório:', error);
+      showToast('Erro ao gerar relatório PDF', 'error');
+    }
+  };
+
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingEquipamento(null);
@@ -210,9 +241,13 @@ export default function EquipamentosPageNew() {
       eq.modelo.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = statusFilter === 'ALL' || eq.status === statusFilter;
+    const matchesTipo = tipoFilter === 'ALL' || eq.tipo === tipoFilter;
     
-    return matchesSearch && matchesStatus;
+    return matchesSearch && matchesStatus && matchesTipo;
   });
+
+  // Obter lista de tipos únicos dos equipamentos
+  const tiposUnicos = Array.from(new Set(equipamentos.map(eq => eq.tipo).filter(Boolean))).sort();
 
   const getStatusBadge = (status: string) => {
     const badges: Record<string, { icon: React.ReactElement; label: string; className: string }> = {
@@ -385,6 +420,16 @@ export default function EquipamentosPageNew() {
                   </svg>
                   Novo Equipamento
                 </button>
+                <button onClick={handleGerarRelatorio} className="btn-secondary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                  </svg>
+                  Gerar Relatório PDF
+                </button>
               </>
             )}
           </div>
@@ -432,6 +477,28 @@ export default function EquipamentosPageNew() {
             </select>
           </div>
 
+          <div className="filter-group">
+            <label>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+              </svg>
+              Tipo:
+            </label>
+            <select 
+              value={tipoFilter} 
+              onChange={(e) => setTipoFilter(e.target.value)}
+              className="filter-select"
+            >
+              <option value="ALL">Todos os tipos</option>
+              {tiposUnicos.map(tipo => (
+                <option key={tipo} value={tipo}>{tipo}</option>
+              ))}
+            </select>
+          </div>
+
           <div className="results-count">
             <span>{filteredEquipamentos.length} equipamento(s) encontrado(s)</span>
           </div>
@@ -449,7 +516,7 @@ export default function EquipamentosPageNew() {
             </svg>
             <h3>Nenhum equipamento encontrado</h3>
             <p>
-              {searchTerm || statusFilter !== 'ALL' 
+              {searchTerm || statusFilter !== 'ALL' || tipoFilter !== 'ALL'
                 ? 'Tente ajustar os filtros de busca'
                 : 'Comece cadastrando um novo equipamento'}
             </p>

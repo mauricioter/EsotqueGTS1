@@ -42,6 +42,7 @@ export default function DashboardClient() {
   const [dataFim, setDataFim] = useState('');
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     carregarDados();
@@ -49,16 +50,23 @@ export default function DashboardClient() {
 
   const carregarDados = async () => {
     setLoading(true);
+    setError('');
     try {
       const params = new URLSearchParams();
       if (dataInicio) params.append('dataInicio', dataInicio);
       if (dataFim) params.append('dataFim', dataFim);
       
       const response = await fetch(`/api/dashboard/stats?${params.toString()}`);
+      
+      if (!response.ok) {
+        throw new Error(`Erro ${response.status}: ${response.statusText}`);
+      }
+      
       const data = await response.json();
       setStats(data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao carregar dashboard:', error);
+      setError(error.message || 'Erro ao carregar dados do dashboard');
     } finally {
       setLoading(false);
     }
@@ -95,6 +103,20 @@ export default function DashboardClient() {
         <div style={{ textAlign: 'center', padding: '40px' }}>
           <div className="spinner"></div>
           <p>Carregando dados...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="page-container">
+        <div className="section-card" style={{ textAlign: 'center', padding: '40px' }}>
+          <h2 style={{ color: '#ef4444', marginBottom: '16px' }}>❌ Erro ao carregar Dashboard</h2>
+          <p style={{ color: 'var(--text-light)', marginBottom: '24px' }}>{error}</p>
+          <button onClick={carregarDados} className="btn-primary">
+            🔄 Tentar Novamente
+          </button>
         </div>
       </div>
     );
