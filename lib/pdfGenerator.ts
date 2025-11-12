@@ -41,6 +41,28 @@ export const gerarRelatorioPDF = (
   const grayColor: [number, number, number] = [55, 65, 81]; // Gray
   const lightGray: [number, number, number] = [243, 244, 246];
   
+  // Função auxiliar para adicionar rodapé
+  const addFooter = () => {
+    const pageCount = (doc as any).internal.getNumberOfPages();
+    const currentPage = (doc as any).internal.getCurrentPageInfo().pageNumber;
+    
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text(
+      `Pagina ${currentPage} de ${pageCount}`,
+      pageWidth / 2,
+      pageHeight - 10,
+      { align: 'center' }
+    );
+    
+    doc.text(
+      'Sistema de Gerenciamento GTS - Relatorio Confidencial',
+      pageWidth / 2,
+      pageHeight - 5,
+      { align: 'center' }
+    );
+  };
+  
   // CABEÇALHO
   doc.setFillColor(...primaryColor);
   doc.rect(0, 0, pageWidth, 35, 'F');
@@ -48,7 +70,7 @@ export const gerarRelatorioPDF = (
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(24);
   doc.setFont('helvetica', 'bold');
-  doc.text('RELATÓRIO DE ESTOQUE', pageWidth / 2, 15, { align: 'center' });
+  doc.text('RELATORIO DE ESTOQUE', pageWidth / 2, 15, { align: 'center' });
   
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
@@ -70,227 +92,211 @@ export const gerarRelatorioPDF = (
   doc.setTextColor(...grayColor);
   doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  doc.text('📊 RESUMO EXECUTIVO', 14, yPos);
+  doc.text('RESUMO EXECUTIVO', 14, yPos);
   
   yPos += 10;
   
-  // Cards de estatísticas em grid 2x5
-  const cardWidth = (pageWidth - 28 - 8) / 2; // 2 colunas com espaçamento
-  const cardHeight = 18;
-  const gap = 4;
+  // Card principal - Total de Equipamentos
+  doc.setFillColor(...primaryColor);
+  doc.roundedRect(14, yPos, pageWidth - 28, 25, 3, 3, 'F');
   
-  const statsCards = [
-    { label: 'Total de Equipamentos', value: stats.total, color: primaryColor },
-    { label: 'Disponíveis', value: stats.disponiveis, color: [34, 197, 94] as [number, number, number] },
-    { label: 'Em Uso', value: stats.emUso, color: [249, 115, 22] as [number, number, number] },
-    { label: 'Manutenção', value: stats.manutencao, color: [245, 158, 11] as [number, number, number] },
-    { label: 'Saídas', value: stats.saida, color: [239, 68, 68] as [number, number, number] },
-    { label: 'Instalados', value: stats.instalado, color: [16, 185, 129] as [number, number, number] },
-    { label: 'Reservados', value: stats.reservado, color: [107, 114, 128] as [number, number, number] },
-    { label: 'Com Defeito', value: stats.defeito, color: [220, 38, 38] as [number, number, number] },
-    { label: 'Emprestados', value: stats.emprestado, color: [234, 88, 12] as [number, number, number] },
-    { label: 'Retornos', value: stats.retorno, color: [249, 115, 22] as [number, number, number] },
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'normal');
+  doc.text('TOTAL DE EQUIPAMENTOS NO ESTOQUE', pageWidth / 2, yPos + 8, { align: 'center' });
+  
+  doc.setFontSize(28);
+  doc.setFont('helvetica', 'bold');
+  doc.text(stats.total.toString(), pageWidth / 2, yPos + 20, { align: 'center' });
+  
+  yPos += 35;
+  
+  // Estatísticas por status - Lista simples
+  doc.setTextColor(...grayColor);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Distribuicao por Status:', 14, yPos);
+  
+  yPos += 8;
+  
+  const statusList = [
+    { label: 'Disponiveis', value: stats.disponiveis },
+    { label: 'Em Uso', value: stats.emUso },
+    { label: 'Instalados', value: stats.instalado },
+    { label: 'Manutencao', value: stats.manutencao },
+    { label: 'Saidas', value: stats.saida },
+    { label: 'Reservados', value: stats.reservado },
+    { label: 'Com Defeito', value: stats.defeito },
+    { label: 'Emprestados', value: stats.emprestado },
+    { label: 'Retornos', value: stats.retorno },
   ];
   
-  statsCards.forEach((card, index) => {
-    const col = index % 2;
-    const row = Math.floor(index / 2);
-    const x = 14 + col * (cardWidth + gap);
-    const y = yPos + row * (cardHeight + gap);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  statusList.forEach((item, index) => {
+    const col = index % 3;
+    const row = Math.floor(index / 3);
+    const x = 14 + col * 65;
+    const y = yPos + row * 7;
     
-    // Fundo do card
-    doc.setFillColor(...lightGray);
-    doc.roundedRect(x, y, cardWidth, cardHeight, 2, 2, 'F');
-    
-    // Borda colorida
-    doc.setDrawColor(...card.color);
-    doc.setLineWidth(1);
-    doc.line(x, y, x + cardWidth, y);
-    
-    // Label
-    doc.setTextColor(100, 100, 100);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(card.label, x + 3, y + 6);
-    
-    // Valor
-    doc.setTextColor(...card.color);
-    doc.setFontSize(16);
+    doc.setTextColor(...grayColor);
+    doc.text(`${item.label}:`, x, y);
     doc.setFont('helvetica', 'bold');
-    doc.text(card.value.toString(), x + 3, y + 14);
+    doc.text(item.value.toString(), x + 40, y);
+    doc.setFont('helvetica', 'normal');
   });
   
-  yPos += (Math.ceil(statsCards.length / 2) * (cardHeight + gap)) + 10;
+  yPos += Math.ceil(statusList.length / 3) * 7 + 5;
   
-  // TABELA DE EQUIPAMENTOS
+  addFooter();
+  
+  // EQUIPAMENTOS POR MARCA
   doc.addPage();
   yPos = 20;
   
   doc.setTextColor(...grayColor);
   doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  doc.text('📦 LISTA COMPLETA DE EQUIPAMENTOS', 14, yPos);
+  doc.text('EQUIPAMENTOS POR MARCA', 14, yPos);
+  
+  yPos += 10;
+  
+  // Agrupar equipamentos por marca
+  const porMarca = equipamentos.reduce((acc, eq) => {
+    const marca = eq.marca || 'Sem marca';
+    if (!acc[marca]) acc[marca] = [];
+    acc[marca].push(eq);
+    return acc;
+  }, {} as Record<string, Equipamento[]>);
+  
+  // Ordenar marcas por quantidade (maior para menor)
+  const marcasOrdenadas = Object.entries(porMarca)
+    .sort((a, b) => b[1].length - a[1].length);
+  
+  // Para cada marca, criar uma seção
+  marcasOrdenadas.forEach(([marca, equipamentos], indexMarca) => {
+    // Verificar se precisa de nova página
+    if (yPos > pageHeight - 60) {
+      addFooter();
+      doc.addPage();
+      yPos = 20;
+    }
+    
+    // Título da marca
+    doc.setFillColor(...lightGray);
+    doc.roundedRect(14, yPos, pageWidth - 28, 12, 2, 2, 'F');
+    
+    doc.setTextColor(...primaryColor);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text(marca.toUpperCase(), 16, yPos + 8);
+    
+    doc.setTextColor(...grayColor);
+    doc.setFontSize(10);
+    doc.text(`(${equipamentos.length} ${equipamentos.length === 1 ? 'equipamento' : 'equipamentos'})`, 
+      pageWidth - 16, yPos + 8, { align: 'right' });
+    
+    yPos += 17;
+    
+    // Tabela de equipamentos da marca
+    const marcaData = equipamentos.map(eq => [
+      eq.nome,
+      eq.tipo || '-',
+      eq.modelo || '-',
+      eq.status,
+    ]);
+    
+    autoTable(doc, {
+      startY: yPos,
+      head: [['Nome', 'Tipo', 'Modelo', 'Status']],
+      body: marcaData,
+      theme: 'plain',
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: grayColor,
+        fontStyle: 'bold',
+        fontSize: 9,
+        lineWidth: 0.5,
+        lineColor: [200, 200, 200],
+      },
+      bodyStyles: {
+        fontSize: 9,
+        textColor: grayColor,
+        lineWidth: 0.1,
+        lineColor: [230, 230, 230],
+      },
+      alternateRowStyles: {
+        fillColor: [250, 250, 250],
+      },
+      columnStyles: {
+        0: { cellWidth: 60 },
+        1: { cellWidth: 35 },
+        2: { cellWidth: 45 },
+        3: { cellWidth: 40, halign: 'center' },
+      },
+      margin: { left: 14, right: 14 },
+    });
+    
+    yPos = (doc as any).lastAutoTable.finalY + 10;
+  });
+  
+  addFooter();
+  
+  // LISTA DE TODOS OS SERIAIS
+  doc.addPage();
+  yPos = 20;
+  
+  doc.setTextColor(...grayColor);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('LISTA DE SERIAIS', 14, yPos);
   
   yPos += 5;
   
-  // Preparar dados para a tabela
-  const tableData = equipamentos.map(eq => [
-    eq.nome,
-    eq.tipo || '-',
-    eq.marca || '-',
-    eq.serial || '-',
-    eq.status,
-    new Date(eq.dataEntrada).toLocaleDateString('pt-BR'),
-  ]);
+  // Criar tabela com todos os seriais
+  const serialData = equipamentos
+    .filter(eq => eq.serial && eq.serial.trim() !== '')
+    .sort((a, b) => a.serial.localeCompare(b.serial))
+    .map(eq => [
+      eq.serial,
+      eq.nome,
+      eq.marca || '-',
+      eq.status,
+    ]);
   
   autoTable(doc, {
     startY: yPos,
-    head: [['Nome', 'Tipo', 'Marca', 'Serial', 'Status', 'Data Entrada']],
-    body: tableData,
+    head: [['Serial', 'Nome do Equipamento', 'Marca', 'Status']],
+    body: serialData.length > 0 ? serialData : [['Nenhum serial cadastrado', '', '', '']],
     theme: 'striped',
     headStyles: {
       fillColor: primaryColor,
       textColor: [255, 255, 255],
       fontStyle: 'bold',
-      fontSize: 9,
+      fontSize: 10,
       halign: 'center',
     },
     bodyStyles: {
-      fontSize: 8,
+      fontSize: 9,
       textColor: grayColor,
     },
     alternateRowStyles: {
       fillColor: lightGray,
     },
     columnStyles: {
-      0: { cellWidth: 40 }, // Nome
-      1: { cellWidth: 25 }, // Tipo
-      2: { cellWidth: 30 }, // Marca
-      3: { cellWidth: 30 }, // Serial
-      4: { cellWidth: 35, halign: 'center' }, // Status
-      5: { cellWidth: 25, halign: 'center' }, // Data
+      0: { cellWidth: 45, fontStyle: 'bold' },
+      1: { cellWidth: 60 },
+      2: { cellWidth: 40 },
+      3: { cellWidth: 35, halign: 'center' },
     },
     margin: { left: 14, right: 14 },
-    didDrawPage: (data) => {
-      // Rodapé em cada página
-      const pageCount = (doc as any).internal.getNumberOfPages();
-      const currentPage = (doc as any).internal.getCurrentPageInfo().pageNumber;
-      
-      doc.setFontSize(8);
-      doc.setTextColor(150, 150, 150);
-      doc.text(
-        `Página ${currentPage} de ${pageCount}`,
-        pageWidth / 2,
-        pageHeight - 10,
-        { align: 'center' }
-      );
-      
-      doc.text(
-        'Sistema de Gerenciamento GTS - Relatório Confidencial',
-        pageWidth / 2,
-        pageHeight - 5,
-        { align: 'center' }
-      );
+    didDrawPage: () => {
+      addFooter();
     },
   });
   
-  // ANÁLISE POR TIPO
-  doc.addPage();
-  yPos = 20;
-  
-  doc.setTextColor(...grayColor);
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.text('📈 ANÁLISE POR TIPO DE EQUIPAMENTO', 14, yPos);
-  
-  yPos += 10;
-  
-  // Agrupar por tipo
-  const porTipo = equipamentos.reduce((acc, eq) => {
-    const tipo = eq.tipo || 'Sem tipo';
-    if (!acc[tipo]) acc[tipo] = 0;
-    acc[tipo]++;
-    return acc;
-  }, {} as Record<string, number>);
-  
-  const tipoData = Object.entries(porTipo)
-    .sort((a, b) => b[1] - a[1])
-    .map(([tipo, count]) => [
-      tipo,
-      count.toString(),
-      `${((count / stats.total) * 100).toFixed(1)}%`
-    ]);
-  
-  autoTable(doc, {
-    startY: yPos,
-    head: [['Tipo de Equipamento', 'Quantidade', 'Percentual']],
-    body: tipoData,
-    theme: 'striped',
-    headStyles: {
-      fillColor: primaryColor,
-      textColor: [255, 255, 255],
-      fontStyle: 'bold',
-      fontSize: 10,
-    },
-    bodyStyles: {
-      fontSize: 9,
-      textColor: grayColor,
-    },
-    columnStyles: {
-      0: { cellWidth: 100 },
-      1: { cellWidth: 40, halign: 'center' },
-      2: { cellWidth: 40, halign: 'center' },
-    },
-    margin: { left: 14, right: 14 },
-  });
-  
-  // ANÁLISE POR MARCA
-  const finalY = (doc as any).lastAutoTable.finalY + 15;
-  
-  doc.setTextColor(...grayColor);
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.text('🏢 ANÁLISE POR MARCA', 14, finalY);
-  
-  // Agrupar por marca
-  const porMarca = equipamentos.reduce((acc, eq) => {
-    const marca = eq.marca || 'Sem marca';
-    if (!acc[marca]) acc[marca] = 0;
-    acc[marca]++;
-    return acc;
-  }, {} as Record<string, number>);
-  
-  const marcaData = Object.entries(porMarca)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 15) // Top 15 marcas
-    .map(([marca, count]) => [
-      marca,
-      count.toString(),
-      `${((count / stats.total) * 100).toFixed(1)}%`
-    ]);
-  
-  autoTable(doc, {
-    startY: finalY + 5,
-    head: [['Marca', 'Quantidade', 'Percentual']],
-    body: marcaData,
-    theme: 'striped',
-    headStyles: {
-      fillColor: primaryColor,
-      textColor: [255, 255, 255],
-      fontStyle: 'bold',
-      fontSize: 10,
-    },
-    bodyStyles: {
-      fontSize: 9,
-      textColor: grayColor,
-    },
-    columnStyles: {
-      0: { cellWidth: 100 },
-      1: { cellWidth: 40, halign: 'center' },
-      2: { cellWidth: 40, halign: 'center' },
-    },
-    margin: { left: 14, right: 14 },
-  });
+  // Adicionar rodapé na última página
+  addFooter();
   
   // Salvar PDF
   const nomeArquivo = `relatorio-estoque-${new Date().toISOString().split('T')[0]}.pdf`;
