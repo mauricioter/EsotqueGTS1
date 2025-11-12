@@ -12,7 +12,7 @@
    HEADER
    ======================================== */
 .usuarios-page .page-header {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
   color: white;
   padding: 1.5rem 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -95,7 +95,7 @@
 }
 
 .usuarios-page .header-icon-wrapper svg {
-  color: #6366f1;
+  color: #f97316;
   flex-shrink: 0;
   margin-top: 0.25rem;
 }
@@ -168,13 +168,13 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
 }
 
 .pending-card .user-avatar {
@@ -290,7 +290,7 @@
 }
 
 .form-group label svg {
-  color: #6366f1;
+  color: #f97316;
 }
 
 .form-group input {
@@ -304,9 +304,9 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #6366f1;
+  border-color: #f97316;
   background: white;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
 }
 
 .form-actions {
@@ -334,14 +334,14 @@
 }
 
 .btn-submit {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
 }
 
 .btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
 }
 
 .btn-submit:disabled {
@@ -423,7 +423,7 @@
 }
 
 .approved-card:hover {
-  border-color: #6366f1;
+  border-color: #f97316;
 }
 
 .approved-card .user-avatar {
@@ -486,7 +486,7 @@
 }
 
 .loading-state .spinner-icon {
-  color: #6366f1;
+  color: #f97316;
   margin-bottom: 1rem;
 }
 

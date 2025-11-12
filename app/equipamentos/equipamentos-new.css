@@ -12,7 +12,7 @@
    HEADER
    ======================================== */
 .page-header {
-  background: linear-gradient(135deg, #1e40af 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
   color: white;
   padding: 1.5rem 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -491,7 +491,7 @@
   align-items: center;
   padding: 2rem;
   border-bottom: 2px solid var(--border);
-  background: linear-gradient(135deg, #1e40af 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   color: white;
   border-radius: 20px 20px 0 0;
 }
@@ -609,7 +609,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #1e40af 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   color: white;
   display: inline-flex;
   align-items: center;
@@ -770,7 +770,7 @@
 }
 
 .modal-import .modal-header {
-  background: linear-gradient(135deg, #1e40af 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   color: white;
   padding: 1.5rem 2rem;
   border-radius: 16px 16px 0 0;
@@ -828,7 +828,7 @@
   min-width: 40px;
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, #1e40af 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -836,7 +836,7 @@
   justify-content: center;
   font-weight: 700;
   font-size: 1.25rem;
-  box-shadow: 0 4px 8px rgba(30, 64, 175, 0.3);
+  box-shadow: 0 4px 8px rgba(249, 115, 22, 0.3);
 }
 
 .step-content {
@@ -1195,13 +1195,13 @@
 }
 
 .modal-import .modal-actions .btn-primary {
-  background: linear-gradient(135deg, #1e40af 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   flex: 1.5;
 }
 
 .modal-import .modal-actions .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(30, 64, 175, 0.3);
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.3);
 }
 
 .modal-import .modal-actions .btn-primary:disabled {

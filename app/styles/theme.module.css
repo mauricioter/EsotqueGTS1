@@ -2,8 +2,8 @@
 .light {
   --bg: #f3f4f6;
   --card: #ffffff;
-  --primary: #4f46e5;
-  --primary-dark: #4338ca;
+  --primary: #f97316;
+  --primary-dark: #ea580c;
   --accent: #10b981;
   --accent-dark: #059669;
   --muted: #64748b;
@@ -12,10 +12,10 @@
   --danger-bg: #fff1f2;
   --input-bg: #fbfdff;
   --input-border: #e6e9ef;
-  --badge-bg: #e0e7ff;
-  --badge-text: #3730a3;
+  --badge-bg: #fff7ed;
+  --badge-text: #9a3412;
   --card-shadow: 0 6px 18px rgba(20,24,40,0.08);
-  --focus-ring: rgba(99,102,241,0.08);
+  --focus-ring: rgba(249,115,22,0.08);
   --hover-overlay: rgba(0,0,0,0.03);
   --danger-border: rgba(220,38,38,0.12);
   --danger-hover: rgba(220,38,38,0.14);
@@ -27,8 +27,8 @@
 .dark {
   --bg: #0f1724;
   --card: #0b1220;
-  --primary: #7c5cff;
-  --primary-dark: #5b3ef0;
+  --primary: #fb923c;
+  --primary-dark: #f97316;
   --accent: #34d399;
   --accent-dark: #10b981;
   --muted: #94a3b8;
@@ -37,8 +37,8 @@
   --danger-bg: rgba(255, 225, 230, 0.06);
   --input-bg: #071024;
   --input-border: #1f2937;
-  --badge-bg: rgba(124, 58, 237, 0.12);
-  --badge-text: #e9d5ff;
+  --badge-bg: rgba(249, 115, 22, 0.12);
+  --badge-text: #fed7aa;
   --card-shadow: 0 10px 30px rgba(2,6,23,0.6);
 }
 
