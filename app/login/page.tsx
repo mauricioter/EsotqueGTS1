@@ -162,6 +162,9 @@ function LoginForm() {
                 className="form-input"
                 disabled={loading}
               />
+              <Link href="/recuperar-senha" className="forgot-password-link">
+                Esqueci minha senha
+              </Link>
             </div>
 
             <button 

@@ -1,0 +1,161 @@
+.recovery-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.recovery-icon svg {
+  color: white;
+}
+
+.back-to-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6366f1;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 2rem;
+  transition: all 0.2s ease;
+}
+
+.back-to-login:hover {
+  color: #4f46e5;
+  transform: translateX(-2px);
+}
+
+.back-to-login svg {
+  transition: transform 0.2s ease;
+}
+
+.back-to-login:hover svg {
+  transform: translateX(-4px);
+}
+
+.success-message {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.success-icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+  animation: scaleIn 0.4s ease;
+}
+
+.success-icon svg {
+  color: white;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.success-message p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.success-message strong {
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.help-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: auto;
+  padding: 0.75rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #6366f1;
+  background: white;
+  border: 2px solid #6366f1;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+}
+
+.btn-secondary:hover {
+  background: #f0f1ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+.spinner-small {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .recovery-icon,
+  .success-icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .recovery-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .success-icon svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .back-to-login {
+    margin-bottom: 1.5rem;
+  }
+
+  .success-message {
+    padding: 1.5rem 0;
+  }
+}
