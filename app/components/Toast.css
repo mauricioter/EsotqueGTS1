@@ -106,17 +106,17 @@
 
 /* Info Toast */
 .toast-info {
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-  border: 2px solid #3b82f6;
-  color: #1e40af;
+  background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+  border: 2px solid #f97316;
+  color: #9a3412;
 }
 
 .toast-info .toast-icon {
-  color: #3b82f6;
+  color: #f97316;
 }
 
 .toast-info .toast-close {
-  color: #1e40af;
+  color: #9a3412;
 }
 
 /* Animations */

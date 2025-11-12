@@ -277,9 +277,9 @@
 }
 
 .status-saida {
-  background: #cffafe;
-  color: #164e63;
-  border-color: #06b6d4;
+  background: #fff7ed;
+  color: #9a3412;
+  border-color: #f97316;
 }
 
 .status-reservado {
@@ -372,14 +372,14 @@
 }
 
 .btn-edit {
-  background: #eff6ff;
-  color: #1e40af;
-  border: 2px solid #dbeafe;
+  background: #fff7ed;
+  color: #9a3412;
+  border: 2px solid #fed7aa;
 }
 
 .btn-edit:hover {
-  background: #dbeafe;
-  border-color: #1e40af;
+  background: #fed7aa;
+  border-color: #f97316;
   transform: translateY(-2px);
 }
 
@@ -916,7 +916,7 @@
   border-radius: 8px;
   font-size: 0.9rem;
   color: var(--text-secondary);
-  border-left: 3px solid #06b6d4;
+  border-left: 3px solid #f97316;
   transition: all 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
@@ -978,9 +978,9 @@
 }
 
 .file-label:hover {
-  border-color: #06b6d4;
+  border-color: #f97316;
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(6, 182, 212, 0.15);
+  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.15);
 }
 
 .file-label svg {
@@ -991,7 +991,7 @@
 }
 
 .file-label:hover svg {
-  color: #06b6d4;
+  color: #f97316;
   transform: scale(1.1) translateY(-4px);
 }
 
@@ -1005,7 +1005,7 @@
 
 .file-name {
   font-weight: 700 !important;
-  color: #06b6d4 !important;
+  color: #f97316 !important;
   font-size: 1.05rem !important;
   display: flex;
   align-items: center;

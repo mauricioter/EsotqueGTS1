@@ -29,7 +29,7 @@
 .header h1 {
   font-size: 2.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #06b6d4 100%);
+  background: linear-gradient(135deg, #374151 0%, #f97316 50%, #ea580c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -43,7 +43,7 @@
 .header h1 svg {
   width: 48px;
   height: 48px;
-  color: #3b82f6;
+  color: #f97316;
   filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3));
 }
 
@@ -77,7 +77,7 @@
 
 .btn-voltar:hover {
   background: #f8fafc;
-  border-color: #3b82f6;
+  border-color: #f97316;
   transform: translateX(-4px);
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
 }
@@ -120,7 +120,7 @@
 .form-group label svg {
   width: 24px;
   height: 24px;
-  color: #3b82f6;
+  color: #f97316;
   flex-shrink: 0;
 }
 
@@ -138,7 +138,7 @@
 
 .form-group select:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #f97316;
   background: white;
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
@@ -160,7 +160,7 @@
   width: 100%;
   max-width: 100%;
   height: 220px;
-  border: 3px dashed #3b82f6;
+  border: 3px dashed #f97316;
   border-radius: 12px;
   cursor: crosshair;
   background: #f8fafc;
@@ -172,7 +172,7 @@
 }
 
 .canvas-assinatura:hover {
-  border-color: #2563eb;
+  border-color: #ea580c;
   background: white;
   box-shadow: inset 0 2px 12px rgba(59, 130, 246, 0.1);
 }
@@ -331,7 +331,7 @@
   width: 56px;
   height: 56px;
   border: 5px solid #e2e8f0;
-  border-top-color: #3b82f6;
+  border-top-color: #f97316;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -412,7 +412,7 @@
 .btn-limpar:focus,
 .btn-transferir:focus,
 .form-group select:focus {
-  outline: 3px solid #3b82f6;
+  outline: 3px solid #f97316;
   outline-offset: 2px;
 }
 

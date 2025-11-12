@@ -103,9 +103,9 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        <div className="section-card" style={{ borderLeft: '4px solid #3b82f6' }}>
+        <div className="section-card" style={{ borderLeft: '4px solid #f97316' }}>
           <div style={{ fontSize: '14px', color: 'var(--text-light)', marginBottom: '8px' }}>🔧 Em Uso</div>
-          <div style={{ fontSize: '32px', fontWeight: 700, color: '#3b82f6' }}>{emUso}</div>
+          <div style={{ fontSize: '32px', fontWeight: 700, color: '#f97316' }}>{emUso}</div>
           <div style={{ fontSize: '12px', color: 'var(--text-light)', marginTop: '8px' }}>
             {total > 0 ? `${((emUso / total) * 100).toFixed(0)}% do estoque` : '0% do estoque'}
           </div>
@@ -129,7 +129,7 @@ export default async function DashboardPage() {
 
         <div className="section-card" style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '14px', color: 'var(--text-light)', marginBottom: '8px' }}>� Reservados</div>
-          <div style={{ fontSize: '28px', fontWeight: 700, color: '#8b5cf6' }}>{reservado}</div>
+          <div style={{ fontSize: '28px', fontWeight: 700, color: '#6b7280' }}>{reservado}</div>
         </div>
 
         <div className="section-card" style={{ textAlign: 'center' }}>
@@ -139,7 +139,7 @@ export default async function DashboardPage() {
 
         <div className="section-card" style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '14px', color: 'var(--text-light)', marginBottom: '8px' }}>📦 Emprestados</div>
-          <div style={{ fontSize: '28px', fontWeight: 700, color: '#06b6d4' }}>{emprestado}</div>
+          <div style={{ fontSize: '28px', fontWeight: 700, color: '#ea580c' }}>{emprestado}</div>
         </div>
 
         <div className="section-card" style={{ textAlign: 'center' }}>
@@ -175,7 +175,7 @@ export default async function DashboardPage() {
           {emUso > 0 && (
             <div style={{ 
               width: `${(emUso / total) * 100}%`, 
-              background: '#3b82f6',
+              background: '#f97316',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -189,7 +189,7 @@ export default async function DashboardPage() {
           {emprestado > 0 && (
             <div style={{ 
               width: `${(emprestado / total) * 100}%`, 
-              background: '#06b6d4',
+              background: '#ea580c',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -217,7 +217,7 @@ export default async function DashboardPage() {
           {reservado > 0 && (
             <div style={{ 
               width: `${(reservado / total) * 100}%`, 
-              background: '#8b5cf6',
+              background: '#6b7280',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -259,10 +259,10 @@ export default async function DashboardPage() {
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '16px', marginTop: '12px', fontSize: '13px' }}>
           <div><span style={{ color: '#22c55e' }}>●</span> Disponíveis ({disponiveis})</div>
-          <div><span style={{ color: '#3b82f6' }}>●</span> Em Uso ({emUso})</div>
-          <div><span style={{ color: '#06b6d4' }}>●</span> Emprestados ({emprestado})</div>
+          <div><span style={{ color: '#f97316' }}>●</span> Em Uso ({emUso})</div>
+          <div><span style={{ color: '#ea580c' }}>●</span> Emprestados ({emprestado})</div>
           <div><span style={{ color: '#f59e0b' }}>●</span> Manutenção ({manutencao})</div>
-          <div><span style={{ color: '#8b5cf6' }}>●</span> Reservados ({reservado})</div>
+          <div><span style={{ color: '#6b7280' }}>●</span> Reservados ({reservado})</div>
           <div><span style={{ color: '#dc2626' }}>●</span> Com Defeito ({defeito})</div>
           <div><span style={{ color: '#ef4444' }}>●</span> Saídas ({saida})</div>
         </div>

@@ -465,9 +465,9 @@
 }
 
 .role-badge.operator {
-  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
-  color: #1e3a8a;
-  border-color: #3b82f6;
+  background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+  color: #9a3412;
+  border-color: #f97316;
 }
 
 .role-badge.viewer {

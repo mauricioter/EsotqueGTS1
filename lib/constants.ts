@@ -109,8 +109,8 @@ export const STATUS_CLASSES = {
 // Cores por status (para uso inline)
 export const STATUS_COLORS = {
   DISPONIVEL: '#10b981', // verde
-  EM_USO: '#3b82f6', // azul
-  EMPRESTADO: '#f59e0b', // laranja
+  EM_USO: '#f97316', // laranja
+  EMPRESTADO: '#f59e0b', // laranja claro
   MANUTENCAO: '#ef4444', // vermelho
   SAIDA: '#6b7280', // cinza
 } as const;
