@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session?.user || (session.user.role !== 'ADMIN' && session.user.role !== 'OPERATOR')) {
+    if (!session?.user || ((session as any).user.role !== 'ADMIN' && (session as any).user.role !== 'OPERATOR')) {
       return NextResponse.json({ 
         error: 'Não autorizado. Apenas administradores e operadores podem importar equipamentos.' 
       }, { status: 403 });
