@@ -31,6 +31,10 @@ export default function EquipamentosPageNew() {
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [showModal, setShowModal] = useState(false);
   const [editingEquipamento, setEditingEquipamento] = useState<Equipamento | null>(null);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importFile, setImportFile] = useState<File | null>(null);
+  const [importing, setImporting] = useState(false);
+  const [importErrors, setImportErrors] = useState<any[]>([]);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -238,6 +242,69 @@ export default function EquipamentosPageNew() {
     );
   };
 
+  const handleDownloadModelo = async () => {
+    try {
+      const response = await fetch('/api/equipamentos/import');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'modelo_importacao_equipamentos.xlsx';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Erro ao baixar modelo:', error);
+      alert('Erro ao baixar modelo de planilha');
+    }
+  };
+
+  const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImportFile(file);
+      setImportErrors([]);
+    }
+  };
+
+  const handleImport = async () => {
+    if (!importFile) {
+      alert('Selecione um arquivo para importar');
+      return;
+    }
+
+    setImporting(true);
+    setImportErrors([]);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', importFile);
+
+      const response = await fetch('/api/equipamentos/import', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert(data.message);
+        setShowImportModal(false);
+        setImportFile(null);
+        await loadEquipamentos();
+      } else {
+        setImportErrors(data.errors || []);
+        alert(data.message || 'Erro ao importar equipamentos');
+      }
+    } catch (error) {
+      console.error('Erro ao importar:', error);
+      alert('Erro ao importar equipamentos');
+    } finally {
+      setImporting(false);
+    }
+  };
+
   if (status === 'loading' || loading) {
     return (
       <div className="loading-screen">
@@ -275,13 +342,23 @@ export default function EquipamentosPageNew() {
           <div className="header-right">
             <span className="user-name">{session.user?.name}</span>
             {(role === 'ADMIN' || role === 'OPERATOR') && (
-              <button onClick={handleNewEquipamento} className="btn-primary">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="12" y1="5" x2="12" y2="19"/>
-                  <line x1="5" y1="12" x2="19" y2="12"/>
-                </svg>
-                Novo Equipamento
-              </button>
+              <>
+                <button onClick={() => setShowImportModal(true)} className="btn-secondary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  Importar Planilha
+                </button>
+                <button onClick={handleNewEquipamento} className="btn-primary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  Novo Equipamento
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -592,6 +669,158 @@ export default function EquipamentosPageNew() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Importação */}
+      {showImportModal && (
+        <div className="modal-overlay" onClick={() => setShowImportModal(false)}>
+          <div className="modal-content modal-import" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Importar Equipamentos em Massa
+              </h2>
+              <button onClick={() => setShowImportModal(false)} className="btn-close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+
+            <div className="import-instructions">
+              <div className="instruction-step">
+                <span className="step-number">1</span>
+                <div className="step-content">
+                  <h3>Baixe o modelo de planilha</h3>
+                  <p>Use nossa planilha modelo com os campos corretos</p>
+                  <button onClick={handleDownloadModelo} className="btn-download">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Baixar Modelo Excel
+                  </button>
+                </div>
+              </div>
+
+              <div className="instruction-step">
+                <span className="step-number">2</span>
+                <div className="step-content">
+                  <h3>Preencha os dados</h3>
+                  <p>Complete a planilha com os dados dos equipamentos</p>
+                  <ul className="campo-lista">
+                    <li><strong>nome</strong> - Nome do equipamento (obrigatório)</li>
+                    <li><strong>tipo</strong> - Tipo do equipamento (ex: Roteador, Switch)</li>
+                    <li><strong>marca</strong> - Marca do fabricante</li>
+                    <li><strong>modelo</strong> - Modelo do equipamento</li>
+                    <li><strong>serial</strong> - Número de série (único)</li>
+                    <li><strong>mac</strong> - Endereço MAC (único)</li>
+                    <li><strong>status</strong> - Status (disponivel, instalado, etc)</li>
+                    <li><strong>localizacaoAtual</strong> - Localização física</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="instruction-step">
+                <span className="step-number">3</span>
+                <div className="step-content">
+                  <h3>Faça upload da planilha</h3>
+                  <p>Selecione o arquivo Excel (.xlsx) ou CSV preenchido</p>
+                  
+                  <div className="file-upload-area">
+                    <input
+                      type="file"
+                      accept=".xlsx,.xls,.csv"
+                      onChange={handleImportFile}
+                      id="import-file"
+                      className="file-input"
+                    />
+                    <label htmlFor="import-file" className="file-label">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                      </svg>
+                      {importFile ? (
+                        <>
+                          <span className="file-name">{importFile.name}</span>
+                          <span className="file-size">
+                            {(importFile.size / 1024).toFixed(2)} KB
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Clique para selecionar ou arraste aqui</span>
+                          <span className="file-formats">Excel (.xlsx, .xls) ou CSV</span>
+                        </>
+                      )}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {importErrors.length > 0 && (
+              <div className="import-errors">
+                <h3>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  Erros encontrados ({importErrors.length})
+                </h3>
+                <div className="errors-list">
+                  {importErrors.map((erro, index) => (
+                    <div key={index} className="error-item">
+                      <span className="error-linha">Linha {erro.linha}</span>
+                      <span className="error-campo">{erro.campo}</span>
+                      <span className="error-mensagem">{erro.mensagem}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="modal-actions">
+              <button 
+                type="button" 
+                onClick={() => setShowImportModal(false)} 
+                className="btn-secondary"
+              >
+                Cancelar
+              </button>
+              <button 
+                onClick={handleImport}
+                disabled={!importFile || importing}
+                className="btn-primary"
+              >
+                {importing ? (
+                  <>
+                    <span className="spinner-small"></span>
+                    Importando...
+                  </>
+                ) : (
+                  <>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Importar Equipamentos
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}
