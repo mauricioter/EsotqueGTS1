@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import Footer from '../components/Footer';
 import './usuarios.css';
 
 interface Usuario {
@@ -459,6 +460,8 @@ export default function UsuariosPage() {
           </div>
         </div>
       )}
+
+      <Footer />
     </div>
   );
 }

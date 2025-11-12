@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Footer from '../components/Footer';
 import '../home.css';
 
 interface Stats {
@@ -33,8 +34,8 @@ interface Equipamento {
 interface Anotacao {
   id: string;
   texto: string;
-  data: string;
-  hora: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export default function HomePage() {
@@ -72,34 +73,50 @@ export default function HomePage() {
     }
   }, [status]);
 
-  const carregarAnotacoes = () => {
-    const anotacoesSalvas = localStorage.getItem('anotacoes-importantes');
-    if (anotacoesSalvas) {
-      setAnotacoes(JSON.parse(anotacoesSalvas));
+  const carregarAnotacoes = async () => {
+    try {
+      const response = await fetch('/api/anotacoes');
+      if (response.ok) {
+        const data = await response.json();
+        setAnotacoes(data);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar anotações:', error);
     }
   };
 
-  const salvarAnotacao = () => {
+  const salvarAnotacao = async () => {
     if (!novaAnotacao.trim()) return;
 
-    const agora = new Date();
-    const novaAnotacaoObj: Anotacao = {
-      id: Date.now().toString(),
-      texto: novaAnotacao,
-      data: agora.toLocaleDateString('pt-BR'),
-      hora: agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-    };
+    try {
+      const response = await fetch('/api/anotacoes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ texto: novaAnotacao }),
+      });
 
-    const anotacoesAtualizadas = [novaAnotacaoObj, ...anotacoes];
-    setAnotacoes(anotacoesAtualizadas);
-    localStorage.setItem('anotacoes-importantes', JSON.stringify(anotacoesAtualizadas));
-    setNovaAnotacao('');
+      if (response.ok) {
+        const novaAnotacaoObj = await response.json();
+        setAnotacoes([novaAnotacaoObj, ...anotacoes]);
+        setNovaAnotacao('');
+      }
+    } catch (error) {
+      console.error('Erro ao salvar anotação:', error);
+    }
   };
 
-  const excluirAnotacao = (id: string) => {
-    const anotacoesAtualizadas = anotacoes.filter(a => a.id !== id);
-    setAnotacoes(anotacoesAtualizadas);
-    localStorage.setItem('anotacoes-importantes', JSON.stringify(anotacoesAtualizadas));
+  const excluirAnotacao = async (id: string) => {
+    try {
+      const response = await fetch(`/api/anotacoes?id=${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setAnotacoes(anotacoes.filter(a => a.id !== id));
+      }
+    } catch (error) {
+      console.error('Erro ao excluir anotação:', error);
+    }
   };
 
   const fetchStats = async () => {
@@ -409,7 +426,12 @@ export default function HomePage() {
                 <span>Adicione lembretes e informações importantes aqui</span>
               </div>
             ) : (
-              anotacoes.map((anotacao) => (
+              anotacoes.map((anotacao) => {
+                const dataObj = new Date(anotacao.createdAt);
+                const data = dataObj.toLocaleDateString('pt-BR');
+                const hora = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                
+                return (
                 <div key={anotacao.id} className="anotacao-item">
                   <div className="anotacao-conteudo">
                     <p>{anotacao.texto}</p>
@@ -421,14 +443,14 @@ export default function HomePage() {
                           <line x1="8" y1="2" x2="8" y2="6"/>
                           <line x1="3" y1="10" x2="21" y2="10"/>
                         </svg>
-                        {anotacao.data}
+                        {data}
                       </span>
                       <span className="anotacao-hora">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <circle cx="12" cy="12" r="10"/>
                           <polyline points="12 6 12 12 16 14"/>
                         </svg>
-                        {anotacao.hora}
+                        {hora}
                       </span>
                     </div>
                   </div>
@@ -443,7 +465,8 @@ export default function HomePage() {
                     </svg>
                   </button>
                 </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>
@@ -575,6 +598,8 @@ export default function HomePage() {
           </div>
         </div>
       )}
+
+      <Footer />
     </div>
   );
 }

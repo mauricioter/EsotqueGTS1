@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Toast from '../components/Toast';
+import Footer from '../components/Footer';
 import './equipamentos-new.css';
 
 interface Equipamento {
@@ -862,6 +863,8 @@ export default function EquipamentosPageNew() {
           />
         ))}
       </div>
+
+      <Footer />
     </div>
   );
 }
