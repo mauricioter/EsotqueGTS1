@@ -48,10 +48,15 @@ function normalizeStatus(status?: string): string {
 
 export async function POST(req: NextRequest) {
   try {
+    console.log('[IMPORT] Iniciando importação de equipamentos');
+    
     const session = await getServerSession(authOptions);
     const role = (session as any)?.role;
     
+    console.log('[IMPORT] Session:', { hasUser: !!session?.user, role });
+    
     if (!session?.user || (role !== 'ADMIN' && role !== 'OPERATOR')) {
+      console.log('[IMPORT] Acesso negado - role:', role);
       return NextResponse.json({ 
         error: 'Não autorizado. Apenas administradores e operadores podem importar equipamentos.' 
       }, { status: 403 });
@@ -60,15 +65,21 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const file = formData.get('file') as File;
     
+    console.log('[IMPORT] Arquivo recebido:', { name: file?.name, size: file?.size });
+    
     if (!file) {
       return NextResponse.json({ error: 'Nenhum arquivo enviado' }, { status: 400 });
     }
 
     // Ler o arquivo
+    console.log('[IMPORT] Lendo arquivo...');
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     
+    console.log('[IMPORT] Buffer criado, tamanho:', buffer.length);
+    
     // Parse Excel/CSV
+    console.log('[IMPORT] Fazendo parse da planilha...');
     const workbook = XLSX.read(buffer, { type: 'buffer' });
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
@@ -76,11 +87,14 @@ export async function POST(req: NextRequest) {
     // Converte para JSON
     const data: any[] = XLSX.utils.sheet_to_json(worksheet);
     
+    console.log('[IMPORT] Dados extraídos:', data.length, 'linhas');
+    
     if (data.length === 0) {
       return NextResponse.json({ error: 'Planilha vazia' }, { status: 400 });
     }
 
     // Validar e normalizar dados
+    console.log('[IMPORT] Validando dados...');
     const equipamentos: EquipamentoImport[] = [];
     const errors: ValidationError[] = [];
 
@@ -100,17 +114,17 @@ export async function POST(req: NextRequest) {
 
       const equipamento: EquipamentoImport = {
         nome: row.nome || row.Nome || row.NOME,
-        tipo: row.tipo || row.Tipo || row.TIPO || undefined,
-        marca: row.marca || row.Marca || row.MARCA || undefined,
-        modelo: row.modelo || row.Modelo || row.MODELO || undefined,
-        descricao: row.descricao || row.Descricao || row.descricão || row.Descrição || row.DESCRICAO || undefined,
-        serial: row.serial || row.Serial || row.SERIAL || undefined,
-        mac: row.mac || row.Mac || row.MAC || undefined,
+        tipo: row.tipo || row.Tipo || row.TIPO || null,
+        marca: row.marca || row.Marca || row.MARCA || null,
+        modelo: row.modelo || row.Modelo || row.MODELO || null,
+        descricao: row.descricao || row.Descricao || row.descricão || row.Descrição || row.DESCRICAO || null,
+        serial: row.serial || row.Serial || row.SERIAL || null,
+        mac: row.mac || row.Mac || row.MAC || null,
         status: normalizeStatus(row.status || row.Status || row.STATUS),
-        destino: row.destino || row.Destino || row.DESTINO || undefined,
-        tecnicoResponsavel: row.tecnicoResponsavel || row.tecnico_responsavel || row['Técnico Responsável'] || row['tecnico responsavel'] || undefined,
-        observacoes: row.observacoes || row.Observacoes || row.observações || row.Observações || row.OBSERVACOES || undefined,
-        localizacaoAtual: row.localizacaoAtual || row.localizacao_atual || row['Localização Atual'] || row.localizacao || row.Localização || undefined,
+        destino: row.destino || row.Destino || row.DESTINO || null,
+        tecnicoResponsavel: row.tecnicoResponsavel || row.tecnico_responsavel || row['Técnico Responsável'] || row['tecnico responsavel'] || null,
+        observacoes: row.observacoes || row.Observacoes || row.observações || row.Observações || row.OBSERVACOES || null,
+        localizacaoAtual: row.localizacaoAtual || row.localizacao_atual || row['Localização Atual'] || row.localizacao || row.Localização || null,
       };
 
       equipamentos.push(equipamento);
@@ -168,6 +182,7 @@ export async function POST(req: NextRequest) {
 
     const duplicatas = [...serialsDuplicados, ...macsDuplicados];
     if (duplicatas.length > 0) {
+      console.log('[IMPORT] Duplicatas encontradas:', duplicatas.length);
       return NextResponse.json({ 
         success: false,
         errors: duplicatas,
@@ -176,23 +191,32 @@ export async function POST(req: NextRequest) {
     }
 
     // Importar em batch
+    console.log('[IMPORT] Iniciando importação em batch de', equipamentos.length, 'equipamentos');
     const resultado = await prisma.equipamento.createMany({
-      data: equipamentos.map(eq => ({
-        nome: eq.nome,
-        tipo: eq.tipo,
-        marca: eq.marca,
-        modelo: eq.modelo,
-        descricao: eq.descricao,
-        serial: eq.serial,
-        mac: eq.mac,
-        status: eq.status as any,
-        destino: eq.destino,
-        tecnicoResponsavel: eq.tecnicoResponsavel,
-        observacoes: eq.observacoes,
-        localizacaoAtual: eq.localizacaoAtual,
-      })),
+      data: equipamentos.map(eq => {
+        const data: any = {
+          nome: eq.nome,
+          status: eq.status as any,
+        };
+        
+        // Adiciona campos opcionais apenas se tiverem valor
+        if (eq.tipo) data.tipo = eq.tipo;
+        if (eq.marca) data.marca = eq.marca;
+        if (eq.modelo) data.modelo = eq.modelo;
+        if (eq.descricao) data.descricao = eq.descricao;
+        if (eq.serial) data.serial = eq.serial;
+        if (eq.mac) data.mac = eq.mac;
+        if (eq.destino) data.destino = eq.destino;
+        if (eq.tecnicoResponsavel) data.tecnicoResponsavel = eq.tecnicoResponsavel;
+        if (eq.observacoes) data.observacoes = eq.observacoes;
+        if (eq.localizacaoAtual) data.localizacaoAtual = eq.localizacaoAtual;
+        
+        return data;
+      }),
       skipDuplicates: true,
     });
+
+    console.log('[IMPORT] Importação concluída:', resultado.count, 'equipamentos');
 
     return NextResponse.json({
       success: true,
@@ -201,10 +225,13 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('Erro ao importar equipamentos:', error);
+    console.error('[IMPORT] Erro ao importar equipamentos:', error);
+    console.error('[IMPORT] Stack trace:', error.stack);
     return NextResponse.json({ 
+      success: false,
       error: 'Erro ao importar equipamentos',
-      details: error.message 
+      details: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     }, { status: 500 });
   }
 }
