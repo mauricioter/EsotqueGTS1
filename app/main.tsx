@@ -7,7 +7,6 @@ import CadastroEquipamento from './components/CadastroEquipamento';
 import ListaEquipamentos from './components/ListaEquipamentos';
 import SidebarSearch from './components/SidebarSearch';
 import UserSidebar from './components/UserSidebar';
-import NotesPanel from './components/NotesPanel';
 import './animations.css';
 
 // Importação dinâmica do ThemeToggle para evitar problemas de hidratação
@@ -143,7 +142,6 @@ export default function App() {
             ×
           </button>
           <SidebarSearch onSearch={handleSearch} />
-          <NotesPanel />
         </aside>
         
         {sidebarOpen && (
