@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Toast from '../components/Toast';
 import './equipamentos-new.css';
 
 interface Equipamento {
@@ -21,6 +22,12 @@ interface Equipamento {
   updatedAt: string;
 }
 
+interface ToastNotification {
+  id: number;
+  message: string;
+  type: 'success' | 'error' | 'warning' | 'info';
+}
+
 export default function EquipamentosPageNew() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -35,6 +42,7 @@ export default function EquipamentosPageNew() {
   const [importFile, setImportFile] = useState<File | null>(null);
   const [importing, setImporting] = useState(false);
   const [importErrors, setImportErrors] = useState<any[]>([]);
+  const [toasts, setToasts] = useState<ToastNotification[]>([]);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -57,6 +65,15 @@ export default function EquipamentosPageNew() {
     }
   }, [status, router]);
 
+  const showToast = (message: string, type: 'success' | 'error' | 'warning' | 'info') => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type }]);
+  };
+
+  const removeToast = (id: number) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  };
+
   const loadEquipamentos = async () => {
     try {
       setLoading(true);
@@ -65,6 +82,7 @@ export default function EquipamentosPageNew() {
       setEquipamentos(data);
     } catch (error) {
       console.error('Erro ao carregar equipamentos:', error);
+      showToast('Erro ao carregar equipamentos', 'error');
     } finally {
       setLoading(false);
     }
@@ -98,15 +116,20 @@ export default function EquipamentosPageNew() {
         console.log('Equipamento salvo com sucesso:', data);
         await loadEquipamentos();
         handleCloseModal();
-        alert('Equipamento salvo com sucesso!');
+        showToast(
+          editingEquipamento 
+            ? 'Equipamento atualizado com sucesso!' 
+            : 'Equipamento cadastrado com sucesso!',
+          'success'
+        );
       } else {
         const error = await response.json();
         console.error('Erro da API:', error);
-        alert(error.error || 'Erro ao salvar equipamento');
+        showToast(error.error || 'Erro ao salvar equipamento', 'error');
       }
     } catch (error) {
       console.error('Erro:', error);
-      alert('Erro ao salvar equipamento: ' + error);
+      showToast('Erro ao salvar equipamento: ' + error, 'error');
     }
   };
 
@@ -120,12 +143,13 @@ export default function EquipamentosPageNew() {
 
       if (response.ok) {
         await loadEquipamentos();
+        showToast('Equipamento excluído com sucesso!', 'success');
       } else {
-        alert('Erro ao excluir equipamento');
+        showToast('Erro ao excluir equipamento', 'error');
       }
     } catch (error) {
       console.error('Erro:', error);
-      alert('Erro ao excluir equipamento');
+      showToast('Erro ao excluir equipamento', 'error');
     }
   };
 
@@ -254,9 +278,10 @@ export default function EquipamentosPageNew() {
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
+      showToast('Modelo de planilha baixado com sucesso!', 'success');
     } catch (error) {
       console.error('Erro ao baixar modelo:', error);
-      alert('Erro ao baixar modelo de planilha');
+      showToast('Erro ao baixar modelo de planilha', 'error');
     }
   };
 
@@ -270,7 +295,7 @@ export default function EquipamentosPageNew() {
 
   const handleImport = async () => {
     if (!importFile) {
-      alert('Selecione um arquivo para importar');
+      showToast('Selecione um arquivo para importar', 'warning');
       return;
     }
 
@@ -289,17 +314,18 @@ export default function EquipamentosPageNew() {
       const data = await response.json();
 
       if (data.success) {
-        alert(data.message);
+        showToast(data.message, 'success');
         setShowImportModal(false);
         setImportFile(null);
+        setImportErrors([]);
         await loadEquipamentos();
       } else {
         setImportErrors(data.errors || []);
-        alert(data.message || 'Erro ao importar equipamentos');
+        showToast(data.message || 'Erro ao importar equipamentos. Verifique os erros abaixo.', 'error');
       }
     } catch (error) {
       console.error('Erro ao importar:', error);
-      alert('Erro ao importar equipamentos');
+      showToast('Erro ao importar equipamentos', 'error');
     } finally {
       setImporting(false);
     }
@@ -824,6 +850,18 @@ export default function EquipamentosPageNew() {
           </div>
         </div>
       )}
+
+      {/* Toast Notifications */}
+      <div className="toast-container">
+        {toasts.map((toast) => (
+          <Toast
+            key={toast.id}
+            message={toast.message}
+            type={toast.type}
+            onClose={() => removeToast(toast.id)}
+          />
+        ))}
+      </div>
     </div>
   );
 }

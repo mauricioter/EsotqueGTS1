@@ -49,8 +49,9 @@ function normalizeStatus(status?: string): string {
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
+    const role = (session as any)?.role;
     
-    if (!session?.user || ((session as any).user.role !== 'ADMIN' && (session as any).user.role !== 'OPERATOR')) {
+    if (!session?.user || (role !== 'ADMIN' && role !== 'OPERATOR')) {
       return NextResponse.json({ 
         error: 'Não autorizado. Apenas administradores e operadores podem importar equipamentos.' 
       }, { status: 403 });
