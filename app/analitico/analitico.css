@@ -1,0 +1,165 @@
+.spinner {
+  border: 3px solid rgba(255, 122, 0, 0.1);
+  border-top: 3px solid #ff7a00;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.date-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.btn-primary {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #ff7a00 0%, #ff9933 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.3);
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  background: var(--bg-subtle);
+  color: var(--text);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.btn-secondary:hover {
+  background: var(--border-color);
+}
+
+.insight-card {
+  padding: 24px;
+  border-radius: 12px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.insight-card:hover {
+  transform: translateY(-4px);
+}
+
+.insight-icon {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.insight-label {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.insight-value {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 80px;
+  gap: 12px;
+  align-items: center;
+}
+
+.chart-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chart-bar-container {
+  background: var(--bg-subtle);
+  border-radius: 8px;
+  height: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-bar {
+  height: 100%;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 12px;
+  transition: width 0.6s ease;
+  min-width: 40px;
+}
+
+.chart-bar-label {
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.chart-percentage {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-light);
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .chart-row {
+    grid-template-columns: 100px 1fr 60px;
+    gap: 8px;
+  }
+
+  .chart-label {
+    font-size: 12px;
+  }
+
+  .chart-percentage {
+    font-size: 12px;
+  }
+
+  .insight-icon {
+    font-size: 28px;
+  }
+
+  .insight-value {
+    font-size: 24px;
+  }
+}

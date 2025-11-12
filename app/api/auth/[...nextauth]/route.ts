@@ -40,7 +40,10 @@ providers.push(
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers,
-  session: { strategy: 'jwt' },
+  session: { 
+    strategy: 'jwt',
+    maxAge: 30 * 60, // 30 minutos em segundos
+  },
   secret: process.env.AUTH_SECRET,
   pages: { signIn: '/login' },
   callbacks: {

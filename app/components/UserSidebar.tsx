@@ -198,6 +198,34 @@ export default function UserSidebar() {
               📊 Dashboard
             </Link>
 
+            <Link 
+              href="/analitico" 
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                padding: '12px 16px',
+                borderRadius: 10,
+                textDecoration: 'none',
+                color: 'var(--text)',
+                background: 'transparent',
+                border: '1px solid var(--input-border)',
+                transition: 'all 0.2s ease',
+                fontWeight: 500
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'var(--primary-subtle)';
+                e.currentTarget.style.borderColor = 'var(--primary-light)';
+                e.currentTarget.style.color = 'var(--primary-dark)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.borderColor = 'var(--input-border)';
+                e.currentTarget.style.color = 'var(--text)';
+              }}
+            >
+              📈 Análises
+            </Link>
+
             {role === 'ADMIN' && (
               <>
                 <Link 
