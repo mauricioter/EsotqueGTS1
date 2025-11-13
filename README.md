@@ -228,7 +228,35 @@ my-app/
 └── public/               # Arquivos estáticos
 ```
 
+## 🧪 Testes Automatizados
+
+O projeto utiliza **Jest** para testes unitários e de API. Para rodar os testes:
+
+```bash
+npx jest
+```
+
+Exemplo de teste:
+
+```ts
+import { describe, it, expect } from '@jest/globals';
+
+describe('Sanity check', () => {
+   it('should add numbers correctly', () => {
+      expect(2 + 2).toBe(4);
+   });
+});
+```
+
+---
+
 ## 🛠️ Scripts Disponíveis
+
+## 🔔 Feedback Visual
+
+O sistema utiliza Toasts para exibir mensagens de sucesso, erro e alerta de forma não bloqueante, melhorando a experiência do usuário.
+
+---
 
 ```bash
 # Desenvolvimento
@@ -287,6 +315,12 @@ npx prisma migrate reset
 - dataSaida: DateTime (opcional)
 - destino: String (opcional)
 ```
+
+## 📊 Logs Estruturados
+
+As APIs utilizam a biblioteca **pino** para logs estruturados, facilitando o monitoramento e auditoria.
+
+---
 
 ## 🔒 Segurança
 

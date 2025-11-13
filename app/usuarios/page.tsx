@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { useToast } from '../components/ToastProvider';
 import axios from 'axios';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
@@ -35,6 +36,7 @@ function validarCPF(cpf: string) {
 }
 
 export default function UsuariosPage() {
+  const { showToast } = useToast();
   const { data: session, status: authStatus } = useSession();
   const [nomeCompleto, setNomeCompleto] = useState('');
   const [numero, setNumero] = useState('');
@@ -67,22 +69,22 @@ export default function UsuariosPage() {
   async function aprovarUsuario(userId: string) {
     try {
       await axios.post('/api/admin/usuarios/approve', { userId, approve: true });
-      setStatus('Usuário aprovado com sucesso!');
+      showToast('Usuário aprovado com sucesso!', 'success');
       await carregarUsuarios();
     } catch (error: any) {
       const msg = error?.response?.data?.error || 'Erro ao aprovar usuário';
-      setStatus(msg);
+      showToast(msg, 'error');
     }
   }
 
   async function rejeitarUsuario(userId: string) {
     try {
       await axios.post('/api/admin/usuarios/approve', { userId, approve: false });
-      setStatus('Usuário rejeitado com sucesso!');
+      showToast('Usuário rejeitado com sucesso!', 'success');
       await carregarUsuarios();
     } catch (error: any) {
       const msg = error?.response?.data?.error || 'Erro ao rejeitar usuário';
-      setStatus(msg);
+      showToast(msg, 'error');
     }
   }
 
@@ -115,34 +117,34 @@ export default function UsuariosPage() {
     e.preventDefault();
     setStatus(null);
     if (!nomeCompleto || !email || !cpf) {
-      setStatus('Preencha nome completo, email e CPF.');
+      showToast('Preencha nome completo, email e CPF.', 'error');
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setStatus('Email inválido.');
+      showToast('Email inválido.', 'error');
       return;
     }
     if (!validarCPF(cpf)) {
-      setStatus('CPF inválido.');
+      showToast('CPF inválido.', 'error');
       return;
     }
     setLoading(true);
     try {
       const res = await axios.post('/api/usuarios', { nomeCompleto, numero, email, cpf });
       if (res.status === 200) {
-        setStatus('Usuário cadastrado com sucesso.');
+        showToast('Usuário cadastrado com sucesso.', 'success');
         setNomeCompleto('');
         setNumero('');
         setEmail('');
         setCpf('');
         await carregarUsuarios(); // Recarregar lista
       } else {
-        setStatus('Erro ao cadastrar usuário.');
+        showToast('Erro ao cadastrar usuário.', 'error');
       }
     } catch (err: any) {
       const msg = err?.response?.data?.error || 'Falha ao cadastrar usuário.';
-      setStatus(msg);
+      showToast(msg, 'error');
     } finally {
       setLoading(false);
     }
@@ -382,22 +384,7 @@ export default function UsuariosPage() {
             </Link>
           </div>
         </form>
-        {status && (
-          <div className={`status-message ${status.includes('sucesso') ? 'success' : 'error'}`}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              {status.includes('sucesso') ? (
-                <polyline points="20 6 9 17 4 12"/>
-              ) : (
-                <>
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" y1="8" x2="12" y2="12"/>
-                  <line x1="12" y1="16" x2="12.01" y2="16"/>
-                </>
-              )}
-            </svg>
-            {status}
-          </div>
-        )}
+        {/* Mensagens de status agora são exibidas via Toast */}
       </div>
 
       {/* Lista de Usuários Aprovados */}

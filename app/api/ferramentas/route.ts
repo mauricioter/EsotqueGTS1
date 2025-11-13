@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import logger from '@/lib/logger';
 
 /**
  * GET /api/ferramentas
@@ -15,6 +16,7 @@ export async function GET(request: NextRequest) {
     if (status) where.status = status;
     if (categoria) where.categoria = categoria;
 
+    logger.info({ status, categoria }, 'Listando ferramentas');
     const ferramentas = await prisma.ferramenta.findMany({
       where,
       include: {
@@ -26,9 +28,10 @@ export async function GET(request: NextRequest) {
       orderBy: { nome: 'asc' },
     });
 
+    logger.info({ total: ferramentas.length }, 'Ferramentas encontradas');
     return NextResponse.json({ ferramentas });
   } catch (error: any) {
-    console.error('Erro ao buscar ferramentas:', error);
+    logger.error({ err: error }, 'Erro ao buscar ferramentas');
     return NextResponse.json(
       { erro: 'Erro ao buscar ferramentas' },
       { status: 500 }
@@ -45,13 +48,32 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { nome, categoria, quantidadeTotal, localizacaoAtual, observacoes } = body;
 
-    if (!nome || !categoria) {
+    const categoriasValidas = [
+      'ELETRICA', 'FIBRA', 'MEDICAO', 'SEGURANCA', 'REDE', 'FERRAMENTAS_MANUAIS', 'OUTROS'
+    ];
+    if (!nome || typeof nome !== 'string' || nome.trim().length < 3) {
+      logger.warn({ body }, 'Nome inválido ao criar ferramenta');
       return NextResponse.json(
-        { erro: 'Nome e categoria sao obrigatorios' },
+        { erro: 'Nome é obrigatório e deve ter pelo menos 3 caracteres.' },
+        { status: 400 }
+      );
+    }
+    if (!categoria || !categoriasValidas.includes(categoria)) {
+      logger.warn({ body }, 'Categoria inválida ao criar ferramenta');
+      return NextResponse.json(
+        { erro: 'Categoria é obrigatória e deve ser válida.' },
+        { status: 400 }
+      );
+    }
+    if (quantidadeTotal !== undefined && (isNaN(quantidadeTotal) || quantidadeTotal < 1)) {
+      logger.warn({ body }, 'Quantidade total inválida ao criar ferramenta');
+      return NextResponse.json(
+        { erro: 'Quantidade total deve ser um número positivo.' },
         { status: 400 }
       );
     }
 
+    logger.info({ nome, categoria, quantidadeTotal }, 'Criando nova ferramenta');
     const ferramenta = await prisma.ferramenta.create({
       data: {
         nome,
@@ -62,9 +84,10 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    logger.info({ id: ferramenta.id }, 'Ferramenta criada com sucesso');
     return NextResponse.json({ ferramenta }, { status: 201 });
   } catch (error: any) {
-    console.error('Erro ao criar ferramenta:', error);
+    logger.error({ err: error }, 'Erro ao criar ferramenta');
     return NextResponse.json(
       { erro: 'Erro ao criar ferramenta' },
       { status: 500 }

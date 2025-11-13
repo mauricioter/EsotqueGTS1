@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useToast } from '../components/ToastProvider';
 import './ferramentas.css';
 
 interface Ferramenta {
@@ -29,11 +30,13 @@ interface Movimentacao {
 }
 
 export default function FerramentasPage() {
+  const { showToast } = useToast();
   const [ferramentas, setFerramentas] = useState<Ferramenta[]>([]);
   const [movimentacoes, setMovimentacoes] = useState<Movimentacao[]>([]);
   const [loading, setLoading] = useState(true);
   const [filtroCategoria, setFiltroCategoria] = useState('');
   const [filtroStatus, setFiltroStatus] = useState('');
+  const [filtroLocalizacao, setFiltroLocalizacao] = useState('');
   const [busca, setBusca] = useState('');
   const [abaAtiva, setAbaAtiva] = useState<'ferramentas' | 'historico'>('ferramentas');
 
@@ -63,17 +66,23 @@ export default function FerramentasPage() {
       setMovimentacoes(dataMovimentacoes.movimentacoes || []);
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
-      alert('Erro ao carregar dados');
+      showToast('Erro ao carregar dados', 'error');
     } finally {
       setLoading(false);
     }
   };
 
   const ferramentasFiltradas = ferramentas.filter(f => {
-    const matchBusca = f.nome.toLowerCase().includes(busca.toLowerCase());
+    // Busca dinâmica em múltiplos campos
+    const termo = busca.toLowerCase();
+    const matchBusca =
+      f.nome.toLowerCase().includes(termo) ||
+      (f.localizacaoAtual || '').toLowerCase().includes(termo) ||
+      (f.observacoes || '').toLowerCase().includes(termo);
     const matchCategoria = !filtroCategoria || f.categoria === filtroCategoria;
     const matchStatus = !filtroStatus || f.status === filtroStatus;
-    return matchBusca && matchCategoria && matchStatus;
+    const matchLocalizacao = !filtroLocalizacao || (f.localizacaoAtual || '') === filtroLocalizacao;
+    return matchBusca && matchCategoria && matchStatus && matchLocalizacao;
   });
 
   const abrirModalCadastro = (ferramenta?: Ferramenta) => {
@@ -109,15 +118,15 @@ export default function FerramentasPage() {
       });
 
       if (res.ok) {
-        alert(ferramentaEditando ? 'Ferramenta atualizada!' : 'Ferramenta cadastrada!');
+        showToast(ferramentaEditando ? 'Ferramenta atualizada!' : 'Ferramenta cadastrada!', 'success');
         setModalAberto(false);
         carregarDados();
       } else {
-        alert('Erro ao salvar ferramenta');
+        showToast('Erro ao salvar ferramenta', 'error');
       }
     } catch (error) {
       console.error('Erro:', error);
-      alert('Erro ao salvar ferramenta');
+      showToast('Erro ao salvar ferramenta', 'error');
     }
   };
 
@@ -146,15 +155,15 @@ export default function FerramentasPage() {
       const result = await res.json();
 
       if (res.ok) {
-        alert('Movimentacao registrada!');
+        showToast('Movimentação registrada!', 'success');
         setModalMovimentacao(false);
         carregarDados();
       } else {
-        alert(result.erro || 'Erro ao registrar movimentacao');
+        showToast(result.erro || 'Erro ao registrar movimentação', 'error');
       }
     } catch (error) {
       console.error('Erro:', error);
-      alert('Erro ao registrar movimentacao');
+      showToast('Erro ao registrar movimentação', 'error');
     }
   };
 
@@ -164,11 +173,11 @@ export default function FerramentasPage() {
     try {
       const res = await fetch(`/api/ferramentas?id=${id}`, { method: 'DELETE' });
       if (res.ok) {
-        alert('Ferramenta deletada!');
+        showToast('Ferramenta deletada!', 'success');
         carregarDados();
       }
     } catch (error) {
-      alert('Erro ao deletar ferramenta');
+      showToast('Erro ao deletar ferramenta', 'error');
     }
   };
 
@@ -206,7 +215,7 @@ export default function FerramentasPage() {
           <div className="filtros">
             <input
               type="text"
-              placeholder="Buscar ferramenta..."
+              placeholder="Buscar por nome, local ou observação..."
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
               className="input-busca"
@@ -235,6 +244,18 @@ export default function FerramentasPage() {
               <option value="EM_USO">Em Uso</option>
               <option value="EM_MANUTENCAO">Em Manutencao</option>
               <option value="PERDIDA">Perdida</option>
+            </select>
+            <select
+              value={filtroLocalizacao}
+              onChange={(e) => setFiltroLocalizacao(e.target.value)}
+              className="select-filtro"
+            >
+              <option value="">Todas as localizações</option>
+              {Array.from(new Set(ferramentas.map(f => f.localizacaoAtual || '')))
+                .filter(loc => loc)
+                .map(loc => (
+                  <option key={loc} value={loc}>{loc}</option>
+                ))}
             </select>
           </div>
 

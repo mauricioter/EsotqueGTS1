@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useToast } from '../components/ToastProvider';
 import './ixc.css';
 
 interface ResultadoSync {
@@ -14,6 +15,7 @@ interface ResultadoSync {
 }
 
 export default function IXCSyncPage() {
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [resultado, setResultado] = useState<ResultadoSync | null>(null);
   const [substituir, setSubstituir] = useState(false);
@@ -33,6 +35,7 @@ export default function IXCSyncPage() {
         sucesso: false,
         mensagem: 'Erro ao testar conexao com IXC',
       });
+      showToast('Erro ao testar conexão com IXC', 'error');
     } finally {
       setTestandoConexao(false);
     }
@@ -61,11 +64,17 @@ export default function IXCSyncPage() {
 
       const data = await response.json();
       setResultado(data);
+      if (response.ok && data.sucesso) {
+        showToast('Sincronização concluída com sucesso!', 'success');
+      } else {
+        showToast(data.mensagem || 'Erro ao sincronizar equipamentos', 'error');
+      }
     } catch (error) {
       setResultado({
         sucesso: false,
         mensagem: 'Erro ao sincronizar equipamentos',
       });
+      showToast('Erro ao sincronizar equipamentos', 'error');
     } finally {
       setLoading(false);
     }
