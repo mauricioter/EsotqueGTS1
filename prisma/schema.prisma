@@ -115,6 +115,61 @@ model Anotacao {
   updatedAt DateTime @updatedAt
 }
 
+model Ferramenta {
+  id                      String                 @id @default(cuid())
+  nome                    String
+  categoria               CategoriaFerramenta
+  quantidadeTotal         Int                    @default(1)
+  quantidadeEmUso         Int                    @default(0)
+  status                  StatusFerramenta       @default(DISPONIVEL)
+  localizacaoAtual        String?
+  observacoes             String?
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
+  movimentacoes           MovimentacaoFerramenta[]
+}
+
+model MovimentacaoFerramenta {
+  id                      String   @id @default(cuid())
+  ferramentaId            String
+  ferramenta              Ferramenta @relation(fields: [ferramentaId], references: [id], onDelete: Cascade)
+  tecnicoId               String?
+  tecnicoNome             String
+  tipoMovimentacao        TipoMovimentacao
+  quantidade              Int      @default(1)
+  dataRetirada            DateTime @default(now())
+  dataPrevistaDevolucao   DateTime?
+  dataDevolucaoReal       DateTime?
+  motivo                  String?
+  observacoes             String?
+  createdAt               DateTime @default(now())
+}
+
+enum CategoriaFerramenta {
+  ELETRICA
+  FIBRA
+  MEDICAO
+  SEGURANCA
+  REDE
+  FERRAMENTAS_MANUAIS
+  OUTROS
+}
+
+enum StatusFerramenta {
+  DISPONIVEL
+  EM_USO
+  EM_MANUTENCAO
+  PERDIDA
+}
+
+enum TipoMovimentacao {
+  EMPRESTIMO
+  DEVOLUCAO
+  MANUTENCAO
+  PERDA
+  TRANSFERENCIA
+}
+
 enum Role {
   ADMIN
   OPERATOR
