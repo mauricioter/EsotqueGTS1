@@ -148,9 +148,9 @@ export async function GET(request: NextRequest) {
     }
 
     // Monta filtro tipado
-    const where: Prisma.MovimentacaoFerramentaWhereInput = {
-      ...(ferramentaId !== undefined ? { ferramentaId } : {}),
-    };
+   const where = {
+  ...(ferramentaId !== undefined ? { ferramentaId } : {}),
+};
 
     const [total, movimentacoes] = await Promise.all([
       prisma.movimentacaoFerramenta.count({ where }),
