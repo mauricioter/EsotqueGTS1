@@ -448,7 +448,7 @@ export default function FerramentasPage() {
                   name="tipoMovimentacao"
                   required
                   value={tipoMovimentacao}
-                  onChange={e => setTipoMovimentacao(e.target.value)}
+                  onChange={e => setTipoMovimentacao(e.target.value as TipoMovimentacao)}
                 >
                   <option value="EMPRESTIMO">Emprestimo</option>
                   <option value="DEVOLUCAO">Devolucao</option>
