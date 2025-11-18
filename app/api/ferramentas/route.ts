@@ -19,17 +19,35 @@ export async function GET(request: NextRequest) {
     logger.info({ status, categoria }, 'Listando ferramentas');
     const ferramentas = await prisma.ferramenta.findMany({
       where,
-      include: {
-        movimentacoes: {
-          orderBy: { createdAt: 'desc' },
-          take: 1,
-        },
-      },
       orderBy: { nome: 'asc' },
     });
 
-    logger.info({ total: ferramentas.length }, 'Ferramentas encontradas');
-    return NextResponse.json({ ferramentas });
+    // Calcula os valores com base nas movimentações
+    const ferramentasAtualizadas = await Promise.all(
+      ferramentas.map(async (ferramenta) => {
+        const movimentacoes = await prisma.movimentacaoFerramenta.findMany({
+          where: { ferramentaId: ferramenta.id }
+        });
+
+        let emUso = 0;
+        let total = ferramenta.quantidadeTotal;
+
+        for (const mov of movimentacoes) {
+          if (mov.tipoMovimentacao === 'EMPRESTIMO') emUso += mov.quantidade;
+          if (mov.tipoMovimentacao === 'DEVOLUCAO') emUso -= mov.quantidade;
+          if (mov.tipoMovimentacao === 'PERDA') total -= mov.quantidade;
+        }
+
+        return {
+          ...ferramenta,
+          quantidadeEmUso: Math.max(0, emUso),
+          quantidadeTotal: Math.max(0, total),
+        };
+      })
+    );
+
+    logger.info({ total: ferramentasAtualizadas.length }, 'Ferramentas encontradas');
+    return NextResponse.json({ ferramentas: ferramentasAtualizadas });
   } catch (error: any) {
     logger.error({ err: error }, 'Erro ao buscar ferramentas');
     return NextResponse.json(

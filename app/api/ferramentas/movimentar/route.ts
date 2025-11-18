@@ -69,6 +69,7 @@ export async function POST(request: NextRequest) {
     // Atualiza o status da ferramenta
     let novoStatus = ferramenta.status;
     let novaQuantidadeEmUso = ferramenta.quantidadeEmUso;
+    let novaQuantidadeTotal = ferramenta.quantidadeTotal;
 
     if (tipoMovimentacao === 'EMPRESTIMO') {
       novaQuantidadeEmUso += qtd;
@@ -78,14 +79,18 @@ export async function POST(request: NextRequest) {
       novoStatus = novaQuantidadeEmUso > 0 ? 'EM_USO' : 'DISPONIVEL';
     } else if (tipoMovimentacao === 'MANUTENCAO') {
       novoStatus = 'EM_MANUTENCAO';
-    } else if (tipoMovimentacao === 'PERDA') {
+    } else if (tipoMovimentacao === 'PERDA') { 
       novoStatus = 'PERDIDA';
+      novaQuantidadeTotal = Math.max(0, novaQuantidadeTotal - qtd);
+      novaQuantidadeEmUso = Math.max(0, novaQuantidadeEmUso - qtd);
+      
     }
 
     await prisma.ferramenta.update({
       where: { id: ferramentaId },
       data: {
         quantidadeEmUso: novaQuantidadeEmUso,
+        quantidadeTotal: novaQuantidadeTotal,
         status: novoStatus,
       },
     });
@@ -107,25 +112,86 @@ export async function POST(request: NextRequest) {
  * GET /api/ferramentas/movimentar
  * Lista historico de movimentacoes
  */
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const ferramentaId = searchParams.get('ferramentaId');
 
-    const where: any = {};
-    if (ferramentaId) where.ferramentaId = ferramentaId;
+    // Query params
+    const ferramentaIdParam = searchParams.get('ferramentaId');
+    const pageParam = searchParams.get('page');
+    const pageSizeParam = searchParams.get('pageSize');
 
-    const movimentacoes = await prisma.movimentacaoFerramenta.findMany({
-      where,
-      include: {
-        ferramenta: true,
-      },
-      orderBy: { createdAt: 'desc' },
+    // Validação/normalização
+    const ferramentaId = ferramentaIdParam !== null ? Number(ferramentaIdParam) : undefined;
+    if (ferramentaIdParam !== null && !Number.isFinite(ferramentaId)) {
+      return NextResponse.json(
+        { erro: 'Parâmetro "ferramentaId" inválido. Use um número inteiro.' },
+        { status: 400 }
+      );
+    }
+
+    const page = pageParam ? Number(pageParam) : 1;
+    const pageSize = pageSizeParam ? Number(pageSizeParam) : 20;
+
+    if (!Number.isFinite(page) || page < 1) {
+      return NextResponse.json(
+        { erro: 'Parâmetro "page" inválido. Use um inteiro >= 1.' },
+        { status: 400 }
+      );
+    }
+    if (!Number.isFinite(pageSize) || pageSize < 1 || pageSize > 100) {
+      return NextResponse.json(
+        { erro: 'Parâmetro "pageSize" inválido. Use um inteiro entre 1 e 100.' },
+        { status: 400 }
+      );
+    }
+
+    // Monta filtro tipado
+    const where: Prisma.MovimentacaoFerramentaWhereInput = {
+      ...(ferramentaId !== undefined ? { ferramentaId } : {}),
+    };
+
+    const [total, movimentacoes] = await Promise.all([
+      prisma.movimentacaoFerramenta.count({ where }),
+      prisma.movimentacaoFerramenta.findMany({
+        where,
+        // Prefira select para reduzir payload
+        select: {
+          id: true,
+          tipoMovimentacao: true,
+          quantidade: true,
+          createdAt: true,
+          //usuarioId: true, // se existir
+          ferramentaId: true,
+          ferramenta: {
+            select: {
+              id: true,
+              nome: true,
+              //codigo: true, // ajuste aos seus campos
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+    ]);
+
+    const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+    return NextResponse.json({
+      page,
+      pageSize,
+      total,
+      totalPages,
+      movimentacoes,
     });
-
-    return NextResponse.json({ movimentacoes });
   } catch (error: any) {
+    // Diferencia erros do Prisma, se quiser
+    // import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
     console.error('Erro ao buscar movimentacoes:', error);
+
     return NextResponse.json(
       { erro: 'Erro ao buscar movimentacoes' },
       { status: 500 }

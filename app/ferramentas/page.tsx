@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '../components/ToastProvider';
 import './ferramentas.css';
+import { TipoMovimentacao } from '@prisma/client';
+ 
 
 interface Ferramenta {
   id: string;
@@ -47,6 +49,7 @@ export default function FerramentasPage() {
   // Modal de movimentação
   const [modalMovimentacao, setModalMovimentacao] = useState(false);
   const [ferramentaSelecionada, setFerramentaSelecionada] = useState<Ferramenta | null>(null);
+  const [tipoMovimentacao, setTipoMovimentacao] = useState<TipoMovimentacao>('EMPRESTIMO');
 
   useEffect(() => {
     carregarDados();
@@ -441,13 +444,18 @@ export default function FerramentasPage() {
             <form onSubmit={registrarMovimentacao}>
               <label>
                 Tipo de Movimentacao*
-                <select name="tipoMovimentacao" required>
+                <select
+                  name="tipoMovimentacao"
+                  required
+                  value={tipoMovimentacao}
+                  onChange={e => setTipoMovimentacao(e.target.value)}
+                >
                   <option value="EMPRESTIMO">Emprestimo</option>
                   <option value="DEVOLUCAO">Devolucao</option>
                   <option value="MANUTENCAO">Manutencao</option>
                   <option value="PERDA">Perda</option>
                   <option value="TRANSFERENCIA">Transferencia</option>
-                </select>
+                </select> 
               </label>
               <label>
                 Nome do Tecnico*
@@ -463,11 +471,13 @@ export default function FerramentasPage() {
                   max={ferramentaSelecionada.quantidadeTotal}
                   required
                 />
-              </label>
-              <label>
-                Previsao de Devolucao
-                <input type="date" name="dataPrevistaDevolucao" />
-              </label>
+              </label> 
+              {tipoMovimentacao !== "PERDA" && tipoMovimentacao !== "TRANSFERENCIA" && (
+            <label>
+              Previsao de Devolucao
+              <input type="date" name="dataPrevistaDevolucao" />
+            </label>
+          )}
               <label>
                 Motivo
                 <input type="text" name="motivo" placeholder="Ex: Instalacao, Manutencao..." />
