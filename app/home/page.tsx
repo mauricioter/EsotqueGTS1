@@ -23,7 +23,7 @@ interface Equipamento {
   id: string;
   nome: string;
   serial?: string;
-  macAddress?: string;
+  mac?: string;
   tipo?: string;
   marca?: string;
   modelo?: string;
@@ -59,6 +59,7 @@ export default function HomePage() {
   const [tituloModal, setTituloModal] = useState('');
   const [anotacoes, setAnotacoes] = useState<Anotacao[]>([]);
   const [novaAnotacao, setNovaAnotacao] = useState('');
+  const [tecnicos, setTecnicos] = useState<{ id: string; nome: string; status: 'ATIVO' | 'INATIVO' }[]>([]);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -66,14 +67,9 @@ export default function HomePage() {
     }
   }, [status, router]);
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      fetchStats();
-      carregarAnotacoes();
-    }
-  }, [status]);
+  
 
-  const carregarAnotacoes = async () => {
+  async function carregarAnotacoes() {
     try {
       const response = await fetch('/api/anotacoes');
       if (response.ok) {
@@ -83,7 +79,7 @@ export default function HomePage() {
     } catch (error) {
       console.error('Erro ao carregar anotações:', error);
     }
-  };
+  }
 
   const salvarAnotacao = async () => {
     if (!novaAnotacao.trim()) return;
@@ -119,32 +115,47 @@ export default function HomePage() {
     }
   };
 
-  const fetchStats = async () => {
+  async function fetchStats() {
     try {
       const response = await fetch('/api/equipamentos');
-      const data = await response.json();
-      
+      const data: Equipamento[] = await response.json();
+
       setEquipamentos(data);
-      
+
       const statsData = {
         total: data.length,
-        disponivel: data.filter((e: any) => e.status === 'DISPONIVEL').length,
-        emPosseDoTecnico: data.filter((e: any) => e.status === 'EM_POSSE_DO_TECNICO').length,
-        descartado: data.filter((e: any) => e.status === 'DESCARTADO').length,
-        saida: data.filter((e: any) => e.status === 'SAIDA').length,
-        reservado: data.filter((e: any) => e.status === 'RESERVADO').length,
-        defeito: data.filter((e: any) => e.status === 'DEFEITO').length,
-        instalado: data.filter((e: any) => e.status === 'INSTALADO').length,
-        equipamentoDeRetorno: data.filter((e: any) => e.status === 'EQUIPAMENTO_DE_RETORNO').length,
+        disponivel: data.filter((e) => e.status === 'DISPONIVEL').length,
+        emPosseDoTecnico: data.filter((e) => e.status === 'EM_POSSE_DO_TECNICO').length,
+        descartado: data.filter((e) => e.status === 'DESCARTADO').length,
+        saida: data.filter((e) => e.status === 'SAIDA').length,
+        reservado: data.filter((e) => e.status === 'RESERVADO').length,
+        defeito: data.filter((e) => e.status === 'DEFEITO').length,
+        instalado: data.filter((e) => e.status === 'INSTALADO').length,
+        equipamentoDeRetorno: data.filter((e) => e.status === 'EQUIPAMENTO_DE_RETORNO').length,
       };
-      
+
       setStats(statsData);
       setLoading(false);
     } catch (error) {
       console.error('Erro ao buscar estatísticas:', error);
       setLoading(false);
     }
-  };
+  }
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      fetchStats();
+      carregarAnotacoes();
+      fetch('/api/tecnicos?status=ATIVO')
+        .then(async (r) => {
+          if (r.ok) {
+            const data = await r.json();
+            setTecnicos(data.map((t: any) => ({ id: t.id, nome: t.nome, status: t.status })));
+          }
+        })
+        .catch(() => {});
+    }
+  }, [status]);
 
   const abrirModal = (status: string, titulo: string) => {
     setFiltroStatus(status);
@@ -332,6 +343,46 @@ export default function HomePage() {
               <p className="stat-number">{stats.equipamentoDeRetorno}</p>
             </div>
           </div>
+        </div>
+
+        <div className="section-card">
+          <div className="home-section-header">
+            <div className="header-icon-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                <path d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+              <div>
+                <h2>Técnicos Ativos</h2>
+                <p className="text-muted">Lista carregada do banco</p>
+              </div>
+            </div>
+            <div>
+              {role === 'ADMIN' && (
+                <Link href="/tecnicos" className="btn btn-secondary">Gerenciar Técnicos</Link>
+              )}
+            </div>
+          </div>
+          {tecnicos.length === 0 ? (
+            <div className="empty-state text-center">Nenhum técnico ativo</div>
+          ) : (
+            <div className="tecnicos-grid">
+              {tecnicos.map((t) => (
+                <div key={t.id} className="card tecnico-card">
+                  <div className="tecnico-info">
+                    <div className="tecnico-avatar">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        <path d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                      </svg>
+                    </div>
+                    <div className="tecnico-name">{t.nome}</div>
+                  </div>
+                  <span className={`status-badge ${t.status === 'ATIVO' ? 'status-disponivel' : 'status-saida'}`}>{t.status}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Quick Actions */}
@@ -582,9 +633,9 @@ export default function HomePage() {
                               <strong>Serial:</strong> {equip.serial}
                             </span>
                           )}
-                          {equip.macAddress && (
+                          {equip.mac && (
                             <span className="spec-item">
-                              <strong>MAC:</strong> {equip.macAddress}
+                              <strong>MAC:</strong> {equip.mac}
                             </span>
                           )}
                         </div>

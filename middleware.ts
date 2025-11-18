@@ -18,11 +18,12 @@ export function middleware(request: NextRequest) {
   // Content Security Policy (relaxado para desenvolvimento)
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://*.vercel.live",
+    "script-src-elem 'self' 'unsafe-inline' https://vercel.live https://*.vercel.live",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https:",
     "font-src 'self' data:",
-    "connect-src 'self'",
+    "connect-src 'self' https://vercel.live https://*.vercel.live wss://*.vercel.live",
     "frame-ancestors 'none'",
   ].join('; ');
   
@@ -46,6 +47,6 @@ export const config = {
      * - manifest.json (PWA manifest)
      * - service-worker.js (PWA service worker)
      */
-    '/((?!_next/static|_next/image|favicon.ico|manifest.json|service-worker.js|offline.html|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|manifest.json|service-worker.js|offline.html|api/auth/.*|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
