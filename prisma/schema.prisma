@@ -134,6 +134,7 @@ model MovimentacaoFerramenta {
   ferramentaId            String
   ferramenta              Ferramenta @relation(fields: [ferramentaId], references: [id], onDelete: Cascade)
   tecnicoId               String?
+  tecnico                 Tecnico?  @relation(fields: [tecnicoId], references: [id])
   tecnicoNome             String
   tipoMovimentacao        TipoMovimentacao
   quantidade              Int      @default(1)
@@ -190,4 +191,21 @@ enum StatusEquipamento {
   DEFEITO
   INSTALADO
   EQUIPAMENTO_DE_RETORNO
+}
+
+model Tecnico {
+  id           String        @id @default(cuid())
+  nome         String
+  telefone     String?
+  funcao       String?
+  status       StatusTecnico @default(ATIVO)
+  observacoes  String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  movimentacoes MovimentacaoFerramenta[]
+}
+
+enum StatusTecnico {
+  ATIVO
+  INATIVO
 }

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import logger from '@/lib/logger';
 
 /**
@@ -30,18 +32,25 @@ export async function GET(request: NextRequest) {
         });
 
         let emUso = 0;
-        let total = ferramenta.quantidadeTotal;
 
         for (const mov of movimentacoes) {
           if (mov.tipoMovimentacao === 'EMPRESTIMO') emUso += mov.quantidade;
           if (mov.tipoMovimentacao === 'DEVOLUCAO') emUso -= mov.quantidade;
-          if (mov.tipoMovimentacao === 'PERDA') total -= mov.quantidade;
+          if (mov.tipoMovimentacao === 'TRANSFERENCIA') emUso -= mov.quantidade;
+        }
+
+        const quantidadeEmUso = Math.max(0, emUso);
+        const quantidadeTotal = ferramenta.quantidadeTotal;
+        let status = ferramenta.status as any;
+        if (status !== 'PERDIDA' && status !== 'EM_MANUTENCAO') {
+          status = quantidadeEmUso > 0 ? 'EM_USO' : 'DISPONIVEL';
         }
 
         return {
           ...ferramenta,
-          quantidadeEmUso: Math.max(0, emUso),
-          quantidadeTotal: Math.max(0, total),
+          quantidadeEmUso,
+          quantidadeTotal,
+          status,
         };
       })
     );
@@ -169,6 +178,82 @@ export async function DELETE(request: NextRequest) {
     console.error('Erro ao deletar ferramenta:', error);
     return NextResponse.json(
       { erro: 'Erro ao deletar ferramenta' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * PATCH /api/ferramentas
+ * Recalibra contagens e status com base no histórico de movimentações
+ */
+export async function PATCH(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    const role = (session as any)?.role;
+    if (!session || role !== 'ADMIN') {
+      return NextResponse.json(
+        { erro: 'Não autorizado' },
+        { status: 403 }
+      );
+    }
+    const body = await request.json().catch(() => ({}));
+    if (!body || (body.action !== 'recalibrar' && body.action !== 'reset')) {
+      return NextResponse.json(
+        { erro: 'Ação inválida. Use { action: "recalibrar" }.' },
+        { status: 400 }
+      );
+    }
+    if (body.action === 'reset') {
+      const deleted = await prisma.movimentacaoFerramenta.deleteMany({});
+      await prisma.ferramenta.updateMany({
+        data: { quantidadeEmUso: 0 },
+      });
+      await prisma.ferramenta.updateMany({
+        where: { status: { in: ['EM_USO', 'DISPONIVEL'] } },
+        data: { status: 'DISPONIVEL' },
+      });
+      return NextResponse.json({ mensagem: 'Reset concluído', movimentacoesRemovidas: deleted.count });
+    }
+
+    const ferramentas = await prisma.ferramenta.findMany({ select: { id: true, status: true, quantidadeTotal: true } });
+
+    let atualizadas = 0;
+    for (const f of ferramentas) {
+      const movimentacoes = await prisma.movimentacaoFerramenta.findMany({
+        where: { ferramentaId: f.id },
+        select: { tipoMovimentacao: true, quantidade: true },
+      });
+
+      let emUso = 0;
+      let totalDelta = 0; // Não será aplicado diretamente ao quantidadeTotal
+      for (const mov of movimentacoes) {
+        if (mov.tipoMovimentacao === 'EMPRESTIMO') emUso += mov.quantidade;
+        if (mov.tipoMovimentacao === 'DEVOLUCAO') emUso -= mov.quantidade;
+        if (mov.tipoMovimentacao === 'TRANSFERENCIA') emUso -= mov.quantidade;
+        if (mov.tipoMovimentacao === 'PERDA') totalDelta -= mov.quantidade;
+      }
+
+      const quantidadeEmUso = Math.max(0, emUso);
+      const quantidadeTotal = Math.max(0, f.quantidadeTotal || 0);
+
+      let status = f.status as any;
+      if (status !== 'PERDIDA' && status !== 'EM_MANUTENCAO') {
+        status = quantidadeEmUso > 0 ? 'EM_USO' : 'DISPONIVEL';
+      }
+
+      await prisma.ferramenta.update({
+        where: { id: f.id },
+        data: { quantidadeEmUso, quantidadeTotal, status },
+      });
+      atualizadas += 1;
+    }
+
+    return NextResponse.json({ mensagem: 'Recalibração concluída', atualizadas });
+  } catch (error: any) {
+    console.error('Erro ao recalibrar ferramentas:', error);
+    return NextResponse.json(
+      { erro: 'Erro ao recalibrar ferramentas' },
       { status: 500 }
     );
   }
