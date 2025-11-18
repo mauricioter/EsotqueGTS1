@@ -123,13 +123,7 @@ export async function GET(request: NextRequest) {
     const pageSizeParam = searchParams.get('pageSize');
 
     // Validação/normalização
-    const ferramentaId = ferramentaIdParam !== null ? Number(ferramentaIdParam) : undefined;
-    if (ferramentaIdParam !== null && !Number.isFinite(ferramentaId)) {
-      return NextResponse.json(
-        { erro: 'Parâmetro "ferramentaId" inválido. Use um número inteiro.' },
-        { status: 400 }
-      );
-    }
+    const ferramentaId = ferramentaIdParam !== null ? ferramentaIdParam : undefined;
 
     const page = pageParam ? Number(pageParam) : 1;
     const pageSize = pageSizeParam ? Number(pageSizeParam) : 20;
@@ -147,28 +141,24 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Monta filtro tipado
-   const where = {
-  ...(ferramentaId !== undefined ? { ferramentaId } : {}),
-};
+    const where = {
+      ...(ferramentaId !== undefined ? { ferramentaId } : {}),
+    };
 
     const [total, movimentacoes] = await Promise.all([
       prisma.movimentacaoFerramenta.count({ where }),
       prisma.movimentacaoFerramenta.findMany({
         where,
-        // Prefira select para reduzir payload
         select: {
           id: true,
           tipoMovimentacao: true,
           quantidade: true,
           createdAt: true,
-          //usuarioId: true, // se existir
           ferramentaId: true,
           ferramenta: {
             select: {
               id: true,
               nome: true,
-              //codigo: true, // ajuste aos seus campos
             },
           },
         },
@@ -188,10 +178,7 @@ export async function GET(request: NextRequest) {
       movimentacoes,
     });
   } catch (error: any) {
-    // Diferencia erros do Prisma, se quiser
-    // import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
     console.error('Erro ao buscar movimentacoes:', error);
-
     return NextResponse.json(
       { erro: 'Erro ao buscar movimentacoes' },
       { status: 500 }
