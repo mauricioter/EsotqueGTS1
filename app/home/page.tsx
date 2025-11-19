@@ -30,6 +30,7 @@ interface Equipamento {
   modelo?: string;
   status: string;
   descricao?: string;
+  tecnicoResponsavel?: string;
 }
 
 interface Anotacao {

@@ -105,6 +105,24 @@ export default function TecnicosPage() {
     );
   }
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.tech-actions-wrapper')) {
+        setListMenuAberto(null);
+      }
+    };
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setListMenuAberto(null);
+    };
+    document.addEventListener('click', handleClickOutside);
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, []);
+
   return (
     <div className="page-container">
       <div className="section-header">
@@ -193,20 +211,3 @@ export default function TecnicosPage() {
     </div>
   );
 }
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (!target.closest('.tech-actions-wrapper')) {
-        setListMenuAberto(null);
-      }
-    };
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setListMenuAberto(null);
-    };
-    document.addEventListener('click', handleClickOutside);
-    document.addEventListener('keydown', handleEsc);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-      document.removeEventListener('keydown', handleEsc);
-    };
-  }, []);
