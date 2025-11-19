@@ -4,9 +4,24 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { prisma } from '@/lib/prisma';
 import { StatusEquipamento } from '@prisma/client';
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    const role = (session as any)?.role;
+    const url = new URL(req.url);
+    const tecnico = url.searchParams.get('tecnico');
+    const where: any = {};
+
+    if (tecnico && role === 'ADMIN') {
+      where.tecnicoResponsavel = tecnico;
+    } else if (session && role !== 'ADMIN') {
+      if (session.user?.name) {
+        where.tecnicoResponsavel = session.user.name;
+      }
+    }
+
     const equipamentos = await prisma.equipamento.findMany({
+      where,
       orderBy: {
         createdAt: 'desc',
       },

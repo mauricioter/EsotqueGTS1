@@ -94,8 +94,7 @@ export default function App() {
     );
   }
 
-  type SessionRole = 'ADMIN' | 'OPERATOR' | 'VIEWER';
-  const role = (session as { role?: SessionRole } | null)?.role;
+  const role = (session as any)?.role as 'ADMIN' | 'OPERATOR' | 'VIEWER' | undefined;
 
   return (
     <div className="app-container" suppressHydrationWarning>

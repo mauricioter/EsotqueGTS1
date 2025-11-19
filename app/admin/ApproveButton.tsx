@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default function ApproveButton({ userId }: Props) {
-  const approve = async (role: 'VIEWER' | 'OPERATOR') => {
+  const approve = async (role: 'VIEWER' | 'OPERATOR' | 'ADMIN') => {
     const res = await fetch('/api/admin/usuarios/approve', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -35,6 +35,13 @@ export default function ApproveButton({ userId }: Props) {
         aria-label="Aprovar como Operador"
       >
         Aprovar como Operador
+      </button>
+      <button
+        className="btn-danger"
+        onClick={() => approve('ADMIN')}
+        aria-label="Aprovar como Admin"
+      >
+        Aprovar como Admin
       </button>
     </div>
   );

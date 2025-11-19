@@ -1,8 +1,5 @@
 import type { NextConfig } from "next";
 
-const allowOrigins = (process.env.ALLOWED_ORIGINS || "").split(",").map(o => o.trim()).filter(Boolean);
-const allowOriginHeader = allowOrigins.length > 0 ? allowOrigins[0] : "*";
-
 const nextConfig: NextConfig = {
   // Headers de seguran�a e CORS
   async headers() {
@@ -12,7 +9,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Access-Control-Allow-Origin',
-            value: allowOriginHeader,
+            value: '*',
           },
           {
             key: 'Access-Control-Allow-Methods',

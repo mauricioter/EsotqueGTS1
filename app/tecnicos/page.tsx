@@ -19,6 +19,7 @@ export default function TecnicosPage() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState<{ nome: string; telefone?: string; funcao?: string; status: 'ATIVO' | 'INATIVO'; observacoes?: string }>({ nome: '', telefone: '', funcao: '', status: 'ATIVO', observacoes: '' });
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [listMenuAberto, setListMenuAberto] = useState<string | null>(null);
   const role = (session as any)?.role as 'ADMIN' | 'OPERATOR' | 'VIEWER' | undefined;
 
   useEffect(() => {
@@ -153,18 +154,36 @@ export default function TecnicosPage() {
         ) : (
           <div className="card-grid">
             {lista.map((t) => (
-              <div key={t.id} className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <div className="avatar" style={{ width: 32, height: 32, borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>👤</div>
-                  <div>
-                    <strong>{t.nome}</strong>
-                    <div className="small-muted">{t.funcao || '—'}</div>
-                  </div>
+              <div key={t.id} className="card" style={{ display: 'grid', gridTemplateColumns: 'auto 1fr auto', alignItems: 'center', gap: 10 }}>
+                <div className="avatar" style={{ width: 32, height: 32, borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    <path d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span className={`status-badge ${t.status === 'ATIVO' ? 'status-disponivel' : 'status-saida'}`}>{t.status}</span>
-                  <button className="btn btn-secondary" onClick={() => editar(t)}>Editar</button>
-                  <button className="btn btn-danger" onClick={() => excluir(t.id)}>Excluir</button>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <strong>{t.nome}</strong>
+                    <span className={`status-badge ${t.status === 'ATIVO' ? 'status-disponivel' : 'status-saida'}`}>{t.status}</span>
+                  </div>
+                  <div className="small-muted">{t.funcao || '—'}</div>
+                </div>
+                <div className="tech-actions-wrapper" style={{ position: 'relative' }} onMouseLeave={() => setListMenuAberto(null)}>
+                  <button
+                    className="tech-actions"
+                    title="Opções"
+                    onClick={() => setListMenuAberto(listMenuAberto === t.id ? null : t.id)}
+                  >
+                    ⋮
+                  </button>
+                  {listMenuAberto === t.id && (
+                    <div className="tech-actions-menu" style={{ position: 'absolute', right: 0, top: 'calc(100% + 6px)', background: '#fff', border: '1px solid #e5e7eb', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', borderRadius: 10, minWidth: 180, zIndex: 30, padding: 6 }}>
+                      <Link href={`/tecnicos/${t.id}`} className="tech-menu-item" onClick={() => setListMenuAberto(null)}>Ver perfil do técnico</Link>
+                      <Link href={`/tecnicos/${t.id}/estoque`} className="tech-menu-item" onClick={() => setListMenuAberto(null)}>Ver estoque do técnico</Link>
+                      <button className="tech-menu-item" style={{ display: 'block', width: '100%', textAlign: 'left', background: 'transparent', border: 'none', padding: '8px 10px', borderRadius: 8, fontWeight: 600, color: '#1f2937' }} onClick={() => { setListMenuAberto(null); editar(t); }}>Editar usuário</button>
+                      <button className="tech-menu-item danger" style={{ display: 'block', width: '100%', textAlign: 'left', background: 'transparent', border: 'none', padding: '8px 10px', borderRadius: 8, fontWeight: 600, color: '#dc2626' }} onClick={() => { setListMenuAberto(null); excluir(t.id); }}>Desativar / Remover técnico</button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -174,3 +193,20 @@ export default function TecnicosPage() {
     </div>
   );
 }
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.tech-actions-wrapper')) {
+        setListMenuAberto(null);
+      }
+    };
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setListMenuAberto(null);
+    };
+    document.addEventListener('click', handleClickOutside);
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, []);

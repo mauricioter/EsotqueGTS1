@@ -14,12 +14,11 @@ interface Equipamento {
   status: string;
 }
 
-interface Tecnico {
+interface Usuario {
   id: string;
-  nome: string;
-  telefone?: string;
-  funcao?: string;
-  status: 'ATIVO' | 'INATIVO';
+  name: string;
+  email: string;
+  role: string;
 }
 
 export default function TransferenciasPage() {
@@ -29,7 +28,7 @@ export default function TransferenciasPage() {
   const [isDrawing, setIsDrawing] = useState(false);
 
   const [equipamentos, setEquipamentos] = useState<Equipamento[]>([]);
-  const [tecnicos, setTecnicos] = useState<Tecnico[]>([]);
+  const [tecnicos, setTecnicos] = useState<Usuario[]>([]);
   const [equipamentoSelecionado, setEquipamentoSelecionado] = useState('');
   const [tecnicoSelecionado, setTecnicoSelecionado] = useState('');
   const [buscaEquipamento, setBuscaEquipamento] = useState('');
@@ -56,9 +55,12 @@ export default function TransferenciasPage() {
       const disponiveis = resEquip.data.filter((e: Equipamento) => e.status === 'DISPONIVEL');
       setEquipamentos(disponiveis);
 
-      // Carregar técnicos (ativos) do banco
-      const resTecnicos = await axios.get('/api/tecnicos?status=ATIVO');
-      setTecnicos(resTecnicos.data);
+      // Carregar técnicos
+      const resTecnicos = await axios.get('/api/admin/users');
+      const tecnicosAtivos = resTecnicos.data.filter(
+        (u: Usuario) => (u.role === 'OPERATOR' || u.role === 'ADMIN') && u.name !== session?.user?.name
+      );
+      setTecnicos(tecnicosAtivos);
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
     }
@@ -267,10 +269,11 @@ export default function TransferenciasPage() {
             <datalist id="tecnicos-list">
               {tecnicos
                 .filter(tec => 
-                  tec.nome.toLowerCase().includes(buscaTecnico.toLowerCase())
+                  tec.name.toLowerCase().includes(buscaTecnico.toLowerCase()) ||
+                  tec.email.toLowerCase().includes(buscaTecnico.toLowerCase())
                 )
                 .map((tec) => (
-                  <option key={tec.id} value={`${tec.nome}`}/>
+                  <option key={tec.id} value={`${tec.name} (${tec.email})`} />
                 ))}
             </datalist>
             <select
@@ -282,11 +285,12 @@ export default function TransferenciasPage() {
               <option value="">-- Escolha um técnico --</option>
               {tecnicos
                 .filter(tec => 
-                  tec.nome.toLowerCase().includes(buscaTecnico.toLowerCase())
+                  tec.name.toLowerCase().includes(buscaTecnico.toLowerCase()) ||
+                  tec.email.toLowerCase().includes(buscaTecnico.toLowerCase())
                 )
                 .map((tec) => (
                   <option key={tec.id} value={tec.id}>
-                    {tec.nome}
+                    {tec.name} ({tec.email})
                   </option>
                 ))}
             </select>

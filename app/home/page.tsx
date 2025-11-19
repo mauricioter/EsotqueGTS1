@@ -5,6 +5,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Footer from '../components/Footer';
+import SettingsModal from '../components/SettingsModal';
 import '../home.css';
 
 interface Stats {
@@ -23,7 +24,7 @@ interface Equipamento {
   id: string;
   nome: string;
   serial?: string;
-  mac?: string;
+  macAddress?: string;
   tipo?: string;
   marca?: string;
   modelo?: string;
@@ -41,6 +42,11 @@ interface Anotacao {
 export default function HomePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const role = (session as unknown as { role?: 'ADMIN' | 'OPERATOR' | 'VIEWER' })?.role;
+  const [menuAberto, setMenuAberto] = useState(false);
+  const [settingsAberto, setSettingsAberto] = useState(false);
+  const [settingsTab, setSettingsTab] = useState<'profile' | 'security'>('profile');
+  const [techMenuAberto, setTechMenuAberto] = useState<string | null>(null);
   const [stats, setStats] = useState<Stats>({
     total: 0,
     disponivel: 0,
@@ -54,12 +60,13 @@ export default function HomePage() {
   });
   const [loading, setLoading] = useState(true);
   const [equipamentos, setEquipamentos] = useState<Equipamento[]>([]);
+  const [movs, setMovs] = useState<any[]>([]);
+  const [tecnicosAtivos, setTecnicosAtivos] = useState<{ id: string; nome: string; funcao?: string; telefone?: string; status: string }[]>([]);
   const [modalAberto, setModalAberto] = useState(false);
   const [filtroStatus, setFiltroStatus] = useState<string>('');
   const [tituloModal, setTituloModal] = useState('');
   const [anotacoes, setAnotacoes] = useState<Anotacao[]>([]);
   const [novaAnotacao, setNovaAnotacao] = useState('');
-  const [tecnicos, setTecnicos] = useState<{ id: string; nome: string; status: 'ATIVO' | 'INATIVO' }[]>([]);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -67,9 +74,8 @@ export default function HomePage() {
     }
   }, [status, router]);
 
-  
-
-  async function carregarAnotacoes() {
+  // Funções de carregamento
+  const carregarAnotacoes = async () => {
     try {
       const response = await fetch('/api/anotacoes');
       if (response.ok) {
@@ -79,7 +85,7 @@ export default function HomePage() {
     } catch (error) {
       console.error('Erro ao carregar anotações:', error);
     }
-  }
+  };
 
   const salvarAnotacao = async () => {
     if (!novaAnotacao.trim()) return;
@@ -115,47 +121,83 @@ export default function HomePage() {
     }
   };
 
-  async function fetchStats() {
+  const fetchStats = async () => {
     try {
       const response = await fetch('/api/equipamentos');
-      const data: Equipamento[] = await response.json();
-
+      const data = await response.json();
       setEquipamentos(data);
-
       const statsData = {
         total: data.length,
-        disponivel: data.filter((e) => e.status === 'DISPONIVEL').length,
-        emPosseDoTecnico: data.filter((e) => e.status === 'EM_POSSE_DO_TECNICO').length,
-        descartado: data.filter((e) => e.status === 'DESCARTADO').length,
-        saida: data.filter((e) => e.status === 'SAIDA').length,
-        reservado: data.filter((e) => e.status === 'RESERVADO').length,
-        defeito: data.filter((e) => e.status === 'DEFEITO').length,
-        instalado: data.filter((e) => e.status === 'INSTALADO').length,
-        equipamentoDeRetorno: data.filter((e) => e.status === 'EQUIPAMENTO_DE_RETORNO').length,
+        disponivel: data.filter((e: any) => e.status === 'DISPONIVEL').length,
+        emPosseDoTecnico: data.filter((e: any) => e.status === 'EM_POSSE_DO_TECNICO').length,
+        descartado: data.filter((e: any) => e.status === 'DESCARTADO').length,
+        saida: data.filter((e: any) => e.status === 'SAIDA').length,
+        reservado: data.filter((e: any) => e.status === 'RESERVADO').length,
+        defeito: data.filter((e: any) => e.status === 'DEFEITO').length,
+        instalado: data.filter((e: any) => e.status === 'INSTALADO').length,
+        equipamentoDeRetorno: data.filter((e: any) => e.status === 'EQUIPAMENTO_DE_RETORNO').length,
       };
-
       setStats(statsData);
       setLoading(false);
     } catch (error) {
       console.error('Erro ao buscar estatísticas:', error);
       setLoading(false);
     }
-  }
+  };
+
+  const fetchMovs = async () => {
+    try {
+      const res = await fetch('/api/ferramentas/movimentar');
+      const data = await res.json();
+      setMovs(data.movimentacoes || []);
+    } catch (e) {
+      console.error('Erro ao buscar movimentações:', e);
+    }
+  };
 
   useEffect(() => {
     if (status === 'authenticated') {
       fetchStats();
+      fetchMovs();
       carregarAnotacoes();
-      fetch('/api/tecnicos?status=ATIVO')
-        .then(async (r) => {
-          if (r.ok) {
-            const data = await r.json();
-            setTecnicos(data.map((t: any) => ({ id: t.id, nome: t.nome, status: t.status })));
-          }
-        })
-        .catch(() => {});
     }
   }, [status]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.tech-actions-wrapper')) {
+        setTechMenuAberto(null);
+      }
+    };
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setTechMenuAberto(null);
+    };
+    document.addEventListener('click', handleClickOutside);
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, []);
+
+
+  useEffect(() => {
+    const loadTecnicos = async () => {
+      if (status === 'authenticated' && role === 'ADMIN') {
+        try {
+          const res = await fetch('/api/tecnicos?status=ATIVO');
+          if (res.ok) {
+            const lista = await res.json();
+            setTecnicosAtivos(lista || []);
+          }
+        } catch (e) {
+          console.error('Erro ao carregar técnicos:', e);
+        }
+      }
+    };
+    loadTecnicos();
+  }, [status, role]);
 
   const abrirModal = (status: string, titulo: string) => {
     setFiltroStatus(status);
@@ -200,7 +242,6 @@ export default function HomePage() {
     return null;
   }
 
-  const role = (session as any)?.role as 'ADMIN' | 'OPERATOR' | 'VIEWER' | undefined;
 
   return (
     <div className="home-container">
@@ -212,15 +253,43 @@ export default function HomePage() {
             <h1>Controle de Estoque GTSnet</h1>
           </div>
           <div className="header-right">
-            <span className="user-name">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-              </svg>
-              {session.user?.name}
-            </span>
-            <button onClick={() => signOut()} className="btn-logout">
-              Sair
-            </button>
+            <div className="profile-menu">
+              <button
+                className="user-name"
+                onClick={() => setMenuAberto(!menuAberto)}
+                aria-expanded={menuAberto}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                {session.user?.name}
+                <svg className="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              {menuAberto && (
+                <div className="profile-dropdown">
+                  <button
+                    className="dropdown-item"
+                    onClick={() => { setSettingsTab('profile'); setSettingsAberto(true); setMenuAberto(false); }}
+                  >
+                    Meu Perfil
+                  </button>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => { setSettingsTab('security'); setSettingsAberto(true); setMenuAberto(false); }}
+                  >
+                    Alterar Senha
+                  </button>
+                  <button
+                    className="dropdown-item sair"
+                    onClick={() => { setMenuAberto(false); signOut(); }}
+                  >
+                    Sair
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -235,6 +304,7 @@ export default function HomePage() {
         </div>
 
         {/* Stats Grid */}
+        {role === 'ADMIN' && (
         <div className="stats-grid">
           <div className="stat-card stat-total" onClick={() => abrirModal('TODOS', 'Todos os Equipamentos')}>
             <div className="stat-icon">
@@ -344,46 +414,132 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+        )}
 
-        <div className="section-card">
-          <div className="home-section-header">
-            <div className="header-icon-wrapper">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-                <path d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-              </svg>
-              <div>
-                <h2>Técnicos Ativos</h2>
-                <p className="text-muted">Lista carregada do banco</p>
+        {role !== 'ADMIN' && (
+          <div className="stats-grid">
+            <div className="stat-card stat-total">
+              <div className="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 14H4V9h16v10z"/>
+                </svg>
+              </div>
+              <div className="stat-content">
+                <h3>Estoque Pessoal</h3>
+                <p className="stat-number">{equipamentos.filter(e => e.tecnicoResponsavel === session.user?.name).length}</p>
               </div>
             </div>
-            <div>
-              {role === 'ADMIN' && (
-                <Link href="/tecnicos" className="btn btn-secondary">Gerenciar Técnicos</Link>
+            <div className="stat-card stat-disponivel">
+              <div className="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div className="stat-content">
+                <h3>Retiradas por você</h3>
+                <p className="stat-number">{movs.filter(m => m.tipoMovimentacao === 'EMPRESTIMO' && m.tecnicoNome === session.user?.name).length}</p>
+              </div>
+            </div>
+            <div className="stat-card stat-instalado">
+              <div className="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 11l3 3L22 4"/>
+                </svg>
+              </div>
+              <div className="stat-content">
+                <h3>Devoluções pendentes</h3>
+                <p className="stat-number">{movs.filter(m => m.tecnicoNome === session.user?.name && m.tipoMovimentacao === 'EMPRESTIMO' && !m.dataDevolucaoReal).length}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {role === 'ADMIN' && (
+          <div className="section-card tech-section">
+            <div className="tech-section-header">
+              <h3>Técnicos Ativos</h3>
+              <Link href="/tecnicos" className="btn btn-secondary">Gerenciar Técnicos</Link>
+            </div>
+            <div className="tech-list">
+              {tecnicosAtivos.length === 0 ? (
+                <div className="empty-state text-center">Nenhum técnico ativo</div>
+              ) : (
+                tecnicosAtivos.map((t, idx) => {
+                  const movimentosDoTecnico = movs.filter(m => m.tecnicoNome === t.nome);
+                  const ultima = movimentosDoTecnico.length
+                    ? new Date(
+                        movimentosDoTecnico.reduce((a: any, b: any) => {
+                          const da = new Date(a.createdAt || a.dataRetirada);
+                          const db = new Date(b.createdAt || b.dataRetirada);
+                          return da > db ? a : b;
+                        }).createdAt || movimentosDoTecnico[0].dataRetirada
+                      ).toLocaleString('pt-BR', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })
+                    : null;
+
+                  return (
+                    <div key={t.id} className={`tech-item ${idx !== 0 ? 'with-divider' : ''}`}>
+                      <div className="tech-avatar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                          <path d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      </div>
+                      <div className="tech-main">
+                        <div className="tech-header">
+                          <span className="tech-name">{t.nome}</span>
+                          <span className={`tech-status ${t.status === 'ATIVO' ? 'ok' : 'off'}`}>{t.status}</span>
+                        </div>
+                        <div className="tech-meta">
+                          {t.funcao && <span className="tech-funcao">{t.funcao}</span>}
+                          {ultima && <span className="tech-ultima">Última atividade {ultima}</span>}
+                        </div>
+                      </div>
+                      <div className="tech-actions-wrapper" onMouseLeave={() => setTechMenuAberto(null)}>
+                        <button
+                          className="tech-actions"
+                          title="Opções"
+                          onClick={() => setTechMenuAberto(techMenuAberto === t.id ? null : t.id)}
+                          aria-expanded={techMenuAberto === t.id}
+                        >
+                          ⋮
+                        </button>
+                        {techMenuAberto === t.id && (
+                          <div className="tech-actions-menu">
+                            <Link href={`/tecnicos/${t.id}`} className="tech-menu-item" onClick={() => setTechMenuAberto(null)}>Ver perfil do técnico</Link>
+                            <Link href={`/tecnicos/${t.id}/estoque`} className="tech-menu-item" onClick={() => setTechMenuAberto(null)}>Ver estoque do técnico</Link>
+                            {role === 'ADMIN' && (
+                              <Link href="/usuarios" className="tech-menu-item" onClick={() => setTechMenuAberto(null)}>Editar usuário</Link>
+                            )}
+                            <button
+                              className="tech-menu-item danger"
+                              onClick={async () => {
+                                try {
+                                  const res = await fetch(`/api/tecnicos/${t.id}`, {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ status: 'INATIVO' }),
+                                  });
+                                  if (res.ok) {
+                                    setTecnicosAtivos(prev => prev.filter(tt => tt.id !== t.id));
+                                    setTechMenuAberto(null);
+                                  }
+                                } catch (e) {
+                                  console.error('Erro ao desativar técnico:', e);
+                                }
+                              }}
+                            >
+                              Desativar
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })
               )}
             </div>
           </div>
-          {tecnicos.length === 0 ? (
-            <div className="empty-state text-center">Nenhum técnico ativo</div>
-          ) : (
-            <div className="tecnicos-grid">
-              {tecnicos.map((t) => (
-                <div key={t.id} className="card tecnico-card">
-                  <div className="tecnico-info">
-                    <div className="tecnico-avatar">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-                        <path d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                      </svg>
-                    </div>
-                    <div className="tecnico-name">{t.nome}</div>
-                  </div>
-                  <span className={`status-badge ${t.status === 'ATIVO' ? 'status-disponivel' : 'status-saida'}`}>{t.status}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        )}
 
         {/* Quick Actions */}
         <div className="quick-actions">
@@ -591,6 +747,8 @@ export default function HomePage() {
         </div>
       </main>
 
+      <SettingsModal isOpen={settingsAberto} onClose={() => setSettingsAberto(false)} initialTab={settingsTab} />
+
       {/* Modal de Equipamentos */}
       {modalAberto && (
         <div className="modal-overlay" onClick={fecharModal}>
@@ -633,9 +791,9 @@ export default function HomePage() {
                               <strong>Serial:</strong> {equip.serial}
                             </span>
                           )}
-                          {equip.mac && (
+                          {equip.macAddress && (
                             <span className="spec-item">
-                              <strong>MAC:</strong> {equip.mac}
+                              <strong>MAC:</strong> {equip.macAddress}
                             </span>
                           )}
                         </div>

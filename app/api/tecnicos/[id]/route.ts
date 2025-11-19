@@ -3,6 +3,38 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { prisma } from '@/lib/prisma';
 
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
+
+    const { id } = await params;
+    const tecnico = await prisma.tecnico.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        nome: true,
+        telefone: true,
+        funcao: true,
+        status: true,
+        observacoes: true,
+        createdAt: true,
+      },
+    });
+    if (!tecnico) return NextResponse.json({ error: 'Técnico não encontrado' }, { status: 404 });
+
+    const user = await prisma.user.findFirst({ where: { name: tecnico.nome }, select: { id: true, email: true, role: true, status: true, createdAt: true } });
+
+    return NextResponse.json({ tecnico, user }, { status: 200 });
+  } catch (error) {
+    console.error('Erro ao buscar técnico:', error);
+    return NextResponse.json({ error: 'Erro ao buscar técnico' }, { status: 500 });
+  }
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

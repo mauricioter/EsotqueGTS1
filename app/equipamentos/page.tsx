@@ -378,7 +378,7 @@ export default function EquipamentosPageNew() {
 
   if (!session) return null;
 
-  const role = (session as any)?.role as 'ADMIN' | 'OPERATOR' | 'VIEWER' | undefined;
+  const role = (session as unknown as { role?: 'ADMIN' | 'OPERATOR' | 'VIEWER' })?.role;
 
   return (
     <div className="equipamentos-page">
