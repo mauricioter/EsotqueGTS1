@@ -70,6 +70,24 @@ export default function HomePage() {
   const [novaAnotacao, setNovaAnotacao] = useState('');
 
   useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.tech-actions-wrapper')) {
+        setTechMenuAberto(null);
+      }
+    };
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setTechMenuAberto(null);
+    };
+    document.addEventListener('click', handleClickOutside);
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, []);
+
+  useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
     }
@@ -495,7 +513,7 @@ export default function HomePage() {
                           {ultima && <span className="tech-ultima">Última atividade {ultima}</span>}
                         </div>
                       </div>
-                      <div className="tech-actions-wrapper" onMouseLeave={() => setTechMenuAberto(null)}>
+                      <div className="tech-actions-wrapper">
                         <button
                           className="tech-actions"
                           title="Opções"
@@ -505,7 +523,7 @@ export default function HomePage() {
                           ⋮
                         </button>
                         {techMenuAberto === t.id && (
-                          <div className="tech-actions-menu">
+                          <div className="tech-actions-menu" onClick={(e) => e.stopPropagation()}>
                             <Link href={`/tecnicos/${t.id}`} className="tech-menu-item" onClick={() => setTechMenuAberto(null)}>Ver perfil do técnico</Link>
                             <Link href={`/tecnicos/${t.id}/estoque`} className="tech-menu-item" onClick={() => setTechMenuAberto(null)}>Ver estoque do técnico</Link>
                             {role === 'ADMIN' && (

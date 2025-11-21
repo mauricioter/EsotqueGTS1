@@ -42,8 +42,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Verificar se técnico existe
-    const tecnico = await prisma.user.findUnique({
+    // Verificar se técnico existe (modelo Tecnico)
+    const tecnico = await prisma.tecnico.findUnique({
       where: { id: tecnicoId }
     });
 
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       where: { id: equipamentoId },
       data: {
         status: 'EM_POSSE_DO_TECNICO',
-        tecnicoResponsavel: tecnicoId,
+        tecnicoResponsavel: tecnico.nome,
         assinaturaTecnico: assinaturaTecnico,
       }
     });
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       equipamento: equipamentoAtualizado,
-      message: `Equipamento transferido para ${tecnico.name}`
+      message: `Equipamento transferido para ${tecnico.nome}`
     });
 
   } catch (error: any) {
